@@ -1,0 +1,56 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 48
+Title       : trunorth_Terragni Consulting_2023
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 16
+Source characters sent to Groq: 4387
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 48
+Title       : trunorth_Terragni Consulting_2023
+Chunks      : 16
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 48
+document_title                     : trunorth_Terragni Consulting_2023
+chunks_sent                        : 16
+previous_pending_deleted           : 0
+staging_rows_inserted              : 15
+case_studies                       : 0
+industries                         : 0
+offerings                          : 3
+frameworks                         : 2
+challenges                         : 3
+outcomes                           : 7
+case_study_relationships           : 0
+
+====================================================================================================
+2026-10-05T11:45:13 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 48
+====================================================================================================

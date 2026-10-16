@@ -1,0 +1,60 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 45
+Title       : LENS Brochure Terragni Consulting_2022
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 19
+Source characters sent to Groq: 5684
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 45
+Title       : LENS Brochure Terragni Consulting_2022
+Chunks      : 19
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 45
+document_title                     : LENS Brochure Terragni Consulting_2022
+chunks_sent                        : 19
+previous_pending_deleted           : 0
+staging_rows_inserted              : 9
+case_studies                       : 0
+industries                         : 0
+offerings                          : 2
+frameworks                         : 0
+challenges                         : 2
+outcomes                           : 5
+case_study_relationships           : 0
+
+====================================================================================================
+2026-10-05T11:43:14 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 45
+====================================================================================================

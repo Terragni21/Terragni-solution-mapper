@@ -1,0 +1,62 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 9
+Title       : Behaviours for Business - Driving market share and wallet share for premium banking among affluent customer segment_ A Terragni Consulting Case Study
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 18
+Source characters sent to Groq: 8545
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 9
+Title       : Behaviours for Business - Driving market share and wallet share for premium banking among affluent customer segment_ A Terragni Consulting Case Study
+Chunks      : 18
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 9
+document_title                     : Behaviours for Business - Driving market share and wallet share for premium banking among affluent customer segment_ A Terragni Consulting Case Study
+chunks_sent                        : 18
+previous_pending_deleted           : 0
+staging_rows_inserted              : 21
+case_studies                       : 1
+industries                         : 0
+offerings                          : 0
+frameworks                         : 2
+challenges                         : 3
+outcomes                           : 4
+case_study_relationships           : 7
+
+====================================================================================================
+2026-10-05T11:26:14 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 9
+====================================================================================================

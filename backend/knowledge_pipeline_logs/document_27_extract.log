@@ -1,0 +1,58 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 27
+Title       : JUMP_Behaviours for Business - Behavioural Design for Adoption & Engagement Banking Case
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 14
+Source characters sent to Groq: 5387
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 27
+Title       : JUMP_Behaviours for Business - Behavioural Design for Adoption & Engagement Banking Case
+Chunks      : 14
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 27
+document_title                     : JUMP_Behaviours for Business - Behavioural Design for Adoption & Engagement Banking Case
+chunks_sent                        : 14
+previous_pending_deleted           : 0
+staging_rows_inserted              : 17
+case_studies                       : 1
+industries                         : 1
+offerings                          : 1
+frameworks                         : 0
+challenges                         : 1
+outcomes                           : 5
+case_study_relationships           : 6
+
+====================================================================================================
+2026-10-05T11:35:25 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 27
+====================================================================================================

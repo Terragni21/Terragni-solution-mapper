@@ -1,0 +1,272 @@
+{
+  "document": {
+    "title": "Me_Brochure_Terragni Consulting_2023",
+    "file_name": "Me_Brochure_Terragni Consulting_2023.pdf",
+    "file_type": "pdf",
+    "document_type": "PDF",
+    "source_path": "backend\\data1\\raw\\pdf\\Me_Brochure_Terragni Consulting_2023.pdf",
+    "file_hash": "225a322deb9fbf223fce9ad2488e53f99e4d493b4a03f3980197cf171ca928e3",
+    "ingestion_status": "EXTRACTED"
+  },
+  "sections": [
+    {
+      "section_type": "PAGE",
+      "page_number": 1,
+      "slide_number": null,
+      "section_order": 1,
+      "section_title": null,
+      "text": "Perceptions Matter.\nPerceptions Cost.\nA traditional approach to communication\ndoes not take perception into account.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 15,
+          "text": "Perceptions Matter.\nPerceptions Cost.\nA traditional approach to communication\ndoes not take perception into account."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 2,
+      "slide_number": null,
+      "section_order": 2,
+      "section_title": null,
+      "text": "The purpose of all communication\nCOMMUNICATION PERCEPTION ACTION",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 8,
+          "text": "The purpose of all communication\nCOMMUNICATION PERCEPTION ACTION"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 3,
+      "slide_number": null,
+      "section_order": 3,
+      "section_title": null,
+      "text": "The reality\nComplex\nIncomplete\nToo Frequent\nInsincere\nIrrelevant\nFriction\nAnnoyed\nConfused\nFrustrated\nOverwhelmed\nDelayed\nAbandoned\nTedious\nExpensive\nIgnored\nDisengaged\nCOMMUNICATION PERCEPTION ACTION",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 22,
+          "text": "The reality\nComplex\nIncomplete\nToo Frequent\nInsincere\nIrrelevant\nFriction\nAnnoyed\nConfused\nFrustrated\nOverwhelmed\nDelayed\nAbandoned\nTedious\nExpensive\nIgnored\nDisengaged\nCOMMUNICATION PERCEPTION ACTION"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 4,
+      "slide_number": null,
+      "section_order": 4,
+      "section_title": null,
+      "text": "Design communication for clarity.\nRemove Perceived Friction\n& Stress From Your Communication.\nDrive High Word of Mouth, Retention,\nLoyalty &Engagement.\nMe Removes The Pain\nOf Uncertainty",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 26,
+          "text": "Design communication for clarity.\nRemove Perceived Friction\n& Stress From Your Communication.\nDrive High Word of Mouth, Retention,\nLoyalty &Engagement.\nMe Removes The Pain\nOf Uncertainty"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 5,
+      "slide_number": null,
+      "section_order": 5,
+      "section_title": null,
+      "text": "When communication lacks clarity,\nconsistency and conciseness,\nSometimes We Imagine The Worst...",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 12,
+          "text": "When communication lacks clarity,\nconsistency and conciseness,\nSometimes We Imagine The Worst..."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 6,
+      "slide_number": null,
+      "section_order": 6,
+      "section_title": null,
+      "text": "Perceived frictionis the anticipation of effort or friction, even when there\nmay not actually be any, or where the quantum of friction is far lower than\nanticipated. It creates confusion, anxiety and disengagement.\nUntil...",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 34,
+          "text": "Perceived frictionis the anticipation of effort or friction, even when there\nmay not actually be any, or where the quantum of friction is far lower than\nanticipated. It creates confusion, anxiety and disengagement.\nUntil..."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 7,
+      "slide_number": null,
+      "section_order": 7,
+      "section_title": null,
+      "text": "Until...",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 1,
+          "text": "Until..."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 8,
+      "slide_number": null,
+      "section_order": 8,
+      "section_title": null,
+      "text": "SAMPLE\nBefore\nPerceived Friction\n“I didn’t know I even had\nthese points”\n“How do I use them?”\n“They don’t expire for a\nmonth; I’ll see this later”\nOpportunity Cost",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 29,
+          "text": "SAMPLE\nBefore\nPerceived Friction\n“I didn’t know I even had\nthese points”\n“How do I use them?”\n“They don’t expire for a\nmonth; I’ll see this later”\nOpportunity Cost"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 9,
+      "slide_number": null,
+      "section_order": 9,
+      "section_title": null,
+      "text": "SAMPLE\nAfter\nRelevant time creates urgency\nCross-sell creates curiosity\nLink for easy access to T&C\nCreates wallet share.\n27 May",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 20,
+          "text": "SAMPLE\nAfter\nRelevant time creates urgency\nCross-sell creates curiosity\nLink for easy access to T&C\nCreates wallet share.\n27 May"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 10,
+      "slide_number": null,
+      "section_order": 10,
+      "section_title": null,
+      "text": "Perceived Friction\n“Why are no flights found?”\n“Is it because of the location?”\n“What can I do now?”\nLeads to cart abandonment\nSAMPLE\nBefore",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 24,
+          "text": "Perceived Friction\n“Why are no flights found?”\n“Is it because of the location?”\n“What can I do now?”\nLeads to cart abandonment\nSAMPLE\nBefore"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 11,
+      "slide_number": null,
+      "section_order": 11,
+      "section_title": null,
+      "text": "Provides a reason for\nunavailability\nAlternatives\nEvokes Hope\nRetains the customer\nSAMPLE\nAfter",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 13,
+          "text": "Provides a reason for\nunavailability\nAlternatives\nEvokes Hope\nRetains the customer\nSAMPLE\nAfter"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 12,
+      "slide_number": null,
+      "section_order": 12,
+      "section_title": null,
+      "text": "Small But Mighty\nSmall initiatives to eliminate perceived friction\ndrive significant business outcomes.\nPerceived Friction has a disproportionate\nimpact on your business outcomes.\nWith Me, you can eliminate friction from\nyour customer journeys in small, yet\nsignificant ways.\nCost effective\nQuick to identify\nDynamic impact",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 45,
+          "text": "Small But Mighty\nSmall initiatives to eliminate perceived friction\ndrive significant business outcomes.\nPerceived Friction has a disproportionate\nimpact on your business outcomes.\nWith Me, you can eliminate friction from\nyour customer journeys in small, yet\nsignificant ways.\nCost effective\nQuick to identify\nDynamic impact"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 13,
+      "slide_number": null,
+      "section_order": 13,
+      "section_title": null,
+      "text": "How we do it\nAUDIT\nOf The Communication\nTouchpoints\nIDENTIFY\nPoints Of\nPerceived Friction\nDEFINE\nIntended\nBusiness Outcome\nREDESIGN\nThe communication or mode\nof delivery to eliminate\nfriction and generate ROI",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 31,
+          "text": "How we do it\nAUDIT\nOf The Communication\nTouchpoints\nIDENTIFY\nPoints Of\nPerceived Friction\nDEFINE\nIntended\nBusiness Outcome\nREDESIGN\nThe communication or mode\nof delivery to eliminate\nfriction and generate ROI"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 14,
+      "slide_number": null,
+      "section_order": 14,
+      "section_title": null,
+      "text": "Areas of impact\nBusiness\nJourney\nAll Sales & Service\npipeline artefacts\nMedium Of\nDelivery\nSMS\nEmail\nWhatsapp\nTouchpoint\nWebsite\nApp\nContent\nType\nText\nImage\nVideo\nGIF",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 26,
+          "text": "Areas of impact\nBusiness\nJourney\nAll Sales & Service\npipeline artefacts\nMedium Of\nDelivery\nSMS\nEmail\nWhatsapp\nTouchpoint\nWebsite\nApp\nContent\nType\nText\nImage\nVideo\nGIF"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 15,
+      "slide_number": null,
+      "section_order": 15,
+      "section_title": null,
+      "text": "Outcomes\nPre-purchase\nReduce Time To Sell\nIncrease Conversions\nIncrease Acquisition\nPurchase\nReduce Cost Of Sale\nPost-Purchase\nIncrease Cross Sell And Up-Sell\nIncrease Retention\nReduce Cost of Service\nHigher Word Of Mouth",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 31,
+          "text": "Outcomes\nPre-purchase\nReduce Time To Sell\nIncrease Conversions\nIncrease Acquisition\nPurchase\nReduce Cost Of Sale\nPost-Purchase\nIncrease Cross Sell And Up-Sell\nIncrease Retention\nReduce Cost of Service\nHigher Word Of Mouth"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 16,
+      "slide_number": null,
+      "section_order": 16,
+      "section_title": null,
+      "text": "Let’s\nConnect!\nengage@terragni.in\nwww.terragni.in",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 4,
+          "text": "Let’s\nConnect!\nengage@terragni.in\nwww.terragni.in"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 17,
+      "slide_number": null,
+      "section_order": 17,
+      "section_title": null,
+      "text": "Also For You",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 3,
+          "text": "Also For You"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "section_count": 17,
+    "chunk_count": 17
+  }
+}

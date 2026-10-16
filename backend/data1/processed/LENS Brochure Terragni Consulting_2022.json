@@ -1,0 +1,311 @@
+{
+  "document": {
+    "title": "LENS Brochure Terragni Consulting_2022",
+    "file_name": "LENS Brochure Terragni Consulting_2022.pdf",
+    "file_type": "pdf",
+    "document_type": "PDF",
+    "source_path": "backend\\data1\\raw\\pdf\\LENS Brochure Terragni Consulting_2022.pdf",
+    "file_hash": "fbe74b2cb6455f4f826716e47a605947cdab32a9204d4dd96f2301bc67a66257",
+    "ingestion_status": "EXTRACTED"
+  },
+  "sections": [
+    {
+      "section_type": "PAGE",
+      "page_number": 1,
+      "slide_number": null,
+      "section_order": 1,
+      "section_title": null,
+      "text": "",
+      "chunks": []
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 2,
+      "slide_number": null,
+      "section_order": 2,
+      "section_title": null,
+      "text": "India London Bucharest\nwww.terragni.in\nwww.buyerbrain.com",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 5,
+          "text": "India London Bucharest\nwww.terragni.in\nwww.buyerbrain.com"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 3,
+      "slide_number": null,
+      "section_order": 3,
+      "section_title": null,
+      "text": "Much like our name, we connect\nseemingly disparate dots and create\ninterdisciplinary solutions.\nThe pioneers of bringing neuroscience to\nthe world of business, Terragni is grounded\nin behaviour science and data science.\nFor more than a decade, Terragni has been\nusing the three together, to solve complex\nbusiness problems.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 49,
+          "text": "Much like our name, we connect\nseemingly disparate dots and create\ninterdisciplinary solutions.\nThe pioneers of bringing neuroscience to\nthe world of business, Terragni is grounded\nin behaviour science and data science.\nFor more than a decade, Terragni has been\nusing the three together, to solve complex\nbusiness problems."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 4,
+      "slide_number": null,
+      "section_order": 4,
+      "section_title": null,
+      "text": "Overwhelmed with data?\nLooking for insights?\nWorried about the investments required to\nmake sense of your customer data?\nOur Lens based “Insights As A Service” practice\nbridges the gap between data & insights.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 33,
+          "text": "Overwhelmed with data?\nLooking for insights?\nWorried about the investments required to\nmake sense of your customer data?\nOur Lens based “Insights As A Service” practice\nbridges the gap between data & insights."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 5,
+      "slide_number": null,
+      "section_order": 5,
+      "section_title": null,
+      "text": "Why do customers engage with you in\nthe manner that they do?\nWho are they?\nWhat are their life goals?\nWhat drives decisions?\nWhat behaviours drive revenue\ngrowth?\nWhat behaviours cause attrition?",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 32,
+          "text": "Why do customers engage with you in\nthe manner that they do?\nWho are they?\nWhat are their life goals?\nWhat drives decisions?\nWhat behaviours drive revenue\ngrowth?\nWhat behaviours cause attrition?"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 6,
+      "slide_number": null,
+      "section_order": 6,
+      "section_title": null,
+      "text": "Insights – Unbiased. Contextual. Focused.\nAn out-of-the box multilingual neuroscience\npowered research platform.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 13,
+          "text": "Insights – Unbiased. Contextual. Focused.\nAn out-of-the box multilingual neuroscience\npowered research platform."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 7,
+      "slide_number": null,
+      "section_order": 7,
+      "section_title": null,
+      "text": "Successful brands are those that are customer-centric.\nThese organizations are deeply rooted in driving\nengagement through insight.\nCustomer insights start with an understanding of why\ncustomers favour a brand, then look at what services\nthey provide and how they engage.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 40,
+          "text": "Successful brands are those that are customer-centric.\nThese organizations are deeply rooted in driving\nengagement through insight.\nCustomer insights start with an understanding of why\ncustomers favour a brand, then look at what services\nthey provide and how they engage."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 8,
+      "slide_number": null,
+      "section_order": 8,
+      "section_title": null,
+      "text": "Insights\n/ˈɪnsʌɪt/ (n)\nQualitative & Quantitative approaches to\nuncover hitherto undiscovered customer\nneeds, wants and fears.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 16,
+          "text": "Insights\n/ˈɪnsʌɪt/ (n)\nQualitative & Quantitative approaches to\nuncover hitherto undiscovered customer\nneeds, wants and fears."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 9,
+      "slide_number": null,
+      "section_order": 9,
+      "section_title": null,
+      "text": "Data + Primary research + Consumer Neuroscience\n+ Observational techniques.*\n*NOTE: Lens is configured to work with any one or multiple of these techniques.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 24,
+          "text": "Data + Primary research + Consumer Neuroscience\n+ Observational techniques.*\n*NOTE: Lens is configured to work with any one or multiple of these techniques."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 10,
+      "slide_number": null,
+      "section_order": 10,
+      "section_title": null,
+      "text": "Customer\nData\nCustomer\nInsights",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 4,
+          "text": "Customer\nData\nCustomer\nInsights"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 11,
+      "slide_number": null,
+      "section_order": 11,
+      "section_title": null,
+      "text": "Insights are source of\ncontinued differentiation.\nEnhanced\nValue\nTailored\nResponses\nDifferentiation\nInsights\nData",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 13,
+          "text": "Insights are source of\ncontinued differentiation.\nEnhanced\nValue\nTailored\nResponses\nDifferentiation\nInsights\nData"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 12,
+      "slide_number": null,
+      "section_order": 12,
+      "section_title": null,
+      "text": "LENS: Types of data\nto drive Insights\nBehavioral Data :\nStructured Transactional Data\n(ERP, POS, CRM)\nPerception /Attitudinal Data:\nSurvey Data\nUnstructured Market Data",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 24,
+          "text": "LENS: Types of data\nto drive Insights\nBehavioral Data :\nStructured Transactional Data\n(ERP, POS, CRM)\nPerception /Attitudinal Data:\nSurvey Data\nUnstructured Market Data"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 13,
+      "slide_number": null,
+      "section_order": 13,
+      "section_title": null,
+      "text": "Customer Insights\nCustomer\nEngagement\nGrowth\nProfitability\nRevenue\ncontribution\nEfficiency\nCustomer\nInteraction\nService levels\nSales coverage\nDelivery\nPerformance\nVoice of Customer\nRepeat business\nMarketing\nMarketing Analytics\nPrecision Marketing\nChannel\nPerformance\nAnalytics\nCustomer Media\nPreferences\nCustomer\nAwareness\nCustomer Lifetime value\nCustomer Scoring models\nClustering and\nsegmentation\nChurn models\nResponse models",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 48,
+          "text": "Customer Insights\nCustomer\nEngagement\nGrowth\nProfitability\nRevenue\ncontribution\nEfficiency\nCustomer\nInteraction\nService levels\nSales coverage\nDelivery\nPerformance\nVoice of Customer\nRepeat business\nMarketing\nMarketing Analytics\nPrecision Marketing\nChannel\nPerformance\nAnalytics\nCustomer Media\nPreferences\nCustomer\nAwareness\nCustomer Lifetime value\nCustomer Scoring models\nClustering and\nsegmentation\nChurn models\nResponse models"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 14,
+      "slide_number": null,
+      "section_order": 14,
+      "section_title": null,
+      "text": "Customer Awareness Insights\nBusiness Focus\nUnderstand the\ncorrect extent of\nvalue a customer\ncontributes to your\nbusiness.\nInsights areas\nCustomer Awareness\nCustomer Lifetime value modeling\nCustomer Scoring models\nClustering and segmentation\nChurn models\nResponse models\nOutcomes\nCraft efficient & profitable\nacquisition, retention &\ndevelopment initiatives.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 45,
+          "text": "Customer Awareness Insights\nBusiness Focus\nUnderstand the\ncorrect extent of\nvalue a customer\ncontributes to your\nbusiness.\nInsights areas\nCustomer Awareness\nCustomer Lifetime value modeling\nCustomer Scoring models\nClustering and segmentation\nChurn models\nResponse models\nOutcomes\nCraft efficient & profitable\nacquisition, retention &\ndevelopment initiatives."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 15,
+      "slide_number": null,
+      "section_order": 15,
+      "section_title": null,
+      "text": "Customer Engagement Insights\nBusiness Focus\nQuantify your\norganization’s\nengagement with your\ncustomers. Analyze what\ndrives sales & growth with\nyour customers\nInsights areas\nCustomer Engagement\nGrowth\nProfitability\nRevenue contribution\nEfficiency\nOutcomes\nIncrease market share,\nrevenue and profit.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 37,
+          "text": "Customer Engagement Insights\nBusiness Focus\nQuantify your\norganization’s\nengagement with your\ncustomers. Analyze what\ndrives sales & growth with\nyour customers\nInsights areas\nCustomer Engagement\nGrowth\nProfitability\nRevenue contribution\nEfficiency\nOutcomes\nIncrease market share,\nrevenue and profit."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 16,
+      "slide_number": null,
+      "section_order": 16,
+      "section_title": null,
+      "text": "Marketing Insights\nBusiness Focus\nWhat separates profitable\nmarketing initiatives from\nnot so profitable ones.\nInsights areas\nMarketing\nMarketing analytics\nPrecision Marketing\nChannel Performance analytics\nCustomer Media Preferences\nOutcomes\nReduce marketing costs\ntowards customer\nacquisition\nIncrease speed & relevance\nof customer acquisition\nofferings",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 42,
+          "text": "Marketing Insights\nBusiness Focus\nWhat separates profitable\nmarketing initiatives from\nnot so profitable ones.\nInsights areas\nMarketing\nMarketing analytics\nPrecision Marketing\nChannel Performance analytics\nCustomer Media Preferences\nOutcomes\nReduce marketing costs\ntowards customer\nacquisition\nIncrease speed & relevance\nof customer acquisition\nofferings"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 17,
+      "slide_number": null,
+      "section_order": 17,
+      "section_title": null,
+      "text": "Customer Interaction Insights\nBusiness Focus\nAccess “Context\nsensitive” Interaction\nInsights, to enhance the\neffectiveness of each\ncustomer interaction.\nInsights areas\nCustomer Interaction\nService Levels\nSales Coverage\nDelivery Performance\nVoice of Customer\nCustomer Satisfaction\nRepeat Business\nOutcomes\nUse the right interaction\nchannel for each customer &\ncontext, making every\ninteraction a memorable\nexperience for your\ncustomer",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 55,
+          "text": "Customer Interaction Insights\nBusiness Focus\nAccess “Context\nsensitive” Interaction\nInsights, to enhance the\neffectiveness of each\ncustomer interaction.\nInsights areas\nCustomer Interaction\nService Levels\nSales Coverage\nDelivery Performance\nVoice of Customer\nCustomer Satisfaction\nRepeat Business\nOutcomes\nUse the right interaction\nchannel for each customer &\ncontext, making every\ninteraction a memorable\nexperience for your\ncustomer"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 18,
+      "slide_number": null,
+      "section_order": 18,
+      "section_title": null,
+      "text": "Metrics & Scorecards\nGet our custom designed context\nspecific scorecards.\nDemonstrate accountability through\nstandardized metrics and KPIs.\nAccurately simulate the outcomes of\nnew customer strategies.",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 25,
+          "text": "Metrics & Scorecards\nGet our custom designed context\nspecific scorecards.\nDemonstrate accountability through\nstandardized metrics and KPIs.\nAccurately simulate the outcomes of\nnew customer strategies."
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 19,
+      "slide_number": null,
+      "section_order": 19,
+      "section_title": null,
+      "text": "Why Terragni?\nProven industry & domain expertise\nOver 2 decades of experience in\nconverting data from multiple sources\n& channels into actionable business\ninsights\nQualified Customer Consulting experts\nQualified Data experts",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 31,
+          "text": "Why Terragni?\nProven industry & domain expertise\nOver 2 decades of experience in\nconverting data from multiple sources\n& channels into actionable business\ninsights\nQualified Customer Consulting experts\nQualified Data experts"
+        }
+      ]
+    },
+    {
+      "section_type": "PAGE",
+      "page_number": 20,
+      "slide_number": null,
+      "section_order": 20,
+      "section_title": null,
+      "text": "India+London+Bucharest\ndipti@terragni.in",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 2,
+          "text": "India+London+Bucharest\ndipti@terragni.in"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "section_count": 20,
+    "chunk_count": 19
+  }
+}

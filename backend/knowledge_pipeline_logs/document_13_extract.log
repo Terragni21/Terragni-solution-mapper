@@ -1,0 +1,59 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 13
+Title       : Behaviours For Business_Driving Growth in Life Insurance with Communication_A Terragni Case Study
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 13
+Source characters sent to Groq: 3661
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 13
+Title       : Behaviours For Business_Driving Growth in Life Insurance with Communication_A Terragni Case Study
+Chunks      : 13
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 13
+document_title                     : Behaviours For Business_Driving Growth in Life Insurance with Communication_A Terragni Case Study
+chunks_sent                        : 13
+previous_pending_deleted           : 0
+staging_rows_inserted              : 18
+case_studies                       : 1
+industries                         : 1
+offerings                          : 0
+frameworks                         : 1
+challenges                         : 5
+outcomes                           : 4
+case_study_relationships           : 4
+
+====================================================================================================
+2026-10-05T11:28:46 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 13
+====================================================================================================

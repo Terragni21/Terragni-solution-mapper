@@ -1,0 +1,74 @@
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 18
+Title       : De-Sludge_Brochure_Terragni Consulting
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+Chunks loaded: 9
+Source characters sent to Groq: 4164
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 18
+Title       : De-Sludge_Brochure_Terragni Consulting
+Chunks      : 9
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 18
+document_title                     : De-Sludge_Brochure_Terragni Consulting
+chunks_sent                        : 9
+previous_pending_deleted           : 0
+staging_rows_inserted              : 15
+case_studies                       : 0
+industries                         : 0
+offerings                          : 1
+frameworks                         : 2
+challenges                         : 6
+outcomes                           : 6
+case_study_relationships           : 0
+
+====================================================================================================
+2026-10-05T11:30:55 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 18
+====================================================================================================

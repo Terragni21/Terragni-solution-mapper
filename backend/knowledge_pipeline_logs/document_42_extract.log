@@ -1,0 +1,56 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 42
+Title       : Driving Customer Engagement for Affluent Banking_for IIFL
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 26
+Source characters sent to Groq: 10609
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 42
+Title       : Driving Customer Engagement for Affluent Banking_for IIFL
+Chunks      : 26
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 42
+document_title                     : Driving Customer Engagement for Affluent Banking_for IIFL
+chunks_sent                        : 26
+previous_pending_deleted           : 0
+staging_rows_inserted              : 7
+case_studies                       : 1
+industries                         : 0
+offerings                          : 0
+frameworks                         : 0
+challenges                         : 2
+outcomes                           : 3
+case_study_relationships           : 0
+
+====================================================================================================
+2026-10-05T11:41:34 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 42
+====================================================================================================

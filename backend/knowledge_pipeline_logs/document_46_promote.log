@@ -1,0 +1,19 @@
+======================================================================
+Terragni Knowledge Promoter
+======================================================================
+Document ID : 46
+
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Promotion complete.
+
+Staging rows     : 9
+Promoted rows    : 9
+Case studies     : 0
+Master entities  : 9
+Evidence links   : 0
+Relationship links: 0
+======================================================================
+
+====================================================================================================
+2026-10-05T11:44:38 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.promoter --document-id 46
+====================================================================================================

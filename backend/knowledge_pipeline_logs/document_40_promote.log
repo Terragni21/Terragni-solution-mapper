@@ -1,0 +1,81 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 2037, in <module>
+    main()
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 2002, in main
+    result = promote(
+             ^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 1799, in promote
+    promote_master_entity(cursor, row)
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 724, in promote_master_entity
+    return execute_returning_id(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 495, in execute_returning_id
+    cursor.execute(sql, bind_params)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\cursor.py", line 898, in wrapped_f
+    return self._connection._impl.process_sync_operation(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "src/oracledb/impl/base/connection.pyx", line 452, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "src/oracledb/impl/base/connection.pyx", line 448, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\cursor.py", line 211, in _execute
+    yield from impl.execute(self)
+  File "src/oracledb/impl/thin/cursor.pyx", line 295, in execute
+  File "src/oracledb/impl/base/connection.pyx", line 443, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "src/oracledb/impl/thin/connection.pyx", line 655, in oracledb.thin_impl.ThinConnImpl._process_sync_operation_sub_op
+  File "src/oracledb/impl/thin/protocol.pyx", line 259, in oracledb.thin_impl.Protocol._process_single_message
+  File "src/oracledb/impl/thin/protocol.pyx", line 260, in oracledb.thin_impl.Protocol._process_single_message
+  File "src/oracledb/impl/thin/protocol.pyx", line 250, in oracledb.thin_impl.Protocol._process_round_trip
+  File "src/oracledb/impl/thin/protocol.pyx", line 246, in oracledb.thin_impl.Protocol._process_round_trip
+  File "src/oracledb/impl/thin/protocol.pyx", line 234, in oracledb.thin_impl.Protocol._process_message
+  File "src/oracledb/impl/thin/messages/base.pyx", line 104, in oracledb.thin_impl.Message._check_and_raise_exception
+oracledb.exceptions.IntegrityError: ORA-00001: unique constraint (C##AI.UK_OUTCOME_CODE) violated
+Help: https://docs.oracle.com/error-help/db/ora-00001/
+======================================================================
+Terragni Knowledge Promoter
+======================================================================
+Document ID : 40
+
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+====================================================================================================
+2026-10-05T11:40:59 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.promoter --document-id 40
+====================================================================================================
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 1431, in <module>
+    main()
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 1396, in main
+    result = promote(
+             ^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 1259, in promote
+    case_study_id = promote_case_study(
+                    ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 674, in promote_case_study
+    cursor.execute(
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\cursor.py", line 898, in wrapped_f
+    return self._connection._impl.process_sync_operation(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "src/oracledb/impl/base/connection.pyx", line 452, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "src/oracledb/impl/base/connection.pyx", line 448, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "src/oracledb/impl/base/connection.pyx", line 441, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\cursor.py", line 211, in _execute
+    yield from impl.execute(self)
+  File "src/oracledb/impl/thin/cursor.pyx", line 293, in execute
+  File "src/oracledb/impl/thin/cursor.pyx", line 248, in _preprocess_execute
+  File "src/oracledb/impl/base/cursor.pyx", line 352, in oracledb.base_impl.BaseCursorImpl._perform_binds
+  File "src/oracledb/impl/thin/var.pyx", line 75, in oracledb.thin_impl.ThinVarImpl._bind
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\errors.py", line 215, in _raise_err
+    raise _create_exception(error_num, context_error_message, cause, **args)
+oracledb.exceptions.DatabaseError: DPY-4008: no bind placeholder named ":title" was found in the SQL text
+======================================================================
+Terragni Knowledge Promoter
+======================================================================
+Document ID : 40
+
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+====================================================================================================
+2026-10-05T12:19:09 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.promoter --document-id 40
+====================================================================================================

@@ -1,0 +1,55 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 10
+Title       : Behaviours For Business - Powering Growth Through Enhanced Wallet Share and Word-of-Mouth_A Terragni Case Study
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 16
+Source characters sent to Groq: 7515
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 10
+Title       : Behaviours For Business - Powering Growth Through Enhanced Wallet Share and Word-of-Mouth_A Terragni Case Study
+Chunks      : 16
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 10
+document_title                     : Behaviours For Business - Powering Growth Through Enhanced Wallet Share and Word-of-Mouth_A Terragni Case Study
+chunks_sent                        : 16
+previous_pending_deleted           : 0
+staging_rows_inserted              : 14
+case_studies                       : 1
+industries                         : 1
+offerings                          : 0
+frameworks                         : 0
+challenges                         : 4
+outcomes                           : 3
+case_study_relationships           : 3
+
+====================================================================================================
+2026-10-05T11:26:29 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 10
+====================================================================================================

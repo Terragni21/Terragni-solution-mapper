@@ -1,0 +1,227 @@
+{
+  "document": {
+    "title": "JUMP_Behaviours for Business - Behavioral Design for Adoption & Engagement Banking Case",
+    "file_name": "JUMP_Behaviours for Business - Behavioral Design for Adoption & Engagement Banking Case.pptx",
+    "file_type": "pptx",
+    "document_type": "PPTX",
+    "source_path": "backend\\data1\\raw\\pptx\\JUMP_Behaviours for Business - Behavioral Design for Adoption & Engagement Banking Case.pptx",
+    "file_hash": "711b6324e5c70f9db3e881a4e0c898a9bf2e20f8a50f67ebededecec42fe4213",
+    "ingestion_status": "EXTRACTED"
+  },
+  "sections": [
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 1,
+      "section_order": 1,
+      "section_title": null,
+      "text": "A Terragni\nCase Study\nBehavioural Science for Digital Journeys In Action",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 11,
+          "text": "A Terragni\nCase Study\nBehavioural Science for Digital Journeys In Action"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 2,
+      "section_order": 2,
+      "section_title": null,
+      "text": "Client Background\n\nChallenge\n\nObjective\n\nWhat We Did\n\nSamples\n\nStrengths\n\nOpportunities\n\nSolutions\n\nBusiness Outcomes\n5th\nLargest bank in Asia\nCustomers pan India\nBranches\n3120\n6 Lac+\n56084\nEmployees",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 27,
+          "text": "Client Background\n\nChallenge\n\nObjective\n\nWhat We Did\n\nSamples\n\nStrengths\n\nOpportunities\n\nSolutions\n\nBusiness Outcomes\n5th\nLargest bank in Asia\nCustomers pan India\nBranches\n3120\n6 Lac+\n56084\nEmployees"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 3,
+      "section_order": 3,
+      "section_title": null,
+      "text": "Client Background\n\nChallenge\n\nObjective\n\nWhat We Did\n\nSamples\n\nStrengths\n\nOpportunities\n\nSolutions\n\nBusiness Outcomes\nProfitability and Customer Retention under pressure due to\nWeak adoption of digital touchpoints for regular banking processes\n\nHigh cost of customer service via physical channels (branches, contact centre)\n\nCustomer dissatisfaction with digital touchpoints detracting from overall customer experience with the institution",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 54,
+          "text": "Client Background\n\nChallenge\n\nObjective\n\nWhat We Did\n\nSamples\n\nStrengths\n\nOpportunities\n\nSolutions\n\nBusiness Outcomes\nProfitability and Customer Retention under pressure due to\nWeak adoption of digital touchpoints for regular banking processes\n\nHigh cost of customer service via physical channels (branches, contact centre)\n\nCustomer dissatisfaction with digital touchpoints detracting from overall customer experience with the institution"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 4,
+      "section_order": 4,
+      "section_title": null,
+      "text": "Client Background\n\nChallenge\n\nWhat We Did\n\nSamples\n\nStrengths\n\nOpportunities\n\nSolutions\n\nBusiness Outcomes\nJump Deployed For All Regular Digital Banking Journeys For:\n\nMaking journeys simpler\n\nAligning journeys with user contexts\n\nIncorporating behaviour science principles to drive adoption and usage",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 38,
+          "text": "Client Background\n\nChallenge\n\nWhat We Did\n\nSamples\n\nStrengths\n\nOpportunities\n\nSolutions\n\nBusiness Outcomes\nJump Deployed For All Regular Digital Banking Journeys For:\n\nMaking journeys simpler\n\nAligning journeys with user contexts\n\nIncorporating behaviour science principles to drive adoption and usage"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 5,
+      "section_order": 5,
+      "section_title": null,
+      "text": "Inconsistent touchpoints\nUsers unable to find the ‘Change Usage Preference’ option on the mobile application. While this option was found in the Debit Cards section on the website it was not available in the corresponding section in the app.\n1\n2\nGo\nInconsistent terminology\n\nBlock & replace only allows the customer to block the card.\nNo option available to apply for new card or to replace card.\nFamiliarity Bias violated\nCognitive Effort",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 72,
+          "text": "Inconsistent touchpoints\nUsers unable to find the ‘Change Usage Preference’ option on the mobile application. While this option was found in the Debit Cards section on the website it was not available in the corresponding section in the app.\n1\n2\nGo\nInconsistent terminology\n\nBlock & replace only allows the customer to block the card.\nNo option available to apply for new card or to replace card.\nFamiliarity Bias violated\nCognitive Effort"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 6,
+      "section_order": 6,
+      "section_title": null,
+      "text": "Chunking of functionality\n\nContextual Design Links changed to buttons to allow for ease of clicking, based on user observations\n\nApplication of Familiarity Bias",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 23,
+          "text": "Chunking of functionality\n\nContextual Design Links changed to buttons to allow for ease of clicking, based on user observations\n\nApplication of Familiarity Bias"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 7,
+      "section_order": 7,
+      "section_title": null,
+      "text": "Key information not presented upfront\nReplacement fees information available on a different page\nAdds a click, adding cognitive effort\nBlock & Replace < Back\n4321********9876\nSelect Debit Card\nBlock & Replace\nBlock & Replace\n4321********9876\nRequest not completely addressed\nUser request is only partly completed\nNo option available to continue with replacement of card Key details not placed intuitively\nBehavioural impact\nHigh cognitive effort Perception of lack of transparency\nGiven the context of a financial product, this drives erosion of trust",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 81,
+          "text": "Key information not presented upfront\nReplacement fees information available on a different page\nAdds a click, adding cognitive effort\nBlock & Replace < Back\n4321********9876\nSelect Debit Card\nBlock & Replace\nBlock & Replace\n4321********9876\nRequest not completely addressed\nUser request is only partly completed\nNo option available to continue with replacement of card Key details not placed intuitively\nBehavioural impact\nHigh cognitive effort Perception of lack of transparency\nGiven the context of a financial product, this drives erosion of trust"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 8,
+      "section_order": 8,
+      "section_title": null,
+      "text": "Block\nSelect Debit Card\nOnce the card is blocked, it can not be used for any transaction.\n\nPlease note that the replacement card will be a chip card enabled for domestic & international use.\nFor NRO customer's the replacement debit card will be a domestic card and can be used only for domestic transactions.\n\nDomestic chipcard replacement fee INR 200 will be charged.\n\nFor charges for other card types click here\n4321********9876\nSelect Debit Card\nBLOCK\nBlock\nYour Debit card 4321********9876 has been blocked.\nAll Done!\nREPLACE\nNEW\nCARD\nGet the same card re-issued in just one click\nTry something NEW from our other options\nAlerts and key information about fees provided upfront\n\nExternal trigger using Fresh Start effect\n\nApplication of Feed-Forward principle",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 123,
+          "text": "Block\nSelect Debit Card\nOnce the card is blocked, it can not be used for any transaction.\n\nPlease note that the replacement card will be a chip card enabled for domestic & international use.\nFor NRO customer's the replacement debit card will be a domestic card and can be used only for domestic transactions.\n\nDomestic chipcard replacement fee INR 200 will be charged.\n\nFor charges for other card types click here\n4321********9876\nSelect Debit Card\nBLOCK\nBlock\nYour Debit card 4321********9876 has been blocked.\nAll Done!\nREPLACE\nNEW\nCARD\nGet the same card re-issued in just one click\nTry something NEW from our other options\nAlerts and key information about fees provided upfront\n\nExternal trigger using Fresh Start effect\n\nApplication of Feed-Forward principle"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 9,
+      "section_order": 9,
+      "section_title": null,
+      "text": "Readability challenge\nUser is not able to easily discover the note about card blocking\nGo\nProceed>\nBack to my card\nCard Details\nUpgrade/Replace card\nCard details\nUpgrade/Replace card\nBack to my card\nGo\nProceed>\nPriya Sharma (4321 **** **** 9876)\nPriya Sharma (4321 **** **** 9876)\nLack of visibility\nUser is not clear how many more steps are required and often abandons the journey here\nUsability challenge\nIt takes the user two clicks just to select the reason\nBehavioural Impact\nHigh Perceived Effort associated with residual anger, lack of transparency and loss of trust\nAbsence of empathy magnified",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 98,
+          "text": "Readability challenge\nUser is not able to easily discover the note about card blocking\nGo\nProceed>\nBack to my card\nCard Details\nUpgrade/Replace card\nCard details\nUpgrade/Replace card\nBack to my card\nGo\nProceed>\nPriya Sharma (4321 **** **** 9876)\nPriya Sharma (4321 **** **** 9876)\nLack of visibility\nUser is not clear how many more steps are required and often abandons the journey here\nUsability challenge\nIt takes the user two clicks just to select the reason\nBehavioural Impact\nHigh Perceived Effort associated with residual anger, lack of transparency and loss of trust\nAbsence of empathy magnified"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 10,
+      "section_order": 10,
+      "section_title": null,
+      "text": "Application of Goal Gradient Effect\n\nUser input elements changed to drive better usability\n\nPrinciples of Visual Hierarchy implemented to bring focus to important instructions",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 24,
+          "text": "Application of Goal Gradient Effect\n\nUser input elements changed to drive better usability\n\nPrinciples of Visual Hierarchy implemented to bring focus to important instructions"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 11,
+      "section_order": 11,
+      "section_title": null,
+      "text": "JUMP PROCESS REDESIGN\nBefore\nAfter\nTedious\nComplex\nTime consuming\nQuick\nSimple\nBehavioural Impact\nReduction in Cognitive Effort, Temporal Effort and Perceived Effort\nEnhances perception of transparency and trust",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 28,
+          "text": "JUMP PROCESS REDESIGN\nBefore\nAfter\nTedious\nComplex\nTime consuming\nQuick\nSimple\nBehavioural Impact\nReduction in Cognitive Effort, Temporal Effort and Perceived Effort\nEnhances perception of transparency and trust"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 12,
+      "section_order": 12,
+      "section_title": null,
+      "text": "Client Background\n\nObjective\n\nApproach\n\nWhy\n\nSolutions\n\nBusiness Outcomes\n⬆Higher Digital Adoption\n⬆Reduction In Cost to Serve\n⬇Improvement In Customer Retention\n⬇Improvement In Customer Experience Index\n⬇Improvement In NPS",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 28,
+          "text": "Client Background\n\nObjective\n\nApproach\n\nWhy\n\nSolutions\n\nBusiness Outcomes\n⬆Higher Digital Adoption\n⬆Reduction In Cost to Serve\n⬇Improvement In Customer Retention\n⬇Improvement In Customer Experience Index\n⬇Improvement In NPS"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 13,
+      "section_order": 13,
+      "section_title": null,
+      "text": "Thank You\ndipti@terragni.in\n\n+91 895 698 2522",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 7,
+          "text": "Thank You\ndipti@terragni.in\n\n+91 895 698 2522"
+        }
+      ]
+    },
+    {
+      "section_type": "SLIDE",
+      "page_number": null,
+      "slide_number": 14,
+      "section_order": 14,
+      "section_title": null,
+      "text": "India\nLondon\nBucharest\nwww.terragni.in\nwww.buyerbrain.com",
+      "chunks": [
+        {
+          "chunk_order": 1,
+          "token_count": 5,
+          "text": "India\nLondon\nBucharest\nwww.terragni.in\nwww.buyerbrain.com"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "section_count": 14,
+    "chunk_count": 14
+  }
+}

@@ -1,0 +1,76 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 2037, in <module>
+    main()
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 2002, in main
+    result = promote(
+             ^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 1834, in promote
+    case_study_id = promote_case_study(
+                    ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 972, in promote_case_study
+    cursor.execute(
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\cursor.py", line 898, in wrapped_f
+    return self._connection._impl.process_sync_operation(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "src/oracledb/impl/base/connection.pyx", line 452, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "src/oracledb/impl/base/connection.pyx", line 448, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "src/oracledb/impl/base/connection.pyx", line 441, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\cursor.py", line 211, in _execute
+    yield from impl.execute(self)
+  File "src/oracledb/impl/thin/cursor.pyx", line 293, in execute
+  File "src/oracledb/impl/thin/cursor.pyx", line 248, in _preprocess_execute
+  File "src/oracledb/impl/base/cursor.pyx", line 352, in oracledb.base_impl.BaseCursorImpl._perform_binds
+  File "src/oracledb/impl/thin/var.pyx", line 75, in oracledb.thin_impl.ThinVarImpl._bind
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\errors.py", line 215, in _raise_err
+    raise _create_exception(error_num, context_error_message, cause, **args)
+oracledb.exceptions.DatabaseError: DPY-4008: no bind placeholder named ":title" was found in the SQL text
+======================================================================
+Terragni Knowledge Promoter
+======================================================================
+Document ID : 23
+
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+====================================================================================================
+2026-10-05T11:34:08 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.promoter --document-id 23
+====================================================================================================
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 1431, in <module>
+    main()
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 1396, in main
+    result = promote(
+             ^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 1259, in promote
+    case_study_id = promote_case_study(
+                    ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\promoter.py", line 674, in promote_case_study
+    cursor.execute(
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\cursor.py", line 898, in wrapped_f
+    return self._connection._impl.process_sync_operation(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "src/oracledb/impl/base/connection.pyx", line 452, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "src/oracledb/impl/base/connection.pyx", line 448, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "src/oracledb/impl/base/connection.pyx", line 441, in oracledb.base_impl.BaseConnImpl.process_sync_operation
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\cursor.py", line 211, in _execute
+    yield from impl.execute(self)
+  File "src/oracledb/impl/thin/cursor.pyx", line 293, in execute
+  File "src/oracledb/impl/thin/cursor.pyx", line 248, in _preprocess_execute
+  File "src/oracledb/impl/base/cursor.pyx", line 352, in oracledb.base_impl.BaseCursorImpl._perform_binds
+  File "src/oracledb/impl/thin/var.pyx", line 75, in oracledb.thin_impl.ThinVarImpl._bind
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\oracledb\errors.py", line 215, in _raise_err
+    raise _create_exception(error_num, context_error_message, cause, **args)
+oracledb.exceptions.DatabaseError: DPY-4008: no bind placeholder named ":title" was found in the SQL text
+======================================================================
+Terragni Knowledge Promoter
+======================================================================
+Document ID : 23
+
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+====================================================================================================
+2026-10-05T12:18:36 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.promoter --document-id 23
+====================================================================================================

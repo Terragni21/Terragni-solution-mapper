@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+data/document_index.json
+venv/
+# Visitor leads and visit logs contain personal data - never commit them.
+data/leads/
+evaluation/last_report.json

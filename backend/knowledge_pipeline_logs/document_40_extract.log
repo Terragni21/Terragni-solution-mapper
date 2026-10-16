@@ -1,0 +1,55 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 40
+Title       : Behaviours For Business_Powering Growth through Wallet Share and Word of Mouth for Affluent Banking_ A Terragni Case
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 26
+Source characters sent to Groq: 10919
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 40
+Title       : Behaviours For Business_Powering Growth through Wallet Share and Word of Mouth for Affluent Banking_ A Terragni Case
+Chunks      : 26
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 40
+document_title                     : Behaviours For Business_Powering Growth through Wallet Share and Word of Mouth for Affluent Banking_ A Terragni Case
+chunks_sent                        : 26
+previous_pending_deleted           : 0
+staging_rows_inserted              : 14
+case_studies                       : 1
+industries                         : 1
+offerings                          : 0
+frameworks                         : 0
+challenges                         : 1
+outcomes                           : 5
+case_study_relationships           : 4
+
+====================================================================================================
+2026-10-05T11:40:10 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 40
+====================================================================================================

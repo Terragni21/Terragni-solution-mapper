@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Terragni Consulting Solution Mapper — explore a business challenge through the Terragni lens."
+    >
+
+    <title>
+        Terragni Consulting | Solution Mapper
+    </title>
+
+
+    <!-- =====================================================
+         TERRAGNI STYLES
+         ===================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/visuals.css') }}"
+    >
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/home.css') }}"
+    >
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/brand.css') }}"
+    >
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/answer.css') }}"
+    >
+
+
+    <!-- =====================================================
+         FONTS
+         ===================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
+    <header class="site-header">
+
+        <a
+            href="#hero"
+            class="brand"
+            aria-label="Terragni Consulting home"
+        >
+
+            <img
+                src="{{ url_for('static', filename='images/terragni t logo.png') }}"
+                alt="Terragni Consulting"
+                class="brand-logo"
+            >
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    TERRAGNI CONSULTING
+                </div>
+
+                <div class="brand-sub">
+                    the Human Engagement company
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <nav
+            class="main-nav"
+            aria-label="Main navigation"
+        >
+
+            <a href="#hero">
+                Solution Mapper
+            </a>
+
+            <!-- Updated: opens the standalone About page -->
+            <a href="/about">
+                About
+            </a>
+
+            <a href="/contact">
+                Contact
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =========================================================
+         MAIN
+         ========================================================= -->
+
+    <main>
+
+
+        <!-- =====================================================
+             HERO / INPUT
+             ===================================================== -->
+
+        <section
+            id="hero"
+            class="hero"
+        >
+
+            <!-- ============ HERO BAND (full width photo) ============ -->
+            <div class="sm-band">
+                <div class="sm-band-media" aria-hidden="true">
+                    <img src="{{ url_for('static', filename='images/terragni-about-hero.png.png') }}" alt="" data-parallax="0.25">
+                </div>
+                <div class="sm-band-shade" aria-hidden="true"></div>
+                <div class="sm-band-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+                <div class="sm-band-inner">
+                    <span class="sm-kicker">Terragni Solution Mapper · Banking</span>
+                    <h1 class="sm-title">
+                        <span class="sm-line"><span>Bring a business challenge,</span></span>
+                        <span class="sm-line"><span>or ask about Terragni.</span></span>
+                        <span class="sm-line sm-accent"><span>Answers from real work.</span></span>
+                    </h1>
+                    <p class="sm-sub">
+                        Tell us who you are and what you need. Our AI reads Terragni's
+                        own case studies and brochures and builds a page made for you,
+                        in seconds.
+                    </p>
+                    <!-- <div class="sm-badges">
+                        <span class="sm-badge"><b>✓</b> Grounded in real Terragni work</span>
+                        <span class="sm-badge"><b>✓</b> Client names never shown</span>
+                        <span class="sm-badge"><b>✓</b> Answers in seconds</span>
+                    </div> -->
+                    <a href="#query-form" class="sm-start">Start now <span>↓</span></a>
+                </div>
+            </div>
+
+            <!-- ============ FORM CARD (floats over the band) ============ -->
+            <div class="sm-form-shell">
+                <div
+                    class="mapper-journey"
+                    aria-label="Solution mapper journey"
+                >
+                    <span class="mapper-journey-item active">01 About you</span>
+                    <span class="mapper-journey-item">02 Your question</span>
+                    <span class="mapper-journey-item">03 Terragni lens</span>
+                    <span class="mapper-journey-item">04 Result</span>
+                </div>
+
+            <form
+                id="query-form"
+                autocomplete="off"
+            >
+                <div class="mapper-step-label">
+                    <span>1</span> About you
+                </div>
+
+                <div class="mapper-context-grid">
+                    <div class="mapper-field">
+                        <label for="industry-input">
+                            Industry
+                        </label>
+                        <input
+                            id="industry-input"
+                            name="industry"
+                            type="text"
+                            maxlength="120"
+                            list="industry-options"
+                            placeholder="e.g. Banking"
+                            autocomplete="organization"
+                            required
+                        >
+                        <datalist id="industry-options">
+                            <option value="Banking">
+                            <option value="Retail banking">
+                            <option value="Premium / private banking">
+                            <option value="Lending and personal loans">
+                            <option value="Financial services">
+                            <option value="Insurance">
+                                
+                            <option value="Other">
+                        </datalist>
+                    </div>
+                    <div class="mapper-field">
+                        <label for="role-select">
+                            Your role
+                        </label>
+                        <select id="role-select" class="mapper-role-select" required>
+                            <option value="" disabled selected>Choose your role</option>
+                            <optgroup label="Leadership">
+                                <option value="CEO / Managing Director">CEO / Managing Director</option>
+                                <option value="Chief Marketing Officer">Chief Marketing Officer</option>
+                                <option value="Chief Customer / Experience Officer">Chief Customer / Experience Officer</option>
+                                <option value="Chief Digital Officer">Chief Digital Officer</option>
+                                <option value="Chief Strategy Officer">Chief Strategy Officer</option>
+                            </optgroup>
+                            <optgroup label="Business heads">
+                                <option value="Head of Retail Banking">Head of Retail Banking</option>
+                                <option value="Head of Premium / Wealth Banking">Head of Premium / Wealth Banking</option>
+                                <option value="Head of Lending and Loans">Head of Lending and Loans</option>
+                                <option value="Head of Cards and Payments">Head of Cards and Payments</option>
+                                <option value="Head of Deposits and Savings">Head of Deposits and Savings</option>
+                                <option value="Head of SME / Business Banking">Head of SME / Business Banking</option>
+                            </optgroup>
+                            <optgroup label="Functions">
+                                <option value="Head of Digital Banking">Head of Digital Banking</option>
+                                <option value="Head of Product">Head of Product</option>
+                                <option value="Head of Customer Experience">Head of Customer Experience</option>
+                                <option value="Head of Marketing / Brand">Head of Marketing / Brand</option>
+                                <option value="Head of Strategy">Head of Strategy</option>
+                                <option value="Head of Analytics and Insights">Head of Analytics and Insights</option>
+                                <option value="Head of HR / People">Head of HR / People</option>
+                                <option value="Head of Operations">Head of Operations</option>
+                                <option value="Branch / Regional Manager">Branch / Regional Manager</option>
+                                <option value="Relationship Manager">Relationship Manager</option>
+                            </optgroup>
+                            <option value="__other">Other (type your role)</option>
+                        </select>
+                        <input
+                            id="role-input"
+                            name="role"
+                            type="text"
+                            maxlength="160"
+                            class="mapper-role-other"
+                            placeholder="Type your role, e.g. Head of Treasury"
+                            autocomplete="organization-title"
+                            hidden
+                        >
+                    </div>
+                </div>
+
+                <div class="mapper-step-label">
+                    <span>2</span> What do you need?
+                </div>
+
+                <div
+                    class="mapper-path-choice"
+                    role="radiogroup"
+                    aria-label="What do you need?"
+                >
+                    <button
+                        type="button"
+                        class="mapper-path-button active"
+                        data-mode="challenge"
+                        role="radio"
+                        aria-checked="true"
+                    >
+                        <strong>I have a challenge</strong>
+                        <span>Find out if Terragni has solved something similar</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="mapper-path-button"
+                        data-mode="knowledge"
+                        role="radio"
+                        aria-checked="false"
+                    >
+                        <strong>I want to know about Terragni</strong>
+                        <span>Services, methods and banking work</span>
+                    </button>
+                </div>
+
+                <input
+                    id="mode-input"
+                    name="mode"
+                    type="hidden"
+                    value="challenge"
+                >
+
+                <!-- CHALLENGE OR QUESTION -->
+                <div class="mapper-field">
+                    <label
+                        for="query-input"
+                        id="query-label"
+                    >
+                        <span class="mapper-step-inline">3</span>
+                        What is not working?
+                    </label>
+                    <textarea
+                        id="query-input"
+                        name="challenge"
+                        maxlength="6000"
+                        rows="5"
+                        placeholder="e.g. Customers still come to our branches even though we launched an app."
+                        required
+                    ></textarea>
+                    <span
+                        id="query-character-count"
+                        class="query-character-count"
+                    >
+                        0 / 6000
+                    </span>
+                    <p class="mapper-privacy-note">
+                        Please do not include client names, account numbers
+                        or personal details.
+                    </p>
+                </div>
+
+                <div
+                    id="example-chips"
+                    class="mapper-example-chips"
+                    aria-label="Example inputs"
+                ></div>
+
+                <!-- SUBMIT -->
+                <button
+                    id="submit-btn"
+                    type="submit"
+                >
+                    Explore the challenge →
+                </button>
+            </form>
+            </div>
+
+            <!-- ============ EXAMPLE CHALLENGES MARQUEE ============ -->
+            <div class="sm-marquee" aria-label="Example banking challenges">
+                <div class="sm-marquee-track">
+                    <button type="button" class="sm-q" data-example-mode="challenge">“Customers still come to our branches even though we launched an app.”</button>
+                    <button type="button" class="sm-q" data-example-mode="knowledge">“What does Terragni do for banks?”</button>
+                    <button type="button" class="sm-q" data-example-mode="challenge">“Our affluent customers are happy but rarely refer anyone.”</button>
+                    <button type="button" class="sm-q" data-example-mode="knowledge">“What is the Effort Assessment Score?”</button>
+                    <button type="button" class="sm-q" data-example-mode="challenge">“Our relationship managers do not resolve complaints well.”</button>
+                    <button type="button" class="sm-q" data-example-mode="knowledge">“What does the name Terragni mean?”</button>
+                    <button type="button" class="sm-q" data-example-mode="challenge">“Customers lose interest after trying to redeem their reward points.”</button>
+                    <button type="button" class="sm-q" data-example-mode="knowledge">“How does Terragni use behavioural science?”</button>
+                </div>
+            </div>
+
+            <div id="how-it-works-strip" class="tv-how-mount"></div>
+
+            <!-- ============ WHY TERRAGNI ============ -->
+            <div class="sm-why">
+                <span class="sm-kicker sm-kicker-dark reveal">Why visitors trust it</span>
+                <h2 class="reveal">Every answer is built from Terragni's real work.</h2>
+                <div class="sm-why-grid" data-reveal-stagger>
+                    <article class="sm-why-card">
+                        <div class="sm-why-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h6"/></svg>
+                        </div>
+                        <h3>Real proof, not promises</h3>
+                        <p>Answers come only from Terragni's case studies and brochures, with the sources shown on every page.</p>
+                    </article>
+                    <article class="sm-why-card">
+                        <div class="sm-why-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3 4 6v6c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+                        </div>
+                        <h3>Private by design</h3>
+                        <p>Personal details are hidden automatically, and client names are never shown.</p>
+                    </article>
+                    <article class="sm-why-card">
+                        <div class="sm-why-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                        </div>
+                        <h3>Personal in seconds</h3>
+                        <p>Your role and industry shape every page: the right services, methods and banking examples for you.</p>
+                    </article>
+                </div>
+            </div>
+
+            <!-- ============ CLOSING BANNER ============ -->
+            <div class="sm-cta reveal reveal-zoom">
+                <div class="sm-cta-text">
+                    <span class="sm-kicker">Terra + Agni</span>
+                    <h2>Grounded in reality. Driven by transformation.</h2>
+                    <p>When behaviour shifts, business moves. Let's understand what is not moving in your organisation.</p>
+                    <div class="sm-cta-actions">
+                        <a href="/contact" class="mapper-cta-primary">Talk to Terragni ↗</a>
+                        <a href="/about" class="sm-ghost">Discover Terragni</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             LOADING
+             ===================================================== -->
+
+        <section
+            id="loading"
+            class="hidden"
+            aria-live="polite"
+            aria-busy="true"
+        >
+
+            <div class="spinner"></div>
+
+            <strong>
+                <span id="loading-title">Understanding your challenge</span>
+            </strong>
+
+            <p>
+                Looking beneath the words to understand what may
+                actually be getting in the way…
+            </p>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             RESULTS
+             ===================================================== -->
+
+        <section
+            id="results"
+            class="hidden"
+            aria-live="polite"
+            aria-busy="false"
+        >
+
+
+            <!-- =================================================
+                 RESULT HEADER
+                 ================================================= -->
+
+            <header class="results-header" id="results-header">
+                <div class="results-banner" aria-hidden="true"></div>
+
+                <div class="eyebrow">
+                    TERRAGNI SOLUTION MAPPER
+                </div>
+
+
+                <h1 id="dynamic-title">
+                    Explore the challenge through
+                    the Terragni lens
+                </h1>
+
+
+                <div
+                    id="result-context"
+                    class="result-context"
+                ></div>
+
+            </header>
+
+
+
+            <!-- =================================================
+                 MATCH STATUS
+                 ================================================= -->
+
+            <div
+                id="match-status-panel"
+                class="match-status-panel hidden"
+                aria-live="polite"
+            ></div>
+
+
+
+            <!-- =================================================
+                 JOURNEY CONTENT
+                 APP.JS BUILDS THE COMPLETE JOURNEY HERE
+                 ================================================= -->
+
+            <div
+                id="journey-content"
+                aria-live="polite"
+            ></div>
+
+
+
+            <!-- =================================================
+                 LEGACY / COMPATIBILITY ELEMENTS
+                 APP.JS CAN USE THESE WHEN PRESENT
+                 ================================================= -->
+
+            <section
+                id="diagnosis-section"
+                class="hidden"
+            >
+
+                <div class="eyebrow">
+                    CONVERSATIONAL → CONCEPTUAL
+                </div>
+
+                <h2 id="problem-summary"></h2>
+
+                <div id="diagnosis"></div>
+
+            </section>
+
+
+
+            <section
+                id="recommendation-section"
+                class="hidden"
+            >
+
+                <div id="primary-offering"></div>
+
+                <h2 id="solution-title"></h2>
+
+                <p id="solution-copy"></p>
+
+                <div id="rationale"></div>
+
+                <div id="how-it-works"></div>
+
+                <div id="framework-tags"></div>
+
+            </section>
+
+
+
+            <section
+                id="case-section"
+                class="hidden"
+            >
+
+                <div id="case-studies-panel"></div>
+
+            </section>
+
+
+
+            <section
+                id="offerings-section"
+                class="hidden"
+            >
+
+                <div id="offerings-panel"></div>
+
+            </section>
+
+
+
+            <section
+                id="outcome-wrap"
+                class="hidden"
+            >
+
+                <div id="outcome-tags"></div>
+
+            </section>
+
+
+
+            <section
+                id="evidence-section"
+                class="hidden"
+            >
+
+                <div id="evidence-panel"></div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CLARIFICATION
+                 ================================================= -->
+
+            <section
+                id="clarification-section"
+                class="hidden"
+            >
+
+                <span class="clarification-question-label">
+                    ONE MORE QUESTION
+                </span>
+
+
+                <h2>
+                    Help us sharpen the problem.
+                </h2>
+
+
+                <p id="clarification-question"></p>
+
+
+                <form id="clarification-form">
+
+                    <textarea
+                        id="clarification-input"
+                        rows="4"
+                        maxlength="3000"
+                        placeholder="Add the missing context in your own words."
+                    ></textarea>
+
+
+                    <button
+                        id="clarification-submit-btn"
+                        type="submit"
+                    >
+                        Re-run the Terragni lens →
+                    </button>
+
+                </form>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 RESET / EXPLORE AGAIN
+                 ================================================= -->
+
+            <div
+                class="mapper-result-section"
+                id="result-actions"
+            >
+
+                <div class="mapper-next-card">
+
+                    <div class="mapper-next-copy">
+
+                        <span>
+                            START AGAIN
+                        </span>
+
+                        <p>
+                            Explore another business challenge
+                            through the Terragni lens.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        id="reset-btn"
+                        type="button"
+                        class="mapper-direction-button"
+                    >
+                        Explore again
+                        <span>↗</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================================================
+         SOLUTION DRAWER
+         ========================================================= -->
+
+    <aside
+        id="solution-drawer"
+        class="hidden"
+        aria-hidden="true"
+    >
+
+        <div
+            class="drawer-backdrop"
+            data-close-drawer
+        ></div>
+
+
+        <div
+            class="drawer-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="solution-drawer-title"
+        >
+
+            <button
+                id="close-drawer"
+                type="button"
+                aria-label="Close solution details"
+            >
+                ×
+            </button>
+
+
+            <div class="eyebrow">
+                TERRAGNI PERSPECTIVE
+            </div>
+
+
+            <h2 id="solution-drawer-title">
+                Solution
+            </h2>
+
+
+            <div id="solution-drawer-body">
+
+                <!-- App.js fills this -->
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer class="tg-footer">
+        <div class="tg-footer-inner">
+            <div class="tg-footer-brand">
+                <img src="{{ url_for('static', filename='images/terragni t logo.png') }}" alt="Terragni Consulting">
+                <div>
+                    <strong>TERRAGNI CONSULTING</strong>
+                    <span>The Human Engagement company</span>
+                </div>
+            </div>
+            <nav aria-label="Footer navigation">
+                <a href="/">Solution Mapper</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+                <a href="https://terragni.in/newsletter-the-shift/" target="_blank" rel="noopener">The SHIFT</a>
+            </nav>
+            <span class="tg-footer-copy">© 2026 Terragni Consulting · Behavioural Strategy · Human Engagement</span>
+        </div>
+    </footer>
+
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
+    <script src="{{ url_for('static', filename='js/site.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/mapper-visuals.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/visual-planner.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/visual-renderer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/answer-view.js') }}"></script>
+    <script
+        src="{{ url_for('static', filename='js/app.js') }}"
+        defer
+    ></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Talk to Terragni Consulting — behavioural strategy and human engagement.">
+    <title>Contact | Terragni Consulting</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/brand.css') }}">
+</head>
+<body class="contact-page">
+
+<header class="site-header">
+    <a href="/" class="brand" aria-label="Terragni Consulting home">
+        <img src="{{ url_for('static', filename='images/terragni t logo.png') }}" alt="Terragni Consulting" class="brand-logo">
+        <div class="brand-text">
+            <div class="brand-name">TERRAGNI CONSULTING</div>
+            <div class="brand-sub">the Human Engagement company</div>
+        </div>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+        <a href="/">Solution Mapper</a>
+        <a href="/about">About</a>
+        <a href="/contact" class="active" aria-current="page">Contact</a>
+    </nav>
+</header>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="ct-hero">
+    <div class="ct-hero-media" aria-hidden="true">
+        <img src="{{ url_for('static', filename='images/Terra-agni.png.png') }}" alt="" data-parallax="0.2">
+    </div>
+    <div class="ct-hero-shade" aria-hidden="true"></div>
+    <div class="ct-hero-inner">
+        <span class="ct-kicker">Talk to Terragni</span>
+        <h1 class="ct-title">
+            <span class="ct-line"><span>Let's understand</span></span>
+            <span class="ct-line ct-accent"><span>what is not moving.</span></span>
+        </h1>
+        <p class="ct-sub">You don't need the problem fully defined. Share the context, and a Terragni consultant will start the conversation with you.</p>
+    </div>
+</section>
+
+<!-- ============ FORM + DETAILS ============ -->
+<section class="ct-main">
+    <div class="ct-form-card">
+        <span class="ct-card-label">Start a conversation</span>
+        <h2>Tell us a little about you.</h2>
+        <p class="ct-card-intro">If you used the Solution Mapper, your role, industry and question are included automatically, so we can prepare for the first call.</p>
+
+        <form id="lead-form" class="lead-form" novalidate>
+            <div id="lead-context" class="lead-context" hidden></div>
+
+            <div class="ct-grid">
+                <div class="ct-field">
+                    <input id="lead-name" name="name" type="text" maxlength="120" autocomplete="name" placeholder=" " required>
+                    <label for="lead-name">Your name *</label>
+                </div>
+                <div class="ct-field">
+                    <input id="lead-email" name="email" type="email" maxlength="200" autocomplete="email" placeholder=" " required>
+                    <label for="lead-email">Work email *</label>
+                </div>
+                <div class="ct-field">
+                    <input id="lead-organisation" name="organisation" type="text" maxlength="160" autocomplete="organization" placeholder=" ">
+                    <label for="lead-organisation">Organisation</label>
+                </div>
+                <div class="ct-field">
+                    <input id="lead-phone" name="phone" type="tel" maxlength="40" autocomplete="tel" placeholder=" ">
+                    <label for="lead-phone">Phone</label>
+                </div>
+            </div>
+
+            <div class="ct-field ct-field-full">
+                <textarea id="lead-message" name="message" maxlength="3000" rows="4" placeholder=" "></textarea>
+                <label for="lead-message">What would you like to talk about?</label>
+            </div>
+
+            <label class="lead-consent">
+                <input id="lead-consent" name="consent" type="checkbox">
+                <span>I agree that Terragni may contact me about this enquiry.</span>
+            </label>
+
+            <div id="lead-result" class="lead-message" hidden></div>
+
+            <button id="lead-submit" type="submit" class="contact-button ct-submit">
+                Send to Terragni <span>→</span>
+            </button>
+        </form>
+    </div>
+
+    <aside class="ct-side">
+        <div class="ct-info" data-reveal-stagger>
+            <a class="ct-info-card" href="mailto:engage@terragni.co">
+                <span class="ct-info-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                </span>
+                <span><small>Email</small><strong>engage@terragni.co</strong></span>
+            </a>
+            <a class="ct-info-card" href="tel:+918956982522">
+                <span class="ct-info-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+                </span>
+                <span><small>Phone</small><strong>+91 895 698 2522</strong></span>
+            </a>
+            <div class="ct-info-card">
+                <span class="ct-info-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 21s-7-6.3-7-12a7 7 0 0 1 14 0c0 5.7-7 12-7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                </span>
+                <span><small>Office</small><strong>302–303, Supreme Centre, Anand Park, ITI Road, Aundh, Pune 411007</strong></span>
+            </div>
+        </div>
+
+        <div class="ct-next reveal">
+            <span class="ct-card-label">What happens next</span>
+            <ol>
+                <li><b>1</b><span><strong>We read your context</strong>Including anything you shared in the Solution Mapper.</span></li>
+                <li><b>2</b><span><strong>A consultant reaches out</strong>To understand what is really happening.</span></li>
+                <li><b>3</b><span><strong>We explore together</strong>Where behaviour can shift, and how business can move.</span></li>
+            </ol>
+        </div>
+    </aside>
+</section>
+
+<!-- ============ QUESTIONS ============ -->
+<section class="ct-faq">
+    <span class="ct-kicker ct-kicker-dark reveal">Good to know</span>
+    <h2 class="reveal">Questions people ask before they reach out.</h2>
+    <div class="ct-faq-list" data-reveal-stagger>
+        <details>
+            <summary>Do I need a clearly defined problem?</summary>
+            <p>No. Many conversations start with "something is not moving". Terragni starts with sensemaking: understanding the challenge beneath the challenge.</p>
+        </details>
+        <details>
+            <summary>What happens to the details I share?</summary>
+            <p>They are used only so a Terragni consultant can contact you about your enquiry. Please do not share client names, account numbers or personal customer data.</p>
+        </details>
+        <details>
+            <summary>Which industries does Terragni work in?</summary>
+            <p>Manufacturing, financial services, insurance, healthcare, consumer, retail and emerging businesses. The Solution Mapper prototype focuses on banking.</p>
+        </details>
+        <details>
+            <summary>Can I try the Solution Mapper first?</summary>
+            <p>Yes. Describe a challenge or ask a question about Terragni on the <a href="/">Solution Mapper</a>, and the page you get is shared with us when you contact us.</p>
+        </details>
+    </div>
+</section>
+
+</main>
+
+<footer class="tg-footer">
+    <div class="tg-footer-inner">
+        <div class="tg-footer-brand">
+            <img src="{{ url_for('static', filename='images/terragni t logo.png') }}" alt="Terragni Consulting">
+            <div>
+                <strong>TERRAGNI CONSULTING</strong>
+                <span>The Human Engagement company</span>
+            </div>
+        </div>
+        <nav aria-label="Footer navigation">
+            <a href="/">Solution Mapper</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="https://terragni.in/newsletter-the-shift/" target="_blank" rel="noopener">The SHIFT</a>
+        </nav>
+        <span class="tg-footer-copy">© 2026 Terragni Consulting · Behavioural Strategy · Human Engagement</span>
+    </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/site.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/contact.js') }}" defer></script>
+</body>
+</html>

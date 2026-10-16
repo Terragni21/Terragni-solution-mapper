@@ -1,0 +1,540 @@
+/* ============================================================
+   TERRAGNI CONTACT PAGE
+   ============================================================ */
+
+.contact-page {
+    background: var(--cream);
+    color: var(--ink);
+}
+
+
+/* ---------- Hero ---------- */
+
+.ct-hero {
+    position: relative;
+    padding: 110px 0 230px;
+    overflow: hidden;
+    color: var(--white);
+}
+
+.ct-hero-media,
+.ct-hero-shade {
+    position: absolute;
+    inset: 0;
+}
+
+.ct-hero-media img {
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    object-position: center 40%;
+    will-change: transform;
+}
+
+.ct-hero-shade {
+    background:
+        linear-gradient(90deg, rgba(36, 25, 70, 0.96) 0%, rgba(47, 37, 87, 0.82) 45%, rgba(47, 37, 87, 0.25) 100%),
+        linear-gradient(0deg, rgba(247, 242, 233, 1) 0%, rgba(247, 242, 233, 0) 25%);
+}
+
+.ct-hero-inner {
+    position: relative;
+    width: min(calc(100% - 48px), var(--max-width));
+    margin: 0 auto;
+}
+
+.ct-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.ct-kicker::before {
+    content: "";
+    width: 28px;
+    height: 2px;
+    background: currentColor;
+}
+
+.ct-kicker-dark {
+    color: var(--purple);
+}
+
+.ct-title {
+    margin: 20px 0 0;
+    color: var(--white) !important;
+    font-size: clamp(2.6rem, 6vw, 5rem) !important;
+}
+
+.ct-line {
+    display: block;
+    overflow: hidden;
+}
+
+.ct-line > span {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: ct-line-up 1000ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.ct-line:nth-child(2) > span {
+    animation-delay: 150ms;
+}
+
+.ct-accent > span {
+    background: linear-gradient(100deg, #d8c4ff, var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.ct-sub {
+    max-width: 560px;
+    margin: 24px 0 0;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+    line-height: 1.75;
+    opacity: 0;
+    animation: ct-fade-up 900ms ease 500ms forwards;
+}
+
+
+/* ---------- Form + side column ---------- */
+
+.ct-main {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: 28px;
+    width: min(calc(100% - 48px), var(--max-width));
+    margin: -170px auto 0;
+}
+
+.ct-form-card {
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 30px 80px rgba(38, 28, 59, 0.18);
+    animation: ct-fade-up 900ms ease 300ms both;
+}
+
+.ct-card-label {
+    color: var(--purple);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.ct-form-card h2 {
+    margin: 10px 0 8px;
+    color: var(--purple-deep);
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+}
+
+.ct-card-intro {
+    margin: 0 0 24px;
+    color: var(--muted);
+    line-height: 1.65;
+}
+
+.lead-form {
+    display: grid;
+    gap: 16px;
+}
+
+.ct-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Floating labels */
+.ct-field {
+    position: relative;
+}
+
+.ct-field input,
+.ct-field textarea {
+    width: 100%;
+    padding: 24px 16px 10px;
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    background: var(--white);
+    color: var(--ink);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.ct-field textarea {
+    min-height: 130px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.ct-field label {
+    position: absolute;
+    top: 17px;
+    left: 17px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: top 200ms ease, font-size 200ms ease, color 200ms ease;
+}
+
+.ct-field input:focus,
+.ct-field textarea:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 4px rgba(95, 74, 158, 0.12);
+}
+
+.ct-field input:focus + label,
+.ct-field input:not(:placeholder-shown) + label,
+.ct-field textarea:focus + label,
+.ct-field textarea:not(:placeholder-shown) + label {
+    top: 7px;
+    color: var(--purple);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.lead-context {
+    padding: 16px 18px;
+    border-left: 4px solid var(--gold);
+    border-radius: 0 14px 14px 0;
+    background: var(--purple-soft);
+    color: var(--ink);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.lead-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.lead-consent input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--purple);
+}
+
+.lead-message {
+    padding: 14px 18px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.lead-message.is-error {
+    background: #fbeaea;
+    color: #8a2f2f;
+}
+
+.lead-message.is-success {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #e6f5ec;
+    color: #23613b;
+    animation: ct-pop 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lead-message.is-success::before {
+    content: "✓";
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #2f8f5b;
+    color: var(--white);
+}
+
+.ct-submit,
+.contact-button {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(120deg, var(--purple), #7a4fb8);
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 14px 34px rgba(95, 74, 158, 0.35);
+    transition: transform 250ms ease;
+}
+
+.ct-submit:hover {
+    transform: translateY(-3px);
+}
+
+.ct-submit:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+
+/* ---------- Side column ---------- */
+
+.ct-side {
+    display: grid;
+    align-content: start;
+    gap: 22px;
+    padding-top: 40px;
+}
+
+.ct-info {
+    display: grid;
+    gap: 14px;
+}
+
+.ct-info-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--white);
+    color: var(--ink);
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+    transition: transform 250ms ease, box-shadow 250ms ease;
+}
+
+a.ct-info-card:hover {
+    transform: translateX(6px);
+    box-shadow: var(--shadow-medium);
+}
+
+.ct-info-icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--purple), #7a4fb8);
+    color: var(--white);
+}
+
+.ct-info-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.ct-info-card small {
+    display: block;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.ct-info-card strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.98rem;
+    line-height: 1.45;
+}
+
+.ct-next {
+    padding: 28px;
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(198, 155, 69, 0.3), transparent 45%),
+        linear-gradient(140deg, var(--purple-deep), var(--purple-dark));
+    color: var(--white);
+}
+
+.ct-next .ct-card-label {
+    color: var(--gold);
+}
+
+.ct-next ol {
+    display: grid;
+    gap: 18px;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ct-next li {
+    display: flex;
+    gap: 14px;
+}
+
+.ct-next b {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--purple-dark);
+}
+
+.ct-next strong {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.ct-next li span {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.ct-next li span strong {
+    color: var(--white);
+    font-size: 0.98rem;
+}
+
+
+/* ---------- Questions ---------- */
+
+.ct-faq {
+    width: min(calc(100% - 48px), 900px);
+    margin: 100px auto 0;
+}
+
+.ct-faq h2 {
+    margin: 12px 0 28px;
+    color: var(--purple-deep);
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+}
+
+.ct-faq-list {
+    display: grid;
+    gap: 12px;
+}
+
+.ct-faq details {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--white);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+}
+
+.ct-faq summary {
+    position: relative;
+    padding: 22px 60px 22px 24px;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+}
+
+.ct-faq summary::-webkit-details-marker {
+    display: none;
+}
+
+.ct-faq summary::after {
+    content: "+";
+    position: absolute;
+    top: 50%;
+    right: 22px;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--purple-soft);
+    color: var(--purple);
+    font-size: 1.2rem;
+    transform: translateY(-50%);
+    transition: transform 300ms ease, background 300ms ease;
+}
+
+.ct-faq details[open] summary::after {
+    background: var(--purple);
+    color: var(--white);
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.ct-faq details p {
+    margin: 0;
+    padding: 0 24px 22px;
+    color: var(--muted);
+    line-height: 1.7;
+    animation: ct-fade-up 400ms ease;
+}
+
+.ct-faq a {
+    color: var(--purple);
+    font-weight: 700;
+}
+
+
+/* ---------- Animations ---------- */
+
+@keyframes ct-line-up {
+    to { transform: translateY(0); }
+}
+
+@keyframes ct-fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes ct-pop {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ct-line > span,
+    .ct-sub,
+    .ct-form-card {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+    .ct-main {
+        grid-template-columns: 1fr;
+    }
+
+    .ct-side {
+        padding-top: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .ct-hero {
+        padding: 80px 0 200px;
+    }
+
+    .ct-form-card {
+        padding: 24px;
+    }
+
+    .ct-grid {
+        grid-template-columns: 1fr;
+    }
+}

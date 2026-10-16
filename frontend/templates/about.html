@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Terragni Consulting — Behavioural Strategy and Human Engagement. When behaviour shifts, business moves.">
+    <title>About | Terragni Consulting</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/brand.css') }}">
+</head>
+<body class="about-page">
+
+<div class="ab-progress" aria-hidden="true"><span id="ab-progress-bar"></span></div>
+
+<!-- ============================================================
+     HEADER (same as the Solution Mapper, with the Terragni logo)
+     ============================================================ -->
+<header class="site-header">
+    <a href="/" class="brand" aria-label="Terragni Consulting home">
+        <img src="{{ url_for('static', filename='images/terragni t logo.png') }}" alt="Terragni Consulting" class="brand-logo">
+        <div class="brand-text">
+            <div class="brand-name">TERRAGNI CONSULTING</div>
+            <div class="brand-sub">the Human Engagement company</div>
+        </div>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+        <a href="/">Solution Mapper</a>
+        <a href="/about" class="active" aria-current="page">About</a>
+        <a href="/contact">Contact</a>
+    </nav>
+</header>
+
+<main>
+
+<!-- ============================================================
+     01 HERO
+     ============================================================ -->
+<section class="ab-hero">
+    <div class="ab-hero-media" aria-hidden="true">
+        <img src="{{ url_for('static', filename='images/terragni-about-hero.png.png') }}" alt="">
+    </div>
+    <div class="ab-hero-shade" aria-hidden="true"></div>
+    <div class="ab-hero-orbs" aria-hidden="true">
+        <span></span><span></span><span></span>
+    </div>
+
+    <div class="ab-hero-inner">
+        <span class="ab-eyebrow ab-eyebrow-light">About Terragni · Behavioural Strategy · Human Engagement</span>
+        <h1 class="ab-hero-title">
+            <span class="ab-line"><span>Businesses do not change</span></span>
+            <span class="ab-line"><span>when strategy changes.</span></span>
+            <span class="ab-line ab-accent"><span>They change when</span></span>
+            <span class="ab-line ab-accent"><span>behaviour changes.</span></span>
+        </h1>
+        <p class="ab-hero-copy">
+            Terragni is a behavioural strategy and human engagement consulting firm.
+            We help organisations understand the human behaviour behind business
+            challenges and create the conditions for meaningful movement.
+        </p>
+        <div class="ab-hero-actions">
+            <a href="#view" class="ab-btn-primary">Discover our thinking <span>→</span></a>
+            <a href="#how" class="ab-btn-ghost">How we work <span>↓</span></a>
+        </div>
+    </div>
+
+    <a href="#view" class="ab-scroll-cue" aria-label="Scroll down"><span></span></a>
+</section>
+
+<!-- ============================================================
+     MARQUEE
+     ============================================================ -->
+<div class="ab-marquee" aria-hidden="true">
+    <div class="ab-marquee-track">
+        <span>People</span><i>✦</i><span>Organisations</span><i>✦</i><span>Behaviour</span><i>✦</i><span>Movement</span><i>✦</i>
+        <span>Friction</span><i>✦</i><span>Motivation</span><i>✦</i><span>Context</span><i>✦</i>
+        <span>People</span><i>✦</i><span>Organisations</span><i>✦</i><span>Behaviour</span><i>✦</i><span>Movement</span><i>✦</i>
+        <span>Friction</span><i>✦</i><span>Motivation</span><i>✦</i><span>Context</span><i>✦</i>
+    </div>
+</div>
+
+<!-- ============================================================
+     02 THE TERRAGNI VIEW
+     ============================================================ -->
+<section class="ab-section ab-view" id="view">
+    <div class="ab-wrap ab-split">
+        <div class="ab-split-copy">
+            <span class="ab-eyebrow reveal">02 · The Terragni view</span>
+            <h2 class="reveal">You may not have a strategy problem.
+                <span class="ab-gradient-text">You may have a behaviour problem.</span></h2>
+            <p class="ab-lead reveal">Businesses come to us when something is not moving. We look beyond the visible problem to understand the human dynamics underneath it.</p>
+        </div>
+
+        <ul class="ab-symptoms" data-reveal-stagger>
+            <li><span class="ab-symptom-dot"></span>Customers are not acting.</li>
+            <li><span class="ab-symptom-dot"></span>Employees are not adopting.</li>
+            <li><span class="ab-symptom-dot"></span>Teams are not changing.</li>
+            <li><span class="ab-symptom-dot"></span>Transformation is not translating into behaviour.</li>
+        </ul>
+    </div>
+
+    <div class="ab-wrap ab-fmc-cards" data-reveal-stagger>
+        <article class="ab-fmc-card ab-friction">
+            <div class="ab-fmc-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12h5l2-4 2 8 2-4h5"/></svg>
+            </div>
+            <h3>Friction</h3>
+            <p>What is getting in the way?</p>
+        </article>
+        <article class="ab-fmc-card ab-motivation">
+            <div class="ab-fmc-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>
+            </div>
+            <h3>Motivation</h3>
+            <p>What is driving people?</p>
+        </article>
+        <article class="ab-fmc-card ab-context">
+            <div class="ab-fmc-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Context</h3>
+            <p>What is shaping behaviour?</p>
+        </article>
+    </div>
+
+    <p class="ab-wrap ab-belief reveal">
+        <strong>Our belief:</strong> people respond to the friction around them, the motivation
+        within them and the context they are operating in.
+    </p>
+</section>
+
+<!-- ============================================================
+     03 WHY TERRAGNI: INTENT -> ACTION
+     ============================================================ -->
+<section class="ab-section ab-why">
+    <div class="ab-wrap ab-split">
+        <div class="ab-split-copy">
+            <span class="ab-eyebrow reveal">03 · Why Terragni</span>
+            <h2 class="reveal">Strategy creates <span class="ab-gradient-text">intent.</span><br>
+                Behaviour creates <span class="ab-gradient-text">movement.</span></h2>
+            <p class="ab-lead reveal">Organisations know what they want people to do. The challenge is getting people to actually do it.</p>
+            <p class="reveal">A transformation may be strategically sound and operationally well planned, yet still struggle because the human behaviour required to make it work has not changed. <strong>This is where Terragni works.</strong></p>
+        </div>
+
+        <div class="ab-gaps" data-reveal-stagger>
+            <div class="ab-gap"><span>Intent</span><i class="ab-gap-line"><b></b></i><span>Action</span></div>
+            <div class="ab-gap"><span>Launch</span><i class="ab-gap-line"><b></b></i><span>Adoption</span></div>
+            <div class="ab-gap"><span>Awareness</span><i class="ab-gap-line"><b></b></i><span>Conversion</span></div>
+            <div class="ab-gap"><span>Transformation</span><i class="ab-gap-line"><b></b></i><span>Movement</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     04 WHAT WE HELP MOVE
+     ============================================================ -->
+<section class="ab-section ab-move">
+    <div class="ab-wrap">
+        <span class="ab-eyebrow reveal">04 · What we help move</span>
+        <h2 class="reveal">We are interested in what is <span class="ab-gradient-text">not moving.</span></h2>
+        <p class="ab-lead reveal">Behind every business challenge is a human behaviour that matters.</p>
+
+        <div class="ab-move-grid" data-reveal-stagger>
+            <article class="ab-move-card ab-tilt">
+                <div class="ab-move-art">
+                    <svg viewBox="0 0 120 80" aria-hidden="true"><circle cx="40" cy="30" r="12"/><path d="M18 70c0-12 10-22 22-22s22 10 22 22"/><circle cx="82" cy="36" r="9" class="soft"/><path d="M66 70c0-9 7-16 16-16s16 7 16 16" class="soft"/></svg>
+                </div>
+                <h3>Customers</h3>
+                <p>Engagement, conversion, trust, experience and action.</p>
+            </article>
+            <article class="ab-move-card ab-tilt">
+                <div class="ab-move-art">
+                    <svg viewBox="0 0 120 80" aria-hidden="true"><rect x="18" y="20" width="84" height="46" rx="6"/><path d="M18 34h84"/><circle cx="40" cy="50" r="6" class="soft"/><circle cx="60" cy="50" r="6" class="soft"/><circle cx="80" cy="50" r="6" class="soft"/></svg>
+                </div>
+                <h3>Employees</h3>
+                <p>Engagement, adoption, productivity and change.</p>
+            </article>
+            <article class="ab-move-card ab-tilt">
+                <div class="ab-move-art">
+                    <svg viewBox="0 0 120 80" aria-hidden="true"><circle cx="24" cy="40" r="8"/><circle cx="60" cy="20" r="8" class="soft"/><circle cx="60" cy="60" r="8" class="soft"/><circle cx="96" cy="40" r="8"/><path d="M32 40 52 22M32 40l20 18M68 22l20 18M68 58l20-18"/></svg>
+                </div>
+                <h3>Channels</h3>
+                <p>Behaviour across the systems, moments and environments where people act.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     05 HOW WE WORK
+     ============================================================ -->
+<section class="ab-section ab-how" id="how">
+    <div class="ab-wrap">
+        <span class="ab-eyebrow ab-eyebrow-light reveal">05 · How we work</span>
+        <h2 class="reveal">We do not start with solutions. <span class="ab-gold">We start with sensemaking.</span></h2>
+        <p class="ab-lead ab-lead-light reveal">Before designing an intervention, we seek to understand the reality behind the challenge.</p>
+
+        <div class="ab-timeline" id="ab-timeline">
+            <div class="ab-timeline-track"><span id="ab-timeline-fill"></span></div>
+            <ol data-reveal-stagger>
+                <li><span class="ab-step-num">01</span><h3>Sensemaking</h3><p>Understand the challenge beneath the challenge.</p></li>
+                <li><span class="ab-step-num">02</span><h3>Diagnose</h3><p>Identify the behavioural forces at play.</p></li>
+                <li><span class="ab-step-num">03</span><h3>Decode</h3><p>Understand what people think, feel and do.</p></li>
+                <li><span class="ab-step-num">04</span><h3>Design</h3><p>Create interventions around real behavioural dynamics.</p></li>
+                <li><span class="ab-step-num">05</span><h3>Deliver</h3><p>Translate insight into measurable movement.</p></li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     06 THE TERRAGNI LENS (interactive F-M-C diagram)
+     ============================================================ -->
+<section class="ab-section ab-lens">
+    <div class="ab-wrap ab-split">
+        <div class="ab-split-copy">
+            <span class="ab-eyebrow reveal">06 · The Terragni lens · F · M · C</span>
+            <h2 class="reveal">Behaviour happens at the intersection of <span class="ab-gradient-text">three forces.</span></h2>
+            <div class="ab-lens-detail reveal" id="ab-lens-detail" aria-live="polite">
+                <strong>Hover a circle</strong>
+                <p>Find the friction. Understand the motivation. Reshape the context.</p>
+            </div>
+        </div>
+
+        <figure class="ab-venn reveal reveal-zoom">
+            <svg viewBox="0 0 420 400" role="img" aria-label="Friction, motivation and context overlap to create a behaviour shift">
+                <g class="ab-venn-spin">
+                    <circle class="ab-venn-c ab-venn-f" cx="160" cy="150" r="110" data-lens="friction"/>
+                    <circle class="ab-venn-c ab-venn-m" cx="260" cy="150" r="110" data-lens="motivation"/>
+                    <circle class="ab-venn-c ab-venn-x" cx="210" cy="240" r="110" data-lens="context"/>
+                </g>
+                <text x="118" y="120" class="ab-venn-label">FRICTION</text>
+                <text x="302" y="120" class="ab-venn-label" text-anchor="middle">MOTIVATION</text>
+                <text x="210" y="320" class="ab-venn-label" text-anchor="middle">CONTEXT</text>
+                <circle cx="210" cy="180" r="34" class="ab-venn-core"/>
+                <text x="210" y="176" class="ab-venn-core-text" text-anchor="middle">BEHAVIOUR</text>
+                <text x="210" y="192" class="ab-venn-core-text" text-anchor="middle">SHIFT</text>
+            </svg>
+        </figure>
+    </div>
+</section>
+
+<!-- ============================================================
+     07 TOOLKIT
+     ============================================================ -->
+<section class="ab-section ab-toolkit">
+    <div class="ab-wrap">
+        <span class="ab-eyebrow reveal">07 · Our toolkit · Multiple lenses</span>
+        <h2 class="reveal">We combine disciplines to <span class="ab-gradient-text">understand behaviour.</span></h2>
+
+        <div class="ab-tools" data-reveal-stagger>
+            <div class="ab-tool"><span class="ab-tool-icon">🧠</span>Behavioural Science</div>
+            <div class="ab-tool"><span class="ab-tool-icon">⚡</span>Neuroscience</div>
+            <div class="ab-tool"><span class="ab-tool-icon">🔍</span>Ethnography</div>
+            <div class="ab-tool"><span class="ab-tool-icon">📊</span>Data</div>
+            <div class="ab-tool"><span class="ab-tool-icon">✏️</span>Design Thinking</div>
+        </div>
+        <p class="ab-lead reveal">Different tools help us see different parts of the same human system.</p>
+    </div>
+</section>
+
+<!-- ============================================================
+     08 BUSINESS IMPACT (counters)
+     ============================================================ -->
+<section class="ab-section ab-impact">
+    <div class="ab-impact-bg" aria-hidden="true"></div>
+    <div class="ab-wrap">
+        <span class="ab-eyebrow ab-eyebrow-light reveal">08 · Business impact</span>
+        <h2 class="reveal">When behaviour shifts, <span class="ab-gold">the business moves.</span></h2>
+
+        <div class="ab-stats" data-reveal-stagger>
+            <div class="ab-stat">
+                <span class="ab-stat-kicker">Revenue</span>
+                <strong><span data-count="120" data-prefix="₹">₹0</span> Cr</strong>
+                <span>Revenue unlocked</span>
+            </div>
+            <div class="ab-stat">
+                <span class="ab-stat-kicker">Cost</span>
+                <strong><span data-count="50" data-prefix="₹">₹0</span> Cr</strong>
+                <span>Avoidable cost removed</span>
+            </div>
+            <div class="ab-stat">
+                <span class="ab-stat-kicker">Experience</span>
+                <strong><span data-count="15" data-suffix="+">0</span></strong>
+                <span>Years of experience</span>
+            </div>
+        </div>
+        <p class="ab-lead ab-lead-light reveal">We measure our work by what changes in the real world.</p>
+    </div>
+</section>
+
+<!-- ============================================================
+     09 SECTORS
+     ============================================================ -->
+<section class="ab-section ab-sectors">
+    <div class="ab-wrap">
+        <span class="ab-eyebrow reveal">09 · Where we work</span>
+        <h2 class="reveal">Different industries. <span class="ab-gradient-text">Similar human dynamics.</span></h2>
+
+        <div class="ab-sector-grid" data-reveal-stagger>
+            <div class="ab-sector"><span>🏭</span>Manufacturing</div>
+            <div class="ab-sector ab-sector-hot"><span>🏦</span>Financial Services</div>
+            <div class="ab-sector"><span>🛡️</span>Insurance</div>
+            <div class="ab-sector"><span>🩺</span>Healthcare</div>
+            <div class="ab-sector"><span>🛍️</span>Consumer</div>
+            <div class="ab-sector"><span>🏬</span>Retail</div>
+            <div class="ab-sector"><span>🚀</span>Emerging Businesses</div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     10 THE NAME: TERRA + AGNI
+     ============================================================ -->
+<section class="ab-section ab-name">
+    <div class="ab-wrap ab-split">
+        <figure class="ab-name-media reveal reveal-left">
+            <img src="{{ url_for('static', filename='images/Terra-agni.png.png') }}" alt="A mountain of earth turning into fire: Terra and Agni">
+            <figcaption>
+                <span><b>TERRA</b> The Earth · grounded reality</span>
+                <span><b>AGNI</b> The Fire · transformative energy</span>
+            </figcaption>
+        </figure>
+        <div class="ab-split-copy">
+            <span class="ab-eyebrow reveal">10 · The name</span>
+            <h2 class="reveal">Terra + Agni. <span class="ab-gradient-text">Grounded in reality. Driven by transformation.</span></h2>
+            <p class="ab-lead reveal">Terragni brings two ideas together: <strong>Terra</strong>, the earth, representing grounded reality, and <strong>Agni</strong>, the fire, representing transformative energy.</p>
+            <div class="ab-equation reveal">
+                <span>TERRA</span><i>+</i><span>AGNI</span><i>=</i><strong>TERRAGNI</strong>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     11 WHY PURPLE
+     ============================================================ -->
+<section class="ab-section ab-purple">
+    <div class="ab-wrap ab-split">
+        <div class="ab-blend reveal reveal-zoom" aria-hidden="true">
+            <span class="ab-blend-red"></span>
+            <span class="ab-blend-blue"></span>
+            <span class="ab-blend-purple"></span>
+        </div>
+        <div class="ab-split-copy">
+            <span class="ab-eyebrow reveal">11 · Why purple</span>
+            <h2 class="reveal">Purple is where <span class="ab-gradient-text">different worlds come together.</span></h2>
+            <p class="ab-lead reveal">Purple reflects our belief in synthesis: bringing different perspectives, disciplines and ways of seeing together to understand what is really happening.</p>
+            <div class="ab-pills reveal"><span>Synthesis</span><span>Contrast</span><span>Possibility</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     12 THINKING
+     ============================================================ -->
+<section class="ab-section ab-thinking">
+    <div class="ab-wrap">
+        <span class="ab-eyebrow reveal">12 · Terragni thinking</span>
+        <h2 class="reveal">Thinking that goes <span class="ab-gradient-text">beyond the brief.</span></h2>
+        <p class="ab-lead reveal">We explore the forces shaping people, organisations and the world around them.</p>
+
+        <div class="ab-think-grid" data-reveal-stagger>
+            <a class="ab-think-card ab-tilt" href="https://terragni.in/newsletter-the-shift/" target="_blank" rel="noopener">
+                <span class="ab-think-kicker">Thinking</span>
+                <h3>The SHIFT</h3>
+                <p>Original research, industry studies, synthesised insights and long reads.</p>
+                <span class="ab-think-link">Explore SHIFT →</span>
+            </a>
+            <a class="ab-think-card ab-tilt" href="#view">
+                <span class="ab-think-kicker">Research</span>
+                <h3>Behavioural Insight</h3>
+                <p>Understanding the human forces behind business challenges.</p>
+                <span class="ab-think-link">Discover our thinking →</span>
+            </a>
+            <a class="ab-think-card ab-tilt" href="/">
+                <span class="ab-think-kicker">Insights</span>
+                <h3>Terragni Perspective</h3>
+                <p>Looking beneath the surface to find what needs to move.</p>
+                <span class="ab-think-link">Try the Solution Mapper →</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     13 FINAL CTA
+     ============================================================ -->
+<section class="ab-final">
+    <div class="ab-final-glow" aria-hidden="true"></div>
+    <div class="ab-wrap ab-final-inner">
+        <img src="{{ url_for('static', filename='images/terragni t logo.png') }}" alt="" class="ab-final-logo reveal reveal-zoom">
+        <h2 class="reveal">When behaviour shifts, <span class="ab-gold">business moves.</span></h2>
+        <p class="reveal">If something in your organisation is not moving, let's understand why.</p>
+        <div class="ab-hero-actions reveal">
+            <a href="/" class="ab-btn-primary">Explore the Solution Mapper <span>→</span></a>
+            <a href="/contact" class="ab-btn-ghost">Talk to Terragni <span>→</span></a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="ab-footer">
+    <div class="ab-wrap ab-footer-inner">
+        <div class="ab-footer-brand">
+            <img src="{{ url_for('static', filename='images/terragni t logo.png') }}" alt="Terragni Consulting">
+            <div>
+                <strong>TERRAGNI CONSULTING</strong>
+                <span>The Human Engagement company</span>
+            </div>
+        </div>
+        <nav aria-label="Footer navigation">
+            <a href="/">Solution Mapper</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="https://terragni.in/newsletter-the-shift/" target="_blank" rel="noopener">The SHIFT</a>
+        </nav>
+        <span class="ab-footer-copy">© 2026 Terragni Consulting · Behavioural Strategy · Human Engagement</span>
+    </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/site.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/about.js') }}" defer></script>
+</body>
+</html>

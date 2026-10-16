@@ -1,0 +1,52 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 34
+Title       : Me_Brochure_Terragni Consulting_2023
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 17
+Source characters sent to Groq: 3817
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 34
+Title       : Me_Brochure_Terragni Consulting_2023
+Chunks      : 17
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 34
+document_title                     : Me_Brochure_Terragni Consulting_2023
+chunks_sent                        : 17
+previous_pending_deleted           : 0
+staging_rows_inserted              : 11
+case_studies                       : 0
+industries                         : 0
+offerings                          : 1
+frameworks                         : 1
+challenges                         : 2
+outcomes                           : 4
+case_study_relationships           : 0
+
+====================================================================================================
+2026-10-05T11:38:50 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 34
+====================================================================================================

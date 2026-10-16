@@ -1,0 +1,97 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\extractor.py", line 3116, in <module>
+    main()
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\extractor.py", line 3074, in main
+    summary = extract_document(
+              ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\extractor.py", line 2798, in extract_document
+    extraction = extract_with_groq(
+                 ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper\backend\knowledge\extractor.py", line 1511, in extract_with_groq
+    response = client.chat.completions.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\groq\resources\chat\completions.py", line 466, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\groq\_base_client.py", line 1284, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\groq\_base_client.py", line 1071, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.APIStatusError: Error code: 413 - {'error': {'message': 'Request too large for model `openai/gpt-oss-120b` in organization `org_01ks011608f66s60h4njnhjnpj` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 10582, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 4
+Title       : Bajaj Allianz Life Insurance - Barriers to Premium Renewals - Pilot - 27thDec 2017
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 40
+Source characters sent to Groq: 19372
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 4
+Title       : Bajaj Allianz Life Insurance - Barriers to Premium Renewals - Pilot - 27thDec 2017
+Chunks      : 40
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+
+====================================================================================================
+2026-10-05T11:25:09 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 4
+====================================================================================================
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 4
+Title       : Bajaj Allianz Life Insurance - Barriers to Premium Renewals - Pilot - 27thDec 2017
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 40
+Source characters sent to Groq: 11900
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 4
+Title       : Bajaj Allianz Life Insurance - Barriers to Premium Renewals - Pilot - 27thDec 2017
+Chunks      : 40
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 4
+document_title                     : Bajaj Allianz Life Insurance - Barriers to Premium Renewals - Pilot - 27thDec 2017
+chunks_sent                        : 40
+previous_pending_deleted           : 0
+staging_rows_inserted              : 10
+case_studies                       : 1
+industries                         : 1
+offerings                          : 0
+frameworks                         : 1
+challenges                         : 2
+outcomes                           : 2
+
+====================================================================================================
+2026-10-05T12:18:16 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 4
+====================================================================================================

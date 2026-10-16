@@ -1,0 +1,223 @@
+/* ============================================================
+   TERRAGNI BRAND LAYER (loaded last on every page)
+   - Montserrat everywhere (Terragni's brand font)
+   - shared motion: scroll reveal, header state, buttons
+   ============================================================ */
+
+:root {
+    --font-brand: "Montserrat", "Segoe UI", Arial, sans-serif;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html,
+body,
+body *:not(svg):not(path):not(circle):not(rect):not(line):not(polygon) {
+    font-family: var(--font-brand) !important;
+}
+
+/* Montserrat is wider than the old serif: tighten big headings. */
+h1,
+h2,
+h3 {
+    letter-spacing: -0.025em !important;
+    font-weight: 700 !important;
+}
+
+h1 {
+    line-height: 1.06 !important;
+}
+
+h2 {
+    line-height: 1.15 !important;
+}
+
+/* SVG text in diagrams */
+svg text {
+    font-family: var(--font-brand);
+}
+
+
+/* ---------- Header: logo + scroll state ---------- */
+
+.site-header {
+    transition: background 300ms ease, box-shadow 300ms ease, padding 300ms ease;
+}
+
+.site-header.is-scrolled {
+    background: rgba(251, 249, 245, 0.9) !important;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(38, 28, 59, 0.08);
+}
+
+.brand-logo {
+    transition: transform 400ms var(--ease-out);
+}
+
+.brand:hover .brand-logo {
+    transform: rotate(-6deg) scale(1.06);
+}
+
+.main-nav a {
+    position: relative;
+}
+
+.main-nav a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -6px;
+    left: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--gold, #c69b45);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 300ms var(--ease-out);
+}
+
+.main-nav a:hover::after,
+.main-nav a.active::after,
+.main-nav a[aria-current="page"]::after {
+    transform: scaleX(1);
+}
+
+
+/* ---------- Scroll reveal ---------- */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 800ms var(--ease-out),
+        transform 800ms var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.reveal-left { transform: translateX(-36px); }
+.reveal.reveal-right { transform: translateX(36px); }
+.reveal.reveal-zoom { transform: scale(0.94); }
+
+.reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+}
+
+
+/* ---------- Buttons: shine on hover ---------- */
+
+#submit-btn,
+.mapper-cta-primary,
+.contact-button,
+.ab-btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+#submit-btn::after,
+.mapper-cta-primary::after,
+.contact-button::after,
+.ab-btn-primary::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-20deg);
+    transition: left 700ms var(--ease-out);
+}
+
+#submit-btn:hover::after,
+.mapper-cta-primary:hover::after,
+.contact-button:hover::after,
+.ab-btn-primary:hover::after {
+    left: 130%;
+}
+
+
+/* ---------- Shared footer ---------- */
+
+.tg-footer {
+    margin-top: 60px;
+    padding: 44px 0;
+    background: #1e1638;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.tg-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: min(calc(100% - 48px), var(--max-width, 1180px));
+    margin: 0 auto;
+}
+
+.tg-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tg-footer-brand img {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+}
+
+.tg-footer-brand strong {
+    display: block;
+    color: #ffffff;
+    letter-spacing: 0.08em;
+}
+
+.tg-footer-brand span {
+    font-size: 0.85rem;
+}
+
+.tg-footer nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+}
+
+.tg-footer a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 200ms ease;
+}
+
+.tg-footer a:hover {
+    color: var(--gold, #c69b45);
+}
+
+.tg-footer-copy {
+    width: 100%;
+    font-size: 0.82rem;
+}
+
+
+/* ---------- Page entrance ---------- */
+
+body {
+    animation: brand-page-in 600ms var(--ease-out) both;
+}
+
+@keyframes brand-page-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    body {
+        animation: none;
+    }
+}

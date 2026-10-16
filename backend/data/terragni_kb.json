@@ -1,0 +1,128 @@
+{
+  "offerings": [
+    {
+      "id": "DS",
+      "name": "De-Sludge",
+      "description": "Removes internal friction ('sludge') in processes, culture, capability and technology that stops an organisation from actually being customer-centric."
+    },
+    {
+      "id": "EAS",
+      "name": "EAS (Effort Assessment Score)",
+      "description": "Measures and reduces customer effort across time, physical, cognitive and emotional dimensions at every touchpoint in a journey."
+    },
+    {
+      "id": "ES",
+      "name": "Experiential Segmentation",
+      "description": "Segments customers by the experience they seek (not demographics), so engagement, service and communication can be tailored to what each segment actually values."
+    },
+    {
+      "id": "JUMP",
+      "name": "JUMP",
+      "description": "Behavioural design for digital adoption and engagement — fixes friction in digital/app/web journeys using behavioural-science design principles."
+    },
+    {
+      "id": "ME",
+      "name": "ME (Marketing Effectiveness)",
+      "description": "Uses the Friction x Motivation x Context model and behavioural nudges to fix positioning, communication and persistency/retention problems."
+    }
+  ],
+
+  "case_studies": [
+    {"id": "DS-CS1", "offering": "DS", "industry": "Consumer Electronics, PCs & Software (global, 160 countries)", "finding": "Shift to a services-led model created internal friction and attrition; CX not seen as a competitive differentiator; disparate systems limited visibility of customer information.", "outcome": "Reduced attrition, servitization shift, enhanced strategic alignment."},
+    {"id": "DS-CS2", "offering": "DS", "industry": "Steel Manufacturing (B2B, industrial, 500+ customers)", "finding": "Severe commoditization and market-share loss; customers perceive the vendor as transaction-oriented; customer centricity siloed to Sales/Customer Service; no contract-profitability review before signing.", "outcome": "1.4X wallet-share growth; re-acquired 'preferred supplier' status; 17% increase in profitability."},
+    {"id": "DS-CS3", "offering": "DS", "industry": "Paints & Speciality Coatings Manufacturing (consumer + B2B)", "finding": "Differing cultural contexts across business units caused disengagement/attrition; low scores on strategic alignment, customer insight and cross-functional collaboration; repetitive, undifferentiated sales cycle.", "outcome": "Complaint redressal time down by half."},
+
+    {"id": "EAS-CS1", "offering": "EAS", "industry": "Pharma / OTC (B2B buying committee)", "finding": "No visibility into a multi-stakeholder buying committee's real decision drivers.", "outcome": null},
+    {"id": "EAS-CS2", "offering": "EAS", "industry": "Manufacturing — capital equipment / diesel engines, pump sets (B2B dealer & distributor channel)", "finding": "Brand perceived as laid-back, causing erosion; dealers feel undercut by direct-to-customer service; one-size-fits-all treatment of sites; no structured escalation matrix.", "outcome": null},
+    {"id": "EAS-CS3", "offering": "EAS", "industry": "Banking (5th-largest-in-Asia scale; branch, mobile app & internet banking)", "finding": "High cost of customer service via physical channels; digital touchpoints/app perceived as inconsistent and unreliable; friction and cognitive load peak in the fund-transfer flow (Money Anxiety / Empathy Gap).", "outcome": null},
+    {"id": "EAS-CS4", "offering": "EAS", "industry": "Life Insurance — Top-4 private player, affluent segment (agency/advisor channel)", "finding": "Lack of market share in the affluent segment; perceived as exclusively sales-focused with weak post-purchase engagement.", "outcome": null},
+    {"id": "EAS-CS5", "offering": "EAS", "industry": "Life Insurance — premium renewal & persistency (advisor and digital renewal channels)", "finding": "Low persistency after year 3-5; over 63% of customers not aware or comfortable with digital payment gateways for renewals; renewal letters don't explain the product.", "outcome": null},
+    {"id": "EAS-CS6", "offering": "EAS", "industry": "Agrochemical (channel-based sales org; retailer network, SIO & call-centre channel)", "finding": "Brand positioned as a 'port of last call'; loyalty programme seen as earn & burn; call centre is a high-friction primary touchpoint; withdrawn products not communicated to retailers; no proactive complaint follow-up.", "outcome": "Increased sales of laggard products."},
+
+    {"id": "ES-CS1", "offering": "ES", "industry": "Electrical Engineering — distributors, dealers, RURBAN markets", "finding": "Driving Channel Engagement (Electricals) — wallet share kept shrinking despite product-quality improvements; brand couldn't break the market leader's 'halo effect'; automating channel processes drove latent dealer disengagement.", "outcome": null},
+    {"id": "ES-CS2", "offering": "ES", "industry": "Premium & Affluent Private Banking (relationship-manager-led channel)", "finding": "Leading Bank Leverages Experiential Segments (Affluent Program) — high NPS but low referral/recommendation growth; relationship managers not effective in support or service recovery.", "outcome": null},
+    {"id": "ES-CS3", "offering": "ES", "industry": "Personal Loans & Lending (branch and channel-based sales org)", "finding": "Leading Financial Institution Goes Experiential (Personal Loans) — over 37% of bank clients switched provider in 6-12 months; a late-stage interest-rate surprise near the end of the loan journey broke trust (cognitive dissonance -> ego depletion).", "outcome": null},
+    {"id": "ES-CS4", "offering": "ES", "industry": "Capital / Material Handling Equipment (global service network)", "finding": "High commoditization with insignificant switching barriers and low engagement; high MTBF reliability story overshadowed by cost and turnaround-time complaints.", "outcome": null},
+    {"id": "ES-CS5", "offering": "ES", "industry": "Organised Retail — electronics (B2C, 1000+ outlets)", "finding": "B2C Goes Experiential (Electronics Retail) — customers treated homogenously regardless of whether they care most about price, convenience or relationship.", "outcome": null},
+    {"id": "ES-CS6", "offering": "ES", "industry": "Broking / Trading (financial franchise & dealer network)", "finding": "Driving Digital Adoption — active customer base a small percentage of a much larger total base; high-volume clients paying competitors for extras not offered; new investors treated as a hobby segment.", "outcome": "Decreased rate of dormancy."},
+    {"id": "ES-CS7", "offering": "ES", "industry": "Premium Banking (relationship-manager-led channel)", "finding": "Leading Financial Institution Goes Experiential (Premium Banking) — loyalty programme tracking & redemption so high-friction it caused disengagement; one-size-fits-all onboarding addressed only immediate needs.", "outcome": null},
+
+    {"id": "JMP-CS1", "offering": "JUMP", "industry": "Retail Banking (mobile banking app; branch & contact centre)", "finding": "High cost of customer service via physical channels despite launching a banking app; customers can't find the fund-transfer option and give up (Money Anxiety / Empathy Gap, Peak 1 friction).", "outcome": "Reduction in Cost to Serve / Higher Digital Adoption."},
+    {"id": "JMP-CS2", "offering": "JUMP", "industry": "General / Motor Insurance (insurer purchase-journey website)", "finding": "Losing market share to online-first competitors; customers abandon the application mid-document-upload due to unclear guidelines and unnecessary iterations.", "outcome": "Increase in market share via digital channel."},
+    {"id": "JMP-CS3", "offering": "JUMP", "industry": "Industrial B2B — Material Handling Equipment (B2B self-service portal)", "finding": "Sales team stuck on AMC/renewal work rather than new consultative business; sign-up screens have too many fields; field engineers unsure whether an asset is in-warranty or in-AMC.", "outcome": "From Cost Centre to Profit Centre; Wallet-Share and Profitability objectives."},
+    {"id": "JMP-CS4", "offering": "JUMP", "industry": "Electricals & Consumer Durables (D2C e-commerce + WhatsApp/chatbot)", "finding": "Built an e-commerce site to match Amazon/Flipkart but customers still default to dealers; chatbot/search gives no help and no re-engagement nudge; WhatsApp bot's 11-item list violates Hick's Law.", "outcome": null},
+    {"id": "JMP-CS5", "offering": "JUMP", "industry": "Financial Institution / Personal Lending (branch & DSA channel)", "finding": "More than 37% of bank clients switched provider in 6-12 months; customers expect differential treatment but receive one-size-fits-all service (segmented instead into Speedsters/Needers/Value Speedsters/Value Needers).", "outcome": null},
+
+    {"id": "ME-CS1", "offering": "ME", "industry": "Private / Priority (Affluent) Banking Programs", "finding": "Leading Bank, Affluent Program — loyal affluent customers rarely refer friends/family despite loyalty; relationship managers not effective in support or service recovery; awareness of programme benefits very low.", "outcome": "Increased Customer Acquisition through recommendation."},
+    {"id": "ME-CS2", "offering": "ME", "industry": "Life Insurance (agency and digital renewal channels)", "finding": "Driving Growth in Life Insurance — low persistency after year 1/3/5; over 75% of premium still collected through non-digital methods.", "outcome": null},
+    {"id": "ME-CS3", "offering": "ME", "industry": "Life Insurance (contact centre & renewal communication)", "finding": "Driving Persistency in Life Insurance — customers lack understanding of the policy as a product/financial instrument; renewal communications feel disjointed across the lifecycle.", "outcome": null},
+    {"id": "ME-CS4", "offering": "ME", "industry": "Pharma / OTC Consumer Health (probiotic supplements; doctor & pharmacist channel)", "finding": "From Illness to Wellness — product only bought when prescribed alongside antibiotics; pharmacists don't drive recommendation; one undifferentiated message sent to all segments.", "outcome": "Enhanced market share from repositioning and redefined communication."},
+    {"id": "ME-CS5", "offering": "ME", "industry": "Manufacturing — Capital Equipment / Material Handling (B2B, key accounts)", "finding": "Driving Accelerated Growth — high commoditization stretching the sales cycle; product revenue plateauing while services revenue stays flat; key accounts get one-size-fits-all engagement.", "outcome": null}
+  ],
+
+  "banking_industry_index": {
+    "note": "Banking is a cross-offering industry: a single banking query can legitimately surface case studies from up to 4 different offerings at once.",
+    "case_study_ids": ["EAS-CS3", "ES-CS2", "ES-CS3", "ES-CS7", "JMP-CS1", "JMP-CS5", "ME-CS1"]
+  },
+
+  "business_challenge_signals": [
+    {"signal": "Friction / high-effort customer or channel touchpoints (umbrella 'sludge' signal)", "offerings": ["DS", "EAS", "ES", "JUMP", "ME"], "cross_offering": true},
+    {"signal": "One-size-fits-all treatment of customers, sites, or key accounts", "offerings": ["EAS", "ES", "JUMP", "ME"], "cross_offering": true},
+    {"signal": "High / rising cost to serve via physical channels (branches, call centres, RMs)", "offerings": ["EAS", "JUMP", "ME"], "cross_offering": true},
+    {"signal": "Commoditization / no real differentiation / low switching barriers", "offerings": ["DS", "ES", "ME"], "cross_offering": true},
+    {"signal": "Loyalty or affluent programme not translating into advocacy, referral or genuine behaviour change ('earn & burn')", "offerings": ["EAS", "ES", "ME"], "cross_offering": true},
+    {"signal": "Weak or stalled digital adoption despite app/digital investment", "offerings": ["EAS", "JUMP"], "cross_offering": true},
+    {"signal": "Digital journey overloaded with steps, fields, or options (Hick's-Law-type friction)", "offerings": ["JUMP", "ME"], "cross_offering": true},
+    {"signal": "Customer switching / high churn despite retention effort", "offerings": ["ES", "JUMP"], "cross_offering": true},
+    {"signal": "Policy lapse / low persistency after year 1, 3, 5", "offerings": ["EAS", "ME"], "cross_offering": true},
+    {"signal": "Relationship managers / frontline reps not resolving issues or driving deeper engagement", "offerings": ["ES", "ME"], "cross_offering": true},
+    {"signal": "No structured escalation / complaint-resolution process", "offerings": ["DS", "EAS"], "cross_offering": true},
+    {"signal": "Dealer/channel-partner conflict or disengagement", "offerings": ["EAS", "ES"], "cross_offering": true},
+    {"signal": "Undifferentiated, one-message-fits-all communication across distinct segments", "offerings": ["ES", "ME"], "cross_offering": true},
+    {"signal": "Customers not comfortable with or aware of digital payment methods for renewals/premiums", "offerings": ["EAS", "ME"], "cross_offering": true},
+    {"signal": "Lack of understanding of the product/category itself, undermining renewal or trust", "offerings": ["EAS", "ME"], "cross_offering": true},
+    {"signal": "Wallet share shrinking or plateauing despite product/service improvements", "offerings": ["ES"], "cross_offering": false},
+    {"signal": "Small active base within a much larger total customer base", "offerings": ["ES"], "cross_offering": false},
+    {"signal": "Multi-stakeholder B2B buying committee decision drivers unclear", "offerings": ["EAS"], "cross_offering": false},
+    {"signal": "Brand lacks top-of-mind recall / seen as a 'last resort' in its category", "offerings": ["EAS"], "cross_offering": false},
+    {"signal": "Customer perceives vendor/brand as purely transactional, not a partner", "offerings": ["DS"], "cross_offering": false},
+    {"signal": "Customer-centricity or CX ownership siloed to one function", "offerings": ["DS"], "cross_offering": false},
+    {"signal": "Losing market share to online-first / e-commerce competitors", "offerings": ["JUMP"], "cross_offering": false}
+  ],
+
+  "outcome_language": [
+    {"outcome": "Increased / improved wallet share", "offerings": ["DS", "EAS", "ES", "JUMP", "ME"]},
+    {"outcome": "Reduced cost to serve", "offerings": ["EAS", "ES", "JUMP", "ME"]},
+    {"outcome": "Increased customer retention", "offerings": ["EAS", "ES", "JUMP", "ME"]},
+    {"outcome": "Higher / enhanced digital adoption", "offerings": ["EAS", "JUMP", "ME"]},
+    {"outcome": "Improved NPS / Customer Experience Index", "offerings": ["EAS", "ES", "JUMP"]},
+    {"outcome": "Reduced complaints", "offerings": ["DS", "JUMP", "ME"]},
+    {"outcome": "Increased customer acquisition through referral/recommendation", "offerings": ["ES", "ME"]},
+    {"outcome": "Improved persistency", "offerings": ["EAS", "ME"]},
+    {"outcome": "Enhanced / increased market share", "offerings": ["EAS", "ME"]},
+    {"outcome": "Reduced customer/channel dormancy", "offerings": ["ES"]},
+    {"outcome": "From cost centre to profit centre / velocity of sales / profitability", "offerings": ["JUMP"]}
+  ],
+
+  "frameworks_by_offering": {
+    "DS": ["Capability-Culture-Process-Technology (C-C-P-T) diagnostic", "4 Customer Culture Disciplines", "8 Customer Centric Disciplines", "Consumer Neuroscience-based Widespan Assessment"],
+    "EAS": ["EAS (Effort Assessment Score)", "Life Cycle Score", "Time / Physical / Cognitive / Emotional effort dimensions", "Money Anxiety / Empathy Gap journey mapping", "Terragni Value Grid (Create/Eliminate/Raise/Reduce)", "EAST framework"],
+    "ES": ["FMC Model (Friction-Motivation-Context)", "Price/Value/Convenience/Relationship Buyer archetypes", "Self Made Tycoon / Steel Grey / PSB Migrant / Mature & Emerging Professionals (banking archetypes)", "Speedsters/Needers/Value Speedsters/Value Needers", "Customer Effort Score"],
+    "JUMP": ["EAS Level I/II", "Peak-curve mapping (Peak 1/2/3, Peak-End)", "Hick's Law, Chunking, Spark Effect, Loss Aversion, Framing, Priming", "JUMP Probe (rapid digital-journey audit)"],
+    "ME": ["FMC Model (Friction x Motivation x Context = Behaviour)", "EAST framework", "Complexity Averse / Complexity Prepared segmentation", "Emotional Anchors (Contextual Relevance, Transparency, Consistency, Flexibility)"]
+  },
+
+  "eval_questions": [
+    {"query": "Digital channels are cheaper to run, but customers still flood our branches for basic banking.", "expected_case_studies": ["EAS-CS3"], "type": "single"},
+    {"query": "Customers get stuck partway through the mobile-banking transfer flow and just give up.", "expected_case_studies": ["EAS-CS3", "JMP-CS1"], "type": "single"},
+    {"query": "Our affluent banking customers report high NPS but almost never refer anyone — how do we convert satisfaction into growth?", "expected_case_studies": ["ES-CS2", "ME-CS1"], "type": "single"},
+    {"query": "Our relationship managers aren't resolving complaints well, and it's undermining the premium banking experience.", "expected_case_studies": ["ES-CS2", "ME-CS1"], "type": "single"},
+    {"query": "More than a third of our banking customers switched providers in the last year despite our retention efforts.", "expected_case_studies": ["ES-CS3", "JMP-CS5"], "type": "single"},
+    {"query": "Loan applicants tell us the process feels great right up until we surprise them with a different interest rate near the end.", "expected_case_studies": ["ES-CS3"], "type": "single"},
+    {"query": "Our contact-centre and branch costs keep climbing even though we launched a banking app.", "expected_case_studies": ["JMP-CS1"], "type": "single"},
+    {"query": "Our loyalty programme's redemption process is so clunky that customers seem to check out right after they try to claim a reward.", "expected_case_studies": ["ES-CS7"], "type": "single"},
+    {"query": "Our affluent banking customers are happy but not engaged — what's really driving that gap?", "expected_case_studies": ["ES-CS2", "ES-CS7", "ME-CS1", "JMP-CS1"], "type": "cross-offering"},
+    {"query": "Our contact-centre and RM network keeps getting more expensive to run even as we push digital.", "expected_case_studies": ["EAS-CS3", "JMP-CS1", "ME-CS1"], "type": "cross-offering"},
+    {"query": "Our personal-loan customers get the same one-size-fits-all treatment regardless of who they are.", "expected_case_studies": ["ES-CS3", "JMP-CS5"], "type": "cross-offering"}
+  ]
+}

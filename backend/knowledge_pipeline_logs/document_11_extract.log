@@ -1,0 +1,53 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 11
+Title       : Behaviours For Business - Powering Growth Through Enhanced Wallet Share and Word-of-Mouth_A Terragni Case Study_2024
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 16
+Source characters sent to Groq: 7588
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 11
+Title       : Behaviours For Business - Powering Growth Through Enhanced Wallet Share and Word-of-Mouth_A Terragni Case Study_2024
+Chunks      : 16
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 11
+document_title                     : Behaviours For Business - Powering Growth Through Enhanced Wallet Share and Word-of-Mouth_A Terragni Case Study_2024
+chunks_sent                        : 16
+previous_pending_deleted           : 0
+staging_rows_inserted              : 12
+case_studies                       : 1
+industries                         : 0
+offerings                          : 0
+frameworks                         : 0
+challenges                         : 4
+outcomes                           : 3
+case_study_relationships           : 3
+
+====================================================================================================
+2026-10-05T11:27:22 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 11
+====================================================================================================

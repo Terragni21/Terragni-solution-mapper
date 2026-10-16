@@ -1,0 +1,62 @@
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 19
+Title       : Driving App Adoption in Life Insurance_A Terragni Case Study
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+Chunks loaded: 14
+Source characters sent to Groq: 5686
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 19
+Title       : Driving App Adoption in Life Insurance_A Terragni Case Study
+Chunks      : 14
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 19
+document_title                     : Driving App Adoption in Life Insurance_A Terragni Case Study
+chunks_sent                        : 14
+previous_pending_deleted           : 0
+staging_rows_inserted              : 19
+case_studies                       : 1
+industries                         : 1
+offerings                          : 1
+frameworks                         : 2
+challenges                         : 4
+outcomes                           : 4
+case_study_relationships           : 4
+
+====================================================================================================
+2026-10-05T11:31:31 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 19
+====================================================================================================

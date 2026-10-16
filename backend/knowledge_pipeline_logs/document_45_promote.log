@@ -1,0 +1,20 @@
+======================================================================
+Terragni Knowledge Promoter
+======================================================================
+Document ID : 45
+
+WARNING: Windows could not resolve 'Terragni-10'.
+Using Oracle fallback IP: 192.168.10.163
+Promotion complete.
+
+Staging rows     : 9
+Promoted rows    : 9
+Case studies     : 0
+Master entities  : 9
+Evidence links   : 0
+Relationship links: 0
+======================================================================
+
+====================================================================================================
+2026-10-05T11:44:05 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.promoter --document-id 45
+====================================================================================================

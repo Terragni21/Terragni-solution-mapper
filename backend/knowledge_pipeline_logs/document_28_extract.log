@@ -1,0 +1,60 @@
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 28
+Title       : JUMP_Brochure_Terragni Consulting_2022
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Chunks loaded: 17
+Source characters sent to Groq: 5129
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 28
+Title       : JUMP_Brochure_Terragni Consulting_2022
+Chunks      : 17
+Model       : openai/gpt-oss-120b
+Max source chars : 24000
+Max completion   : 5000
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+Oracle host resolved: Terragni-10 -> 192.168.10.163
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 28
+document_title                     : JUMP_Brochure_Terragni Consulting_2022
+chunks_sent                        : 17
+previous_pending_deleted           : 0
+staging_rows_inserted              : 19
+case_studies                       : 5
+industries                         : 0
+offerings                          : 0
+frameworks                         : 1
+challenges                         : 3
+outcomes                           : 5
+case_study_relationships           : 5
+
+====================================================================================================
+2026-10-05T11:36:02 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 28
+====================================================================================================
