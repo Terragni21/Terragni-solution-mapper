@@ -1,3 +1,18 @@
 # Local editor / tool settings
 .claude/
 .vscode/
+
+# Oracle data exports (large JSON files)
+backend/data/oracle_export.json
+backend/data/oracle_embeddings_export.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+venv/
+.env
+

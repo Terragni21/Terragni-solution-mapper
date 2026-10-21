@@ -10,7 +10,6 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-import ollama
 from dotenv import load_dotenv
 
 
@@ -31,64 +30,41 @@ if str(PROJECT_ROOT) not in sys.path:
 
 load_dotenv(BACKEND_DIR / ".env")
 
-OLLAMA_HOST = os.getenv(
-    "OLLAMA_HOST",
-    "http://localhost:11434"
+# FastEmbed model that produces 768-dim vectors compatible with stored embeddings.
+FASTEMBED_MODEL = os.getenv(
+    "FASTEMBED_MODEL",
+    "nomic-ai/nomic-embed-text-v1"
 ).strip()
 
-OLLAMA_EMBEDDING_MODEL = os.getenv(
-    "OLLAMA_EMBEDDING_MODEL",
+# The model_name stored in the DB during ingestion (used to filter rows).
+DB_EMBEDDING_MODEL = os.getenv(
+    "DB_EMBEDDING_MODEL",
     "nomic-embed-text"
 ).strip()
 
 
 # ============================================================
-# OLLAMA
+# FASTEMBED
 # ============================================================
 
-def normalise_ollama_host(host: str) -> str:
-    """
-    Use 127.0.0.1 instead of "localhost".
-
-    On Windows "localhost" is tried over IPv6 first, which adds about a
-    second to every Ollama request when Ollama only listens on IPv4.
-    """
-    return (host or "http://127.0.0.1:11434").replace(
-        "localhost",
-        "127.0.0.1",
-    )
-
-
-_OLLAMA_CLIENT = None
-
-
-def get_ollama_client():
-    # One shared client keeps the HTTP connection open between requests.
-    global _OLLAMA_CLIENT
-
-    if _OLLAMA_CLIENT is None:
-        _OLLAMA_CLIENT = ollama.Client(
-            host=normalise_ollama_host(OLLAMA_HOST)
-        )
-
-    return _OLLAMA_CLIENT
+@lru_cache(maxsize=1)
+def _get_fastembed_model():
+    """Lazy-load the FastEmbed model (downloads on first use)."""
+    from fastembed import TextEmbedding
+    return TextEmbedding(model_name=FASTEMBED_MODEL)
 
 
 @lru_cache(maxsize=512)
 def _cached_embedding(text: str) -> tuple[float, ...]:
-    response = get_ollama_client().embed(
-        model=OLLAMA_EMBEDDING_MODEL,
-        input=text
-    )
-
-    embeddings = response["embeddings"]
+    model = _get_fastembed_model()
+    embeddings = list(model.embed([text]))
 
     if not embeddings:
         raise RuntimeError(
-            "Ollama returned no embedding."
+            "FastEmbed returned no embedding."
         )
 
-    return tuple(embeddings[0])
+    return tuple(float(v) for v in embeddings[0])
 
 
 def create_query_embedding(
@@ -147,7 +123,7 @@ def cosine_similarity(
 
 
 # ============================================================
-# ORACLE EMBEDDINGS + SOURCE METADATA
+# DATABASE EMBEDDINGS + SOURCE METADATA
 # ============================================================
 
 def load_embeddings(
@@ -160,65 +136,65 @@ def load_embeddings(
     Important:
     A chunk is NOT assumed to belong to a case study.
 
-    CASE_STUDY_EVIDENCE is used to determine whether an
+    case_study_evidence is used to determine whether an
     explicit case-study relationship exists.
     """
 
     sql = """
         SELECT
-            e.CHUNK_ID,
-            e.MODEL_NAME,
-            e.DIMENSIONS,
-            e.EMBEDDING_JSON,
+            e.chunk_id,
+            e.model_name,
+            e.dimensions,
+            e.embedding_json,
 
-            c.DOCUMENT_ID,
-            c.SECTION_ID,
-            c.CHUNK_ORDER,
-            c.CHUNK_TEXT,
+            c.document_id,
+            c.section_id,
+            c.chunk_order,
+            c.chunk_text,
 
-            d.TITLE AS DOCUMENT_TITLE,
-            d.FILE_NAME,
-            d.DOCUMENT_TYPE,
+            d.title AS document_title,
+            d.file_name,
+            d.document_type,
 
-            ds.SECTION_TYPE,
-            ds.SECTION_TITLE,
+            ds.section_type,
+            ds.section_title,
 
-            cse.CASE_STUDY_ID,
-            cse.EVIDENCE_TYPE,
-            cse.RELEVANCE_NOTE,
+            cse.case_study_id,
+            cse.evidence_type,
+            cse.relevance_note,
 
-            cs.CASE_STUDY_CODE,
-            cs.TITLE AS CASE_STUDY_TITLE,
-            cs.PUBLIC_TITLE,
-            cs.CLIENT_NAME,
-            cs.SUMMARY AS CASE_STUDY_SUMMARY,
-            cs.CHALLENGE AS CASE_STUDY_CHALLENGE,
-            cs.OBJECTIVE AS CASE_STUDY_OBJECTIVE,
-            cs.APPROACH AS CASE_STUDY_APPROACH,
-            cs.KEY_FINDING AS CASE_STUDY_KEY_FINDING,
-            cs.SOLUTION AS CASE_STUDY_SOLUTION,
-            cs.BUSINESS_OUTCOME AS CASE_STUDY_BUSINESS_OUTCOME
+            cs.case_study_code,
+            cs.title AS case_study_title,
+            cs.public_title,
+            cs.client_name,
+            cs.summary AS case_study_summary,
+            cs.challenge AS case_study_challenge,
+            cs.objective AS case_study_objective,
+            cs.approach AS case_study_approach,
+            cs.key_finding AS case_study_key_finding,
+            cs.solution AS case_study_solution,
+            cs.business_outcome AS case_study_business_outcome
 
-        FROM DOCUMENT_CHUNK_EMBEDDING e
+        FROM document_chunk_embedding e
 
-        INNER JOIN DOCUMENT_CHUNK c
-            ON c.CHUNK_ID = e.CHUNK_ID
+        INNER JOIN document_chunk c
+            ON c.chunk_id = e.chunk_id
 
-        LEFT JOIN DOCUMENT d
-            ON d.DOCUMENT_ID = c.DOCUMENT_ID
+        LEFT JOIN document d
+            ON d.document_id = c.document_id
 
-        LEFT JOIN DOCUMENT_SECTION ds
-            ON ds.SECTION_ID = c.SECTION_ID
+        LEFT JOIN document_section ds
+            ON ds.section_id = c.section_id
 
-        LEFT JOIN CASE_STUDY_EVIDENCE cse
-            ON cse.CHUNK_ID = c.CHUNK_ID
+        LEFT JOIN case_study_evidence cse
+            ON cse.chunk_id = c.chunk_id
 
-        LEFT JOIN CASE_STUDY cs
-            ON cs.CASE_STUDY_ID = cse.CASE_STUDY_ID
+        LEFT JOIN case_study cs
+            ON cs.case_study_id = cse.case_study_id
 
-        WHERE e.MODEL_NAME = :model_name
+        WHERE e.model_name = %s
 
-        ORDER BY e.CHUNK_ID
+        ORDER BY e.chunk_id
     """
 
     results: list[dict[str, Any]] = []
@@ -227,7 +203,7 @@ def load_embeddings(
 
         cursor.execute(
             sql,
-            model_name=OLLAMA_EMBEDDING_MODEL
+            (DB_EMBEDDING_MODEL,)
         )
 
         for row in cursor:
@@ -271,6 +247,7 @@ def load_embeddings(
             if embedding_json is None:
                 continue
 
+            # Handle Oracle CLOBs and plain PostgreSQL text alike.
             if hasattr(
                 embedding_json,
                 "read"
@@ -350,7 +327,7 @@ def load_embeddings(
 # ============================================================
 
 # Embeddings change only when the knowledge pipeline runs, so they are kept in
-# memory instead of being re-read from Oracle (about 20 seconds) on every query.
+# memory instead of being re-read from the database on every query.
 EMBEDDING_CACHE_SECONDS = int(
     os.getenv("EMBEDDING_CACHE_SECONDS", "900")
 )
@@ -398,8 +375,8 @@ def link_chunks_to_document_case_study(
     """
     Attach untagged chunks to their document's case study.
 
-    In Oracle only 2-3 chunks per case-study document are linked through
-    CASE_STUDY_EVIDENCE; the rest of the same document is untagged, so a
+    In the database only 2-3 chunks per case-study document are linked through
+    case_study_evidence; the rest of the same document is untagged, so a
     strong match on an untagged chunk could not be credited to the case
     study. When every linked chunk of a document points to the SAME case
     study, the document is that case study, and its other chunks are

@@ -1,28 +1,13 @@
-from __future__ import annotations
-
-"""
-Terragni journey retrieval layer.
-
-Responsibilities:
-- Run semantic retrieval against the existing Oracle + Ollama search layer.
-- Aggregate retrieved chunks into evidence and case-study candidates.
-- Enrich matched case studies with Oracle master-data relationships.
-- Keep retrieval semantic/evidence-driven; there is no phrase-to-offering routing.
-
-This module does NOT call Groq. Groq belongs in the journey/orchestration layer,
-after this module has produced an evidence package.
-"""
-
 import os
 from collections import defaultdict
 from typing import Any
 
 from dotenv import load_dotenv
-import ollama
 
 from backend.database.connection import get_connection
-from backend.retrieval.semantic_search import semantic_search
+from backend.retrieval.semantic_search import semantic_search, create_query_embedding
 
+# Removed unused Ollama import – embeddings now use FastEmbed via semantic_search.
 
 BACKEND_DIR = os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))
@@ -40,9 +25,10 @@ DEFAULT_MAX_CASE_STUDIES = int(
     os.getenv("JOURNEY_RETRIEVAL_MAX_CASE_STUDIES", "8")
 )
 
-
 def _clean_text(value: Any) -> str | None:
-    """Safely convert Oracle CLOB/scalar values into plain text."""
+    """Safely convert Oracle CLOB/scalar values into plain text.
+    The function now works for both Oracle and PostgreSQL (text fields).
+    """
     if value is None:
         return None
 
@@ -52,13 +38,11 @@ def _clean_text(value: Any) -> str | None:
     text = str(value).strip()
     return text if text else None
 
-
 def _case_study_key(case_study: dict[str, Any]) -> Any:
     return case_study.get("case_study_id")
 
-
 def _build_evidence_item(result: dict[str, Any]) -> dict[str, Any]:
-    """Convert a raw semantic-search result into API-safe evidence."""
+    """Convert a raw semantic-search result into API‑safe evidence."""
     document = result.get("document") or {}
     section = result.get("section") or {}
     case_study = result.get("case_study")
@@ -88,48 +72,33 @@ def _build_evidence_item(result: dict[str, Any]) -> dict[str, Any]:
             if case_study
             else None
         ),
-        # RELEVANCE_NOTE is an Oracle CLOB locator from the semantic-search
-        # connection. That connection has already closed by this stage.
         "relevance_note": None,
     }
-
 
 def _build_case_study_candidates(
     results: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    """
-    Aggregate multiple retrieved chunks belonging to the same case study.
+    """Aggregate multiple retrieved chunks belonging to the same case study.
 
-    A case study's ranking is based on the strongest semantic evidence and
-    supporting-chunk count. No phrase matching is used.
+    Ranking uses strongest semantic evidence and supporting‑chunk count.
     """
     grouped: dict[Any, dict[str, Any]] = {}
-
     for result in results:
         case_study = result.get("case_study")
         if not case_study:
             continue
-
         case_id = _case_study_key(case_study)
         if case_id is None:
             continue
-
         similarity = float(result.get("similarity", 0.0))
         entry = grouped.get(case_id)
-
         if entry is None:
             entry = {
                 "case_study_id": case_id,
-                "case_study_code": _clean_text(
-                    case_study.get("case_study_code")
-                ),
+                "case_study_code": _clean_text(case_study.get("case_study_code")),
                 "title": _clean_text(case_study.get("title")),
-                "public_title": _clean_text(
-                    case_study.get("public_title")
-                ),
-                "client_name": _clean_text(
-                    case_study.get("client_name")
-                ),
+                "public_title": _clean_text(case_study.get("public_title")),
+                "client_name": _clean_text(case_study.get("client_name")),
                 "summary": None,
                 "challenge": None,
                 "objective": None,
@@ -142,70 +111,43 @@ def _build_case_study_candidates(
                 "supporting_evidence": [],
             }
             grouped[case_id] = entry
-
-        entry["best_similarity"] = max(
-            entry["best_similarity"],
-            similarity,
-        )
-
+        entry["best_similarity"] = max(entry["best_similarity"], similarity)
         chunk_id = result.get("chunk_id")
         if chunk_id not in entry["supporting_chunk_ids"]:
             entry["supporting_chunk_ids"].append(chunk_id)
-
         if len(entry["supporting_evidence"]) < 4:
-            entry["supporting_evidence"].append(
-                _build_evidence_item(result)
-            )
-
+            entry["supporting_evidence"].append(_build_evidence_item(result))
     candidates = list(grouped.values())
-
-    # Strongest semantic match first; number of independent supporting chunks
-    # acts only as a secondary evidence-strength signal.
     candidates.sort(
-        key=lambda item: (
-            item["best_similarity"],
-            len(item["supporting_chunk_ids"]),
-        ),
+        key=lambda item: (item["best_similarity"], len(item["supporting_chunk_ids"])),
         reverse=True,
     )
-
     return candidates
-
 
 def _load_case_study_master_data(
     connection,
     case_study_ids: list[int],
 ) -> dict[int, dict[str, Any]]:
-    """Materialize CASE_STUDY CLOB fields while Oracle connection is live."""
+    """Load CLOB fields for case studies (PostgreSQL stores TEXT)."""
     if not case_study_ids:
         return {}
-
-    placeholders = ", ".join(
-        f":id_{index}" for index in range(len(case_study_ids))
-    )
-    params = {
-        f"id_{index}": int(case_id)
-        for index, case_id in enumerate(case_study_ids)
-    }
-
+    placeholders = ", ".join(["%s"] * len(case_study_ids))
     sql = f"""
         SELECT
-            CASE_STUDY_ID,
-            SUMMARY,
-            CHALLENGE,
-            OBJECTIVE,
-            APPROACH,
-            KEY_FINDING,
-            SOLUTION,
-            BUSINESS_OUTCOME
-        FROM CASE_STUDY
-        WHERE CASE_STUDY_ID IN ({placeholders})
+            case_study_id,
+            summary,
+            challenge,
+            objective,
+            approach,
+            key_finding,
+            solution,
+            business_outcome
+        FROM case_study
+        WHERE case_study_id IN ({placeholders})
     """
-
     result: dict[int, dict[str, Any]] = {}
-
     with connection.cursor() as cursor:
-        cursor.execute(sql, params)
+        cursor.execute(sql, tuple(case_study_ids))
         for row in cursor:
             case_id = int(row[0])
             result[case_id] = {
@@ -217,117 +159,93 @@ def _load_case_study_master_data(
                 "solution": _clean_text(row[6]),
                 "business_outcome": _clean_text(row[7]),
             }
-
     return result
-
 
 def _load_case_study_relationships(
     connection,
     case_study_ids: list[int],
 ) -> dict[int, dict[str, list[dict[str, Any]]]]:
-    """Load master-data relationships for the matched case studies."""
+    """Load relationships (industries, offerings, frameworks, challenges, outcomes)."""
     if not case_study_ids:
         return {}
-
-    placeholders = ", ".join(
-        f":id_{index}" for index in range(len(case_study_ids))
-    )
-    params = {
-        f"id_{index}": int(case_id)
-        for index, case_id in enumerate(case_study_ids)
-    }
-
+    placeholders = ", ".join(["%s"] * len(case_study_ids))
+    params = tuple(case_study_ids)
     result: dict[int, dict[str, list[dict[str, Any]]]] = {
-        int(case_id): {
-            "industries": [],
-            "offerings": [],
-            "frameworks": [],
-            "challenges": [],
-            "outcomes": [],
-        }
+        int(case_id): {"industries": [], "offerings": [], "frameworks": [], "challenges": [], "outcomes": []}
         for case_id in case_study_ids
     }
-
     relationship_queries = {
         "industries": f"""
             SELECT
-                csi.CASE_STUDY_ID,
-                i.INDUSTRY_ID,
-                i.INDUSTRY_CODE,
-                i.INDUSTRY_NAME,
-                i.DESCRIPTION,
-                csi.RELATIONSHIP_TYPE
-            FROM CASE_STUDY_INDUSTRY csi
-            INNER JOIN INDUSTRY i
-                ON i.INDUSTRY_ID = csi.INDUSTRY_ID
-            WHERE csi.CASE_STUDY_ID IN ({placeholders})
-            ORDER BY csi.CASE_STUDY_ID, i.INDUSTRY_NAME
+                csi.case_study_id,
+                i.industry_id,
+                i.industry_code,
+                i.industry_name,
+                i.description,
+                csi.relationship_type
+            FROM case_study_industry csi
+            INNER JOIN industry i ON i.industry_id = csi.industry_id
+            WHERE csi.case_study_id IN ({placeholders})
+            ORDER BY csi.case_study_id, i.industry_name
         """,
         "offerings": f"""
             SELECT
-                cso.CASE_STUDY_ID,
-                o.OFFERING_ID,
-                o.OFFERING_CODE,
-                o.OFFERING_NAME,
-                o.DESCRIPTION,
-                cso.RELATIONSHIP_TYPE
-            FROM CASE_STUDY_OFFERING cso
-            INNER JOIN OFFERING o
-                ON o.OFFERING_ID = cso.OFFERING_ID
-            WHERE cso.CASE_STUDY_ID IN ({placeholders})
-            ORDER BY cso.CASE_STUDY_ID, o.OFFERING_NAME
+                cso.case_study_id,
+                o.offering_id,
+                o.offering_code,
+                o.offering_name,
+                o.description,
+                cso.relationship_type
+            FROM case_study_offering cso
+            INNER JOIN offering o ON o.offering_id = cso.offering_id
+            WHERE cso.case_study_id IN ({placeholders})
+            ORDER BY cso.case_study_id, o.offering_name
         """,
         "frameworks": f"""
             SELECT
-                csf.CASE_STUDY_ID,
-                f.FRAMEWORK_ID,
-                f.FRAMEWORK_CODE,
-                f.FRAMEWORK_NAME,
-                f.DESCRIPTION,
-                csf.RELATIONSHIP_TYPE
-            FROM CASE_STUDY_FRAMEWORK csf
-            INNER JOIN FRAMEWORK f
-                ON f.FRAMEWORK_ID = csf.FRAMEWORK_ID
-            WHERE csf.CASE_STUDY_ID IN ({placeholders})
-            ORDER BY csf.CASE_STUDY_ID, f.FRAMEWORK_NAME
+                csf.case_study_id,
+                f.framework_id,
+                f.framework_code,
+                f.framework_name,
+                f.description,
+                csf.relationship_type
+            FROM case_study_framework csf
+            INNER JOIN framework f ON f.framework_id = csf.framework_id
+            WHERE csf.case_study_id IN ({placeholders})
+            ORDER BY csf.case_study_id, f.framework_name
         """,
         "challenges": f"""
             SELECT
-                csc.CASE_STUDY_ID,
-                c.CHALLENGE_ID,
-                c.CHALLENGE_CODE,
-                c.CHALLENGE_NAME,
-                c.DESCRIPTION,
-                csc.RELATIONSHIP_TYPE
-            FROM CASE_STUDY_CHALLENGE csc
-            INNER JOIN CHALLENGE c
-                ON c.CHALLENGE_ID = csc.CHALLENGE_ID
-            WHERE csc.CASE_STUDY_ID IN ({placeholders})
-            ORDER BY csc.CASE_STUDY_ID, c.CHALLENGE_NAME
+                csc.case_study_id,
+                c.challenge_id,
+                c.challenge_code,
+                c.challenge_name,
+                c.description,
+                csc.relationship_type
+            FROM case_study_challenge csc
+            INNER JOIN challenge c ON c.challenge_id = csc.challenge_id
+            WHERE csc.case_study_id IN ({placeholders})
+            ORDER BY csc.case_study_id, c.challenge_name
         """,
         "outcomes": f"""
             SELECT
-                cso.CASE_STUDY_ID,
-                o.OUTCOME_ID,
-                o.OUTCOME_CODE,
-                o.OUTCOME_NAME,
-                o.DESCRIPTION,
-                cso.RELATIONSHIP_TYPE
-            FROM CASE_STUDY_OUTCOME cso
-            INNER JOIN OUTCOME o
-                ON o.OUTCOME_ID = cso.OUTCOME_ID
-            WHERE cso.CASE_STUDY_ID IN ({placeholders})
-            ORDER BY cso.CASE_STUDY_ID, o.OUTCOME_NAME
+                cso.case_study_id,
+                o.outcome_id,
+                o.outcome_code,
+                o.outcome_name,
+                o.description,
+                cso.relationship_type
+            FROM case_study_outcome cso
+            INNER JOIN outcome o ON o.outcome_id = cso.outcome_id
+            WHERE cso.case_study_id IN ({placeholders})
+            ORDER BY cso.case_study_id, o.outcome_name
         """,
     }
-
     with connection.cursor() as cursor:
         for entity_type, sql in relationship_queries.items():
             cursor.execute(sql, params)
-
             for row in cursor:
                 case_id = int(row[0])
-
                 if entity_type == "industries":
                     item = {
                         "industry_id": int(row[1]),
@@ -360,7 +278,7 @@ def _load_case_study_relationships(
                         "description": _clean_text(row[4]),
                         "relationship_type": _clean_text(row[5]),
                     }
-                else:
+                else:  # outcomes
                     item = {
                         "outcome_id": int(row[1]),
                         "code": _clean_text(row[2]),
@@ -368,60 +286,31 @@ def _load_case_study_relationships(
                         "description": _clean_text(row[4]),
                         "relationship_type": _clean_text(row[5]),
                     }
-
                 result.setdefault(
                     case_id,
-                    {
-                        "industries": [],
-                        "offerings": [],
-                        "frameworks": [],
-                        "challenges": [],
-                        "outcomes": [],
-                    },
+                    {"industries": [], "offerings": [], "frameworks": [], "challenges": [], "outcomes": []},
                 )[entity_type].append(item)
-
     return result
 
-
-def cosine_similarity(
-    vector_a: list[float],
-    vector_b: list[float],
-) -> float:
+def cosine_similarity(vector_a: list[float], vector_b: list[float]) -> float:
     """Calculate cosine similarity between two embedding vectors."""
     if len(vector_a) != len(vector_b):
         raise ValueError(
             "Vector dimensions do not match: "
             f"{len(vector_a)} != {len(vector_b)}"
         )
-
-    dot_product = 0.0
-    magnitude_a = 0.0
-    magnitude_b = 0.0
-
-    for a, b in zip(vector_a, vector_b):
-        dot_product += a * b
-        magnitude_a += a * a
-        magnitude_b += b * b
-
-    magnitude_a = magnitude_a ** 0.5
-    magnitude_b = magnitude_b ** 0.5
-
-    if magnitude_a == 0.0 or magnitude_b == 0.0:
+    dot_product = sum(a * b for a, b in zip(vector_a, vector_b))
+    mag_a = sum(a * a for a in vector_a) ** 0.5
+    mag_b = sum(b * b for b in vector_b) ** 0.5
+    if mag_a == 0.0 or mag_b == 0.0:
         return 0.0
-
-    return dot_product / (magnitude_a * magnitude_b)
-
+    return dot_product / (mag_a * mag_b)
 
 def _embed_text(text: str) -> list[float]:
-    """Create an Ollama embedding for a short master-knowledge record.
-
-    Offering and framework descriptions rarely change, so their embeddings
-    are cached instead of being recomputed on every visitor query.
+    """Create a FastEmbed embedding for a short master‑knowledge record.
+    Uses the same embedding function as query generation.
     """
-    from backend.retrieval.semantic_search import create_query_embedding
-
     return create_query_embedding(text)
-
 
 def _semantic_rank_master_entities(
     query: str,
@@ -430,111 +319,58 @@ def _semantic_rank_master_entities(
     top_k: int,
     minimum_similarity: float,
 ) -> list[dict[str, Any]]:
-    """
-    Rank standalone Terragni master entities semantically.
-
-    This intentionally does NOT create a CASE_STUDY_OFFERING or
-    CASE_STUDY_FRAMEWORK relationship. It only identifies relevant
-    master knowledge for the reasoning layer.
-    """
     if not rows:
         return []
-
     query_embedding = _embed_text(query)
-
     ranked: list[dict[str, Any]] = []
-
     for row in rows:
-        searchable_text = " | ".join(
-            value
-            for value in [
-                row.get("name"),
-                row.get("code"),
-                row.get("description"),
-            ]
-            if value
-        )
-
-        if not searchable_text.strip():
+        searchable = " | ".join(v for v in [row.get("name"), row.get("code"), row.get("description")] if v)
+        if not searchable.strip():
             continue
-
-        entity_embedding = _embed_text(searchable_text)
-        similarity = cosine_similarity(
-            query_embedding,
-            entity_embedding,
-        )
-
-        if similarity < minimum_similarity:
+        entity_emb = _embed_text(searchable)
+        sim = cosine_similarity(query_embedding, entity_emb)
+        if sim < minimum_similarity:
             continue
-
         item = dict(row)
-        item["similarity"] = round(float(similarity), 6)
+        item["similarity"] = round(float(sim), 6)
         ranked.append(item)
-
-    ranked.sort(
-        key=lambda item: item["similarity"],
-        reverse=True,
-    )
-
+    ranked.sort(key=lambda i: i["similarity"], reverse=True)
     return ranked[:top_k]
 
-
-def _load_master_entity_catalogs(
-    connection,
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def _load_master_entity_catalogs(connection) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Load standalone Offering and Framework master knowledge."""
     offerings: list[dict[str, Any]] = []
     frameworks: list[dict[str, Any]] = []
-
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT
-                OFFERING_ID,
-                OFFERING_CODE,
-                OFFERING_NAME,
-                DESCRIPTION,
-                STATUS
-            FROM OFFERING
-            WHERE STATUS IS NULL OR UPPER(STATUS) = 'ACTIVE'
-            ORDER BY OFFERING_ID
+            SELECT offering_id, offering_code, offering_name, description, status
+            FROM offering
+            WHERE status IS NULL OR UPPER(status) = 'ACTIVE'
+            ORDER BY offering_id
         """)
-
         for row in cursor:
-            offerings.append(
-                {
-                    "offering_id": int(row[0]),
-                    "code": _clean_text(row[1]),
-                    "name": _clean_text(row[2]),
-                    "description": _clean_text(row[3]),
-                    "status": _clean_text(row[4]),
-                }
-            )
-
+            offerings.append({
+                "offering_id": int(row[0]),
+                "code": _clean_text(row[1]),
+                "name": _clean_text(row[2]),
+                "description": _clean_text(row[3]),
+                "status": _clean_text(row[4]),
+            })
         cursor.execute("""
-            SELECT
-                FRAMEWORK_ID,
-                FRAMEWORK_CODE,
-                FRAMEWORK_NAME,
-                DESCRIPTION,
-                STATUS
-            FROM FRAMEWORK
-            WHERE STATUS IS NULL OR UPPER(STATUS) = 'ACTIVE'
-            ORDER BY FRAMEWORK_ID
+            SELECT framework_id, framework_code, framework_name, description, status
+            FROM framework
+            WHERE status IS NULL OR UPPER(status) = 'ACTIVE'
+            ORDER BY framework_id
         """)
-
         for row in cursor:
-            frameworks.append(
-                {
-                    "framework_id": int(row[0]),
-                    "code": _clean_text(row[1]),
-                    "name": _clean_text(row[2]),
-                    "description": _clean_text(row[3]),
-                    "status": _clean_text(row[4]),
-                }
-            )
-
+            frameworks.append({
+                "framework_id": int(row[0]),
+                "code": _clean_text(row[1]),
+                "name": _clean_text(row[2]),
+                "description": _clean_text(row[3]),
+                "status": _clean_text(row[4]),
+            })
     return offerings, frameworks
-
 
 def retrieve_journey_evidence(
     query: str,
@@ -547,91 +383,37 @@ def retrieve_journey_evidence(
     max_frameworks: int = 5,
     master_minimum_similarity: float = 0.35,
 ) -> dict[str, Any]:
-    """
-    Produce the evidence package consumed by the journey/LLM layer.
-
-    The function intentionally returns raw evidence plus structured master
-    entities. It does not decide whether a visitor's challenge is a match.
-    That decision belongs to the reasoning layer using this evidence.
-    """
     query = (query or "").strip()
     if not query:
         raise ValueError("Query cannot be empty.")
-
     if top_k <= 0:
         raise ValueError("top_k must be greater than zero.")
-
     if max_evidence <= 0:
         raise ValueError("max_evidence must be greater than zero.")
-
     if max_case_studies <= 0:
         raise ValueError("max_case_studies must be greater than zero.")
-
-    semantic_results = semantic_search(
-        query=query,
-        top_k=top_k,
-        minimum_similarity=minimum_similarity,
-    )
-
-    evidence = [
-        _build_evidence_item(result)
-        for result in semantic_results[:max_evidence]
-    ]
-
-    case_studies = _build_case_study_candidates(semantic_results)
-    case_studies = case_studies[:max_case_studies]
-
-    case_study_ids = [
-        int(item["case_study_id"])
-        for item in case_studies
-        if item.get("case_study_id") is not None
-    ]
-
-    relationships: dict[
-        int,
-        dict[str, list[dict[str, Any]]]
-    ] = {}
-    master_data: dict[int, dict[str, Any]] = {}
-    catalog_offerings: list[dict[str, Any]] = []
-    catalog_frameworks: list[dict[str, Any]] = []
-
-    connection = None
+    semantic_results = semantic_search(query=query, top_k=top_k, minimum_similarity=minimum_similarity)
+    evidence = [_build_evidence_item(r) for r in semantic_results[:max_evidence]]
+    case_studies = _build_case_study_candidates(semantic_results)[:max_case_studies]
+    case_study_ids = [int(cs["case_study_id"]) for cs in case_studies if cs.get("case_study_id")]
+    relationships = {}
+    master_data = {}
+    catalog_offerings = []
+    catalog_frameworks = []
+    conn = get_connection()
     try:
-        connection = get_connection()
-
         if case_study_ids:
-            master_data = _load_case_study_master_data(
-                connection,
-                case_study_ids,
-            )
-            relationships = _load_case_study_relationships(
-                connection,
-                case_study_ids,
-            )
-
-        catalog_offerings, catalog_frameworks = (
-            _load_master_entity_catalogs(connection)
-        )
+            master_data = _load_case_study_master_data(conn, case_study_ids)
+            relationships = _load_case_study_relationships(conn, case_study_ids)
+        catalog_offerings, catalog_frameworks = _load_master_entity_catalogs(conn)
     finally:
-        if connection is not None:
-            connection.close()
-
-    # Offerings and frameworks are standalone Terragni master knowledge.
-    # They are semantically ranked independently of case-study relationships.
+        conn.close()
     offerings = _semantic_rank_master_entities(
-        query,
-        catalog_offerings,
-        top_k=max_offerings,
-        minimum_similarity=master_minimum_similarity,
+        query, catalog_offerings, top_k=max_offerings, minimum_similarity=master_minimum_similarity
     )
-
     frameworks = _semantic_rank_master_entities(
-        query,
-        catalog_frameworks,
-        top_k=max_frameworks,
-        minimum_similarity=master_minimum_similarity,
+        query, catalog_frameworks, top_k=max_frameworks, minimum_similarity=master_minimum_similarity
     )
-
     all_entities: dict[str, list[dict[str, Any]]] = {
         "industries": [],
         "offerings": offerings,
@@ -639,35 +421,21 @@ def retrieve_journey_evidence(
         "challenges": [],
         "outcomes": [],
     }
-
-    seen_entities: dict[str, set[Any]] = defaultdict(set)
-
-    for case_study in case_studies:
-        case_id = int(case_study["case_study_id"])
-        rels = relationships.get(case_id, {})
-        case_study.update(master_data.get(case_id, {}))
-        case_study["relationships"] = rels
-
+    seen: dict[str, set[Any]] = defaultdict(set)
+    for cs in case_studies:
+        cid = int(cs["case_study_id"])
+        rels = relationships.get(cid, {})
+        cs.update(master_data.get(cid, {}))
+        cs["relationships"] = rels
         for entity_type, entities in rels.items():
-            # Offerings/frameworks are already ranked independently above.
-            # Explicit case-study relationships remain attached to the
-            # individual case study under case_study["relationships"].
             if entity_type in {"offerings", "frameworks"}:
                 continue
-
             for entity in entities:
-                entity_id = (
-                    entity.get("industry_id")
-                    or entity.get("challenge_id")
-                    or entity.get("outcome_id")
-                )
-
-                if entity_id in seen_entities[entity_type]:
+                eid = entity.get("industry_id") or entity.get("challenge_id") or entity.get("outcome_id")
+                if eid in seen[entity_type]:
                     continue
-
-                seen_entities[entity_type].add(entity_id)
+                seen[entity_type].add(eid)
                 all_entities[entity_type].append(entity)
-
     return {
         "query": query,
         "retrieval": {
@@ -682,64 +450,31 @@ def retrieve_journey_evidence(
         **all_entities,
     }
 
-
 if __name__ == "__main__":
     test_query = (
         "Our affluent banking customers are happy but not engaged. "
         "What is really driving that gap?"
     )
-
-    package = retrieve_journey_evidence(test_query)
-
+    pkg = retrieve_journey_evidence(test_query)
     print("=" * 90)
     print("TERRAGNI JOURNEY RETRIEVAL TEST")
     print("=" * 90)
-    print("Query:", package["query"])
-    print("Evidence:", package["retrieval"]["evidence_count"])
-    print("Case studies:", package["retrieval"]["case_study_count"])
-    print("Industries:", len(package["industries"]))
-    print("Offerings:", len(package["offerings"]))
-    print("Frameworks:", len(package["frameworks"]))
-    print("Challenges:", len(package["challenges"]))
-    print("Outcomes:", len(package["outcomes"]))
-
+    print("Query:", pkg["query"])
+    print("Evidence:", pkg["retrieval"]["evidence_count"])
+    print("Case studies:", pkg["retrieval"]["case_study_count"])
+    print("Industries:", len(pkg["industries"]))
+    print("Offerings:", len(pkg["offerings"]))
+    print("Frameworks:", len(pkg["frameworks"]))
+    print("Challenges:", len(pkg["challenges"]))
+    print("Outcomes:", len(pkg["outcomes"]))
     print("-" * 90)
-    print("SEMANTIC OFFERINGS:")
-    for item in package["offerings"]:
-        print(
-            f"  - {item.get('name')} "
-            f"(similarity={item.get('similarity'):.6f})"
-        )
-
+    for i, off in enumerate(pkg["offerings"], 1):
+        print(f"{i}. {off.get('name')} (sim={off.get('similarity'):.6f})")
     print("-" * 90)
-    print("SEMANTIC FRAMEWORKS:")
-    for item in package["frameworks"]:
-        print(
-            f"  - {item.get('name')} "
-            f"(similarity={item.get('similarity'):.6f})"
-        )
+    for i, fw in enumerate(pkg["frameworks"], 1):
+        print(f"{i}. {fw.get('name')} (sim={fw.get('similarity'):.6f})")
     print("-" * 90)
-
-    for index, case_study in enumerate(
-        package["case_studies"],
-        start=1,
-    ):
-        print(
-            f"{index}. "
-            f"{case_study.get('title')} "
-            f"(similarity={case_study.get('best_similarity'):.6f})"
-        )
-        print(
-            "   Supporting chunks:",
-            case_study.get("supporting_chunk_ids"),
-        )
-        print(
-            "   Offerings:",
-            [
-                item.get("name")
-                for item in case_study["relationships"].get(
-                    "offerings",
-                    [],
-                )
-            ],
-        )
+    for i, cs in enumerate(pkg["case_studies"], 1):
+        print(f"{i}. {cs.get('title')} (sim={cs.get('best_similarity'):.6f})")
+        print("   Supporting chunks:", cs.get("supporting_chunk_ids"))
+        print("   Offerings:", [it.get('name') for it in cs["relationships"].get('offerings', [])])

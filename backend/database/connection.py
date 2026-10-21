@@ -159,42 +159,36 @@ def resolve_oracle_host() -> str:
 # ============================================================
 
 def get_connection():
-
-    validate_config()
-
-    resolved_host = resolve_oracle_host()
-
-    # --------------------------------------------------------
-    # Use SERVICE NAME if configured
-    # --------------------------------------------------------
-
-    if ORACLE_SERVICE_NAME:
-
-        dsn = oracledb.makedsn(
-            resolved_host,
-            ORACLE_PORT,
-            service_name=ORACLE_SERVICE_NAME
-        )
-
-    # --------------------------------------------------------
-    # Otherwise use SID
-    # --------------------------------------------------------
-
+    """Return a PostgreSQL connection when DATABASE_URL is defined, otherwise Oracle.
+    This mirrors the historic behaviour while making Render work out‑of‑the‑box.
+    """
+    if os.getenv("DATABASE_URL"):
+        # PostgreSQL via psycopg2 (the pooler URL works with sslmode=require)
+        import psycopg2
+        conn = psycopg2.connect(os.getenv("DATABASE_URL"), sslmode="require")
+        return conn
     else:
-
-        dsn = oracledb.makedsn(
-            resolved_host,
-            ORACLE_PORT,
-            sid=ORACLE_SID
+        # Fall back to original Oracle connection logic
+        validate_config()
+        resolved_host = resolve_oracle_host()
+        if ORACLE_SERVICE_NAME:
+            dsn = oracledb.makedsn(
+                resolved_host,
+                ORACLE_PORT,
+                service_name=ORACLE_SERVICE_NAME,
+            )
+        else:
+            dsn = oracledb.makedsn(
+                resolved_host,
+                ORACLE_PORT,
+                sid=ORACLE_SID,
+            )
+        connection = oracledb.connect(
+            user=ORACLE_USER,
+            password=ORACLE_PASSWORD,
+            dsn=dsn,
         )
-
-    connection = oracledb.connect(
-        user=ORACLE_USER,
-        password=ORACLE_PASSWORD,
-        dsn=dsn
-    )
-
-    return connection
+        return connection
 
 
 # ============================================================

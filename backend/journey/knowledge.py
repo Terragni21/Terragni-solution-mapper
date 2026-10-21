@@ -4,8 +4,8 @@ Knowledge path for the Terragni Solution Mapper.
 Answers questions about Terragni itself (who it is, its services, methods and
 past banking work) using only Terragni's own material:
 
-    - brochure and thought-leadership chunks from Oracle
-    - case-study evidence from Oracle
+    - brochure and thought-leadership chunks from the database
+    - case-study evidence from the database
     - the full catalogue of offerings and frameworks
 
 The LLM sees only this material. Every offering, framework and case study it
