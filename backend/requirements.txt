@@ -10,3 +10,4 @@ gunicorn
 python-docx
 psycopg2-binary
 python-dotenv
+ollama
