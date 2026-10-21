@@ -4,7 +4,6 @@ import os
 import socket
 from pathlib import Path
 
-import oracledb
 from dotenv import load_dotenv
 
 
@@ -169,6 +168,7 @@ def get_connection():
         return conn
     else:
         # Fall back to original Oracle connection logic
+        import oracledb  # lazy import - not needed on Render
         validate_config()
         resolved_host = resolve_oracle_host()
         if ORACLE_SERVICE_NAME:
