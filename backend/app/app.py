@@ -163,6 +163,46 @@ def _memory_mb() -> dict:
     return info
 
 
+def _step(label: str) -> None:
+    print(f"[step] {label} | memory {_memory_mb().get('current')} MB", flush=True)
+
+
+@app.route("/api/debug/<step>")
+def api_debug(step: str):
+    """
+    Temporary diagnostics: run ONE part of the answer pipeline.
+      /api/debug/embed     - embed a test sentence
+      /api/debug/retrieve  - full Supabase retrieval
+      /api/debug/groq      - one tiny Groq call
+    """
+    import time as _time
+    started = _time.time()
+    _step(f"debug {step}: start")
+    question = "Our affluent banking customers are happy but not engaged."
+    if step == "embed":
+        from ..retrieval.semantic_search import create_query_embedding
+        detail = f"{len(create_query_embedding(question + ' ' + str(started)))} dims"
+    elif step == "retrieve":
+        from ..retrieval.journey_retrieval import retrieve_journey_evidence
+        detail = retrieve_journey_evidence(question)["retrieval"]
+    elif step == "groq":
+        from ..journey_service import _call_groq
+        detail = _call_groq(
+            system_prompt='Reply with JSON {"ok": true}.',
+            user_prompt="Say ok.",
+        )
+    else:
+        return jsonify({"ok": False, "error": "unknown step"}), 404
+    _step(f"debug {step}: done")
+    return jsonify({
+        "ok": True,
+        "step": step,
+        "detail": detail,
+        "seconds": round(_time.time() - started, 2),
+        "memory_mb": _memory_mb(),
+    })
+
+
 @app.route("/api/health")
 def health():
     """
@@ -696,12 +736,14 @@ def api_ask():
         }), 400
 
     industry_supported = is_supported_industry(industry)
+    _step("ask: received")
 
     try:
         if force and mode in ("challenge", "knowledge"):
             intent = {"intent": mode, "confidence": "high", "method": "visitor_choice"}
         else:
             intent = detect_intent(safe_text, chosen_path=mode)
+        _step(f"ask: intent = {intent.get('intent')} ({intent.get('method')})")
 
         path = "challenge" if intent["intent"] == "challenge" else "knowledge"
 
@@ -756,11 +798,13 @@ def api_ask():
                     knowledge, skip=("offerings", "frameworks", "sources")),
             })
 
+        _step("ask: running journey")
         result = run_journey(
             industry=industry,
             role=role,
             challenge=safe_text,
         )
+        _step("ask: journey done")
         response = build_challenge_response(result, industry=industry, role=role)
         log_visit(
             industry=industry,
