@@ -79,7 +79,7 @@
     <header class="site-header">
 
         <a
-            href="#hero"
+            href="/"
             class="brand"
             aria-label="Terragni Consulting home"
         >
@@ -110,7 +110,7 @@
             aria-label="Main navigation"
         >
 
-            <a href="#hero">
+            <a href="/" class="active" aria-current="page">
                 Solution Mapper
             </a>
 
@@ -196,29 +196,29 @@
 
                 <div class="mapper-context-grid">
                     <div class="mapper-field">
-                        <label for="industry-input">
+                        <label for="industry-select">
                             Industry
                         </label>
+                        <select id="industry-select" class="mapper-role-select" required>
+                            <option value="" disabled selected>Choose your industry</option>
+                            <option value="Banking">Banking</option>
+                            <option value="Retail banking">Retail banking</option>
+                            <option value="Premium / private banking">Premium / private banking</option>
+                            <option value="Lending and personal loans">Lending and personal loans</option>
+                            <option value="Financial services">Financial services</option>
+                            <option value="Insurance">Insurance</option>
+                            <option value="__other">Other (type your industry)</option>
+                        </select>
                         <input
                             id="industry-input"
                             name="industry"
                             type="text"
                             maxlength="120"
-                            list="industry-options"
-                            placeholder="e.g. Banking"
+                            class="mapper-role-other"
+                            placeholder="Type your industry, e.g. Healthcare"
                             autocomplete="organization"
-                            required
+                            hidden
                         >
-                        <datalist id="industry-options">
-                            <option value="Banking">
-                            <option value="Retail banking">
-                            <option value="Premium / private banking">
-                            <option value="Lending and personal loans">
-                            <option value="Financial services">
-                            <option value="Insurance">
-                                
-                            <option value="Other">
-                        </datalist>
                     </div>
                     <div class="mapper-field">
                         <label for="role-select">

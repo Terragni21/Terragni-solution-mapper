@@ -106,17 +106,17 @@ threading.Thread(target=_warm_up, daemon=True).start()
 # ============================================================
 # PUBLIC PAGES
 # ============================================================
-@app.route("/")
+@app.route("/", strict_slashes=False)
 def home():
     return render_template(
         "index.html"
     )
-@app.route("/contact")
+@app.route("/contact", strict_slashes=False)
 def contact():
     return render_template(
         "contact.html"
     )
-@app.route("/about")
+@app.route("/about", strict_slashes=False)
 def about():
     return render_template(
         "about.html"

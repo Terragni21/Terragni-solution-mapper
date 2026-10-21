@@ -194,6 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "textarea[name='query']"
     ]);
 
+    const industrySelect = document.getElementById("industry-select");
+
     const industryInput = firstElement([
         "#industry-input",
         "#industry",
@@ -571,10 +573,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function validateQuery() {
         const industry =
-            valueOf(industryInput);
+            valueOf(industryInput) ||
+            (industrySelect ? (industrySelect.value === "__other" ? "" : industrySelect.value) : "");
 
         const role =
-            valueOf(roleInput);
+            valueOf(roleInput) ||
+            (roleSelect ? (roleSelect.value === "__other" ? "" : roleSelect.value) : "");
 
         const challenge =
             valueOf(challengeInput);
@@ -584,7 +588,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Please tell us your industry."
             );
 
-            industryInput?.focus();
+            (industryInput && !industryInput.hidden ? industryInput : industrySelect || industryInput)?.focus();
             return false;
         }
 
@@ -3688,14 +3692,12 @@ ${extra}`;
                 }
 
                 const industry =
-                    valueOf(
-                        industryInput
-                    );
+                    valueOf(industryInput) ||
+                    (industrySelect ? (industrySelect.value === "__other" ? "" : industrySelect.value) : "");
 
                 const role =
-                    valueOf(
-                        roleInput
-                    );
+                    valueOf(roleInput) ||
+                    (roleSelect ? (roleSelect.value === "__other" ? "" : roleSelect.value) : "");
 
                 const challenge =
                     valueOf(
@@ -3718,6 +3720,34 @@ ${extra}`;
     /* ============================================================
        INPUT INTERACTIONS
        ============================================================ */
+
+    /*
+     * Industry picker: a click-to-choose list. "Other" reveals a text box.
+     * The chosen industry is always written into #industry-input, which the rest
+     * of the app reads.
+     */
+    if (industrySelect && industryInput) {
+        industrySelect.addEventListener("change", () => {
+            const isOther = industrySelect.value === "__other";
+            industryInput.hidden = !isOther;
+            industryInput.value = isOther ? "" : industrySelect.value;
+            industrySelect.closest(".mapper-field")?.classList.toggle("has-other", isOther);
+            clearError();
+            setJourneyStep(1);
+            if (isOther) {
+                industryInput.focus();
+            }
+        });
+    }
+
+    if (industrySelect) {
+        industrySelect.addEventListener(
+            "focus",
+            () => {
+                setJourneyStep(1);
+            }
+        );
+    }
 
     if (industryInput) {
         industryInput.addEventListener(
@@ -3838,6 +3868,24 @@ ${extra}`;
         hide(clarificationSection);
 
         show(hero);
+
+        if (industrySelect) {
+            industrySelect.value = "";
+            industrySelect.closest(".mapper-field")?.classList.remove("has-other");
+        }
+        if (industryInput) {
+            industryInput.value = "";
+            industryInput.hidden = true;
+        }
+
+        if (roleSelect) {
+            roleSelect.value = "";
+            roleSelect.closest(".mapper-field")?.classList.remove("has-other");
+        }
+        if (roleInput) {
+            roleInput.value = "";
+            roleInput.hidden = true;
+        }
 
         if (challengeInput) {
             challengeInput.value = "";
@@ -4125,6 +4173,43 @@ ${extra}`;
     setMode(currentMode);
     renderHomeVisuals();
 
+
+    /* ============================================================
+       SITE NAVIGATION & LINK BEHAVIOUR
+       ============================================================ */
+
+    /*
+     * Brand & Solution Mapper links: if clicked while results or loading are
+     * visible on this page, reset the mapper smoothly instead of a harsh reload.
+     */
+    const navHomeLinks = document.querySelectorAll("a.brand, nav.main-nav a[href='/']");
+    navHomeLinks.forEach(link => {
+        link.addEventListener("click", (event) => {
+            if (window.location.pathname === "/" || window.location.pathname === "") {
+                if (results && !results.classList.contains("hidden")) {
+                    event.preventDefault();
+                    resetMapper();
+                }
+            }
+        });
+    });
+
+    /*
+     * Save context whenever user clicks any /contact link, capturing current
+     * form state even if they didn't submit yet.
+     */
+    document.querySelectorAll("a[href='/contact']").forEach(link => {
+        link.addEventListener("click", () => {
+            const ind = valueOf(industryInput) || (industrySelect ? (industrySelect.value === "__other" ? "" : industrySelect.value) : "") || currentIndustry;
+            const rol = valueOf(roleInput) || (roleSelect ? (roleSelect.value === "__other" ? "" : roleSelect.value) : "") || currentRole;
+            const q = valueOf(challengeInput) || currentChallenge;
+            saveContactContext({
+                industry: ind,
+                role: rol,
+                question: q
+            });
+        });
+    });
 
     /* ============================================================
        DEBUG API
