@@ -7,7 +7,9 @@ services:
 
     # Where Render finds requirements and the app code
     rootDir: .
-    buildCommand: pip install -r backend/requirements.txt
+    buildCommand: >-
+      pip install -r backend/requirements.txt &&
+      python -c "from fastembed import TextEmbedding; TextEmbedding('nomic-ai/nomic-embed-text-v1'); print('FastEmbed model cached OK')"
 
     # Gunicorn binds to $PORT (Render injects this automatically)
     startCommand: gunicorn wsgi:app --workers 2 --threads 2 --timeout 120 --bind 0.0.0.0:$PORT

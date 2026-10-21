@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 import threading
 from pathlib import Path
 import markdown as md_lib
@@ -80,8 +80,8 @@ def _warm_up() -> None:
         try:
             cursor = connection.cursor()
             cursor.execute(
-                "SELECT DISTINCT CLIENT_NAME FROM CASE_STUDY "
-                "WHERE CLIENT_NAME IS NOT NULL"
+                "SELECT DISTINCT client_name FROM case_study "
+                "WHERE client_name IS NOT NULL"
             )
             register_client_names(row[0] for row in cursor)
             cursor.close()
@@ -136,13 +136,13 @@ def health():
         connection = get_connection()
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT COUNT(*) FROM DOCUMENT_CHUNK"
+            "SELECT COUNT(*) FROM document_chunk"
         )
         document_chunks = int(
             cursor.fetchone()[0]
         )
         cursor.execute(
-            "SELECT COUNT(*) FROM DOCUMENT_CHUNK_EMBEDDING"
+            "SELECT COUNT(*) FROM document_chunk_embedding"
         )
         embeddings = int(
             cursor.fetchone()[0]
@@ -150,12 +150,10 @@ def health():
         cursor.execute(
             """
             SELECT COUNT(*)
-            FROM DOCUMENT_CHUNK_EMBEDDING
-            WHERE MODEL_NAME = :model_name
+            FROM document_chunk_embedding
+            WHERE model_name = %s
             """,
-            {
-                "model_name": "nomic-embed-text",
-            },
+            ("nomic-embed-text",),
         )
         nomic_embeddings = int(
             cursor.fetchone()[0]
@@ -166,10 +164,10 @@ def health():
                 GROQ_API_KEY
             ),
             "model": GROQ_MODEL,
-            "retrieval_backend": "oracle_ollama",
-            "oracle_document_chunks": document_chunks,
-            "oracle_embeddings": embeddings,
-            "oracle_nomic_embeddings": nomic_embeddings,
+            "retrieval_backend": "supabase_fastembed",
+            "document_chunks": document_chunks,
+            "embeddings": embeddings,
+            "nomic_embeddings": nomic_embeddings,
         })
     except Exception as exc:
         app.logger.exception(
@@ -181,7 +179,7 @@ def health():
                 GROQ_API_KEY
             ),
             "model": GROQ_MODEL,
-            "retrieval_backend": "oracle_ollama",
+            "retrieval_backend": "supabase_fastembed",
             "error": (
                 f"{type(exc).__name__}: {exc}"
             ),
