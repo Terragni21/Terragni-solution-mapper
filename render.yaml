@@ -1,0 +1,67 @@
+services:
+  - type: web
+    name: terragni-solution-mapper
+    runtime: python
+    region: singapore   # closest to ap-northeast-2 (Seoul) Supabase instance
+    plan: starter
+
+    # Where Render finds requirements and the app code
+    rootDir: .
+    buildCommand: pip install -r backend/requirements.txt
+
+    # Gunicorn binds to $PORT (Render injects this automatically)
+    startCommand: gunicorn wsgi:app --workers 2 --threads 2 --timeout 120 --bind 0.0.0.0:$PORT
+
+    # Health-check endpoint (Flask serves / by default)
+    healthCheckPath: /
+
+    envVars:
+      # ── Supabase PostgreSQL ──────────────────────────────────────────────────
+      - key: DATABASE_URL
+        sync: false          # set this manually in the Render dashboard (secret)
+
+      # ── Groq LLM ────────────────────────────────────────────────────────────
+      - key: GROQ_API_KEY
+        sync: false          # set manually in the Render dashboard (secret)
+
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-120b
+
+      - key: JOURNEY_GROQ_MAX_COMPLETION_TOKENS
+        value: "2500"
+
+      - key: JOURNEY_GROQ_REASONING_EFFORT
+        value: low
+
+      # ── Flask ────────────────────────────────────────────────────────────────
+      - key: FLASK_DEBUG
+        value: "false"
+
+      - key: TOP_K_CHUNKS
+        value: "10"
+
+      - key: MAX_CHUNK_CHARS
+        value: "4500"
+
+      # ── FastEmbed ────────────────────────────────────────────────────────────
+      - key: FASTEMBED_MODEL
+        value: nomic-ai/nomic-embed-text-v1
+
+      - key: DB_EMBEDDING_MODEL
+        value: nomic-embed-text
+
+      # ── Embedding / retrieval tuning ─────────────────────────────────────────
+      - key: EMBEDDING_CACHE_SECONDS
+        value: "900"
+
+      - key: JOURNEY_RETRIEVAL_TOP_K
+        value: "24"
+
+      - key: JOURNEY_RETRIEVAL_MIN_SIMILARITY
+        value: "0.45"
+
+      - key: JOURNEY_RETRIEVAL_MAX_EVIDENCE
+        value: "12"
+
+      - key: JOURNEY_RETRIEVAL_MAX_CASE_STUDIES
+        value: "8"
