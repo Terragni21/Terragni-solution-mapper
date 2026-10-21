@@ -101,8 +101,26 @@ def _warm_up() -> None:
         app.logger.exception("Terragni warm-up failed; first query will be slower")
 
 
-if os.getenv("WARM_UP_ON_START", "true").strip().lower() == "true":
-    threading.Thread(target=_warm_up, daemon=True).start()
+_WARM_UP_STARTED = False
+
+
+def start_warm_up() -> None:
+    """
+    Start the background warm-up ONCE, in the process that serves requests.
+
+    It must NOT run at import time: gunicorn imports the app in its master
+    process too, and a warm-up there loaded a second copy of the embedding
+    model (~300 MB) that never served a request - together with the worker's
+    copy that went over Render's 512 MB limit and the instance was killed.
+    gunicorn.conf.py calls this from the post_fork hook (worker only);
+    `python -m backend.app.app` calls it below.
+    """
+    global _WARM_UP_STARTED
+    if _WARM_UP_STARTED:
+        return
+    _WARM_UP_STARTED = True
+    if os.getenv("WARM_UP_ON_START", "true").strip().lower() == "true":
+        threading.Thread(target=_warm_up, daemon=True).start()
 # ============================================================
 # JSON ERRORS FOR THE API
 # ============================================================
@@ -929,6 +947,7 @@ def api_case_study_detail(
 # START SERVER
 # ============================================================
 if __name__ == "__main__":
+    start_warm_up()
     app.run(
         host="127.0.0.1",
         port=PORT,
