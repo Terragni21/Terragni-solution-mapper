@@ -16,3 +16,5 @@ build/
 venv/
 .env
 
+
+backend/model_cache/
