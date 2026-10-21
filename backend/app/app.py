@@ -104,6 +104,31 @@ def _warm_up() -> None:
 if os.getenv("WARM_UP_ON_START", "true").strip().lower() == "true":
     threading.Thread(target=_warm_up, daemon=True).start()
 # ============================================================
+# JSON ERRORS FOR THE API
+# ============================================================
+# Any crash inside an /api/ route must come back as JSON. Before, Flask
+# returned an HTML error page and the website could only say
+# "The server returned an invalid response".
+from werkzeug.exceptions import HTTPException  # noqa: E402
+
+
+@app.errorhandler(Exception)
+def _api_error(exc):
+    if isinstance(exc, HTTPException) and not request.path.startswith("/api/"):
+        return exc
+    status = exc.code if isinstance(exc, HTTPException) else 500
+    if status >= 500:
+        app.logger.exception("Unhandled error on %s", request.path)
+    if not request.path.startswith("/api/"):
+        return exc if isinstance(exc, HTTPException) else ("Internal Server Error", 500)
+    return jsonify({
+        "ok": False,
+        "error": "The Terragni AI hit an internal error. Please try again.",
+        "details": f"{type(exc).__name__}: {exc}",
+    }), status
+
+
+# ============================================================
 # PUBLIC PAGES
 # ============================================================
 @app.route("/", strict_slashes=False)
