@@ -66,6 +66,53 @@ def _load_model():
     return TextEmbedding(model_name=MODEL, cache_dir=cache_dir)
 
 
+def _allow_several_models(cursor) -> None:
+    """
+    The table may have been created with PRIMARY KEY (chunk_id), which allows
+    only ONE embedding per chunk. Replace it with a unique (chunk_id,
+    model_name) rule so the old nomic vectors and the new ones can coexist.
+    """
+    cursor.execute(
+        """
+        SELECT con.conname, array_agg(att.attname ORDER BY att.attname)
+        FROM pg_constraint con
+        JOIN pg_class rel ON rel.oid = con.conrelid
+        JOIN pg_attribute att
+          ON att.attrelid = rel.oid AND att.attnum = ANY (con.conkey)
+        WHERE rel.relname = 'document_chunk_embedding'
+          AND con.contype IN ('p', 'u')
+        GROUP BY con.conname
+        """
+    )
+    for name, columns in cursor.fetchall():
+        if list(columns) == ["chunk_id"]:
+            print(f"Removing one-embedding-per-chunk rule ({name}) ...")
+            cursor.execute(
+                f'ALTER TABLE document_chunk_embedding DROP CONSTRAINT "{name}"'
+            )
+    # Unique indexes on chunk_id alone (not constraints) block it too.
+    cursor.execute(
+        """
+        SELECT i.relname
+        FROM pg_index x
+        JOIN pg_class i ON i.oid = x.indexrelid
+        JOIN pg_class t ON t.oid = x.indrelid
+        WHERE t.relname = 'document_chunk_embedding'
+          AND x.indisunique AND NOT x.indisprimary
+          AND x.indnatts = 1
+          AND (SELECT attname FROM pg_attribute
+               WHERE attrelid = t.oid AND attnum = x.indkey[0]) = 'chunk_id'
+        """
+    )
+    for (index_name,) in cursor.fetchall():
+        print(f"Removing unique index {index_name} ...")
+        cursor.execute(f'DROP INDEX "{index_name}"')
+    cursor.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS ux_document_chunk_embedding_chunk_id_model_name "
+        "ON document_chunk_embedding (chunk_id, model_name)"
+    )
+
+
 def _normalise(matrix: np.ndarray) -> np.ndarray:
     norms = np.linalg.norm(matrix, axis=1, keepdims=True)
     norms[norms == 0] = 1.0
@@ -88,13 +135,32 @@ def main() -> None:
         rows = [(chunk_id, text) for chunk_id, text in rows if text]
         print(f"Chunks to embed: {len(rows)}")
 
-        started = time.time()
-        vectors: list[list[float]] = []
-        for start in range(0, len(rows), BATCH):
-            texts = [text for _, text in rows[start:start + BATCH]]
-            vectors.extend(v.tolist() for v in model.embed(texts, batch_size=BATCH))
-            print(f"  embedded {min(start + BATCH, len(rows))}/{len(rows)}", end="\r")
-        print(f"\nEmbedding took {time.time() - started:.0f}s")
+        # Re-use vectors from a previous run (saves ~2 minutes).
+        cache_file = PROJECT_ROOT / "backend" / "model_cache" / f"{MODEL_NAME}_vectors.json"
+        cached: dict[str, list[float]] = {}
+        if cache_file.exists():
+            try:
+                cached = json.loads(cache_file.read_text(encoding="utf-8"))
+            except ValueError:
+                cached = {}
+        if cached and all(str(chunk_id) in cached for chunk_id, _ in rows):
+            print(f"Using saved vectors from {cache_file.name}")
+            vectors = [cached[str(chunk_id)] for chunk_id, _ in rows]
+        else:
+            started = time.time()
+            vectors = []
+            for start in range(0, len(rows), BATCH):
+                texts = [text for _, text in rows[start:start + BATCH]]
+                vectors.extend(v.tolist() for v in model.embed(texts, batch_size=BATCH))
+                print(f"  embedded {min(start + BATCH, len(rows))}/{len(rows)}", end="\r")
+            print(f"\nEmbedding took {time.time() - started:.0f}s")
+            cache_file.parent.mkdir(parents=True, exist_ok=True)
+            cache_file.write_text(
+                json.dumps({str(c): v for (c, _), v in zip(rows, vectors)}),
+                encoding="utf-8",
+            )
+
+        _allow_several_models(cursor)
 
         values = [
             (

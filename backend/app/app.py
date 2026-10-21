@@ -149,6 +149,20 @@ def about():
 # ============================================================
 # HEALTH CHECK
 # ============================================================
+def _memory_mb() -> dict:
+    """Current and peak memory of this process (Render Starter = 512 MB)."""
+    info = {}
+    try:
+        with open("/proc/self/status", encoding="utf-8") as handle:
+            for line in handle:
+                if line.startswith(("VmRSS:", "VmHWM:")):
+                    key = "current" if line.startswith("VmRSS") else "peak"
+                    info[key] = round(int(line.split()[1]) / 1024)
+    except OSError:
+        pass
+    return info
+
+
 @app.route("/api/health")
 def health():
     """
@@ -186,6 +200,7 @@ def health():
             cursor.fetchone()[0]
         )
         return jsonify({
+            "memory_mb": _memory_mb(),
             "ok": bool(document_chunks and nomic_embeddings and GROQ_API_KEY),
             "database": "connected",
             "query_embedding_model": FASTEMBED_MODEL,
