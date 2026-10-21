@@ -6,7 +6,9 @@ services:
     plan: starter
 
     rootDir: .
-    buildCommand: pip install -r backend/requirements.txt
+    buildCommand: >-
+      pip install -r backend/requirements.txt &&
+      python -c "from fastembed import TextEmbedding; TextEmbedding('nomic-ai/nomic-embed-text-v1')"
     startCommand: gunicorn wsgi:app --workers 1 --threads 4 --timeout 180 --bind 0.0.0.0:$PORT
 
     healthCheckPath: /

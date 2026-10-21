@@ -47,11 +47,18 @@ DB_EMBEDDING_MODEL = os.getenv(
 # FASTEMBED
 # ============================================================
 
-@lru_cache(maxsize=1)
+_FASTEMBED_LOCK = threading.Lock()
+_FASTEMBED_INSTANCE = None
+
 def _get_fastembed_model():
-    """Lazy-load the FastEmbed model (downloads on first use)."""
-    from fastembed import TextEmbedding
-    return TextEmbedding(model_name=FASTEMBED_MODEL)
+    """Thread-safe singleton loader for FastEmbed model."""
+    global _FASTEMBED_INSTANCE
+    if _FASTEMBED_INSTANCE is None:
+        with _FASTEMBED_LOCK:
+            if _FASTEMBED_INSTANCE is None:
+                from fastembed import TextEmbedding
+                _FASTEMBED_INSTANCE = TextEmbedding(model_name=FASTEMBED_MODEL)
+    return _FASTEMBED_INSTANCE
 
 
 @lru_cache(maxsize=512)
