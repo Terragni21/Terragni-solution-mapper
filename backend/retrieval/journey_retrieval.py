@@ -376,7 +376,9 @@ def retrieve_journey_evidence(
     max_case_studies: int = DEFAULT_MAX_CASE_STUDIES,
     max_offerings: int = 5,
     max_frameworks: int = 5,
-    master_minimum_similarity: float = 0.35,
+    master_minimum_similarity: float = float(
+        os.getenv("MASTER_MIN_SIMILARITY", "0.35")
+    ),
 ) -> dict[str, Any]:
     query = (query or "").strip()
     if not query:

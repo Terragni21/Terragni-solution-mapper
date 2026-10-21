@@ -3,7 +3,7 @@ services:
     name: terragni-solution-mapper
     runtime: python
     region: singapore
-    plan: starter            # 512 MB RAM - works with the quantised -Q embedding model
+    plan: starter            # 512 MB RAM - works with the small bge embedding model
 
     rootDir: .
     # The embedding model is downloaded during the BUILD into backend/model_cache
@@ -12,7 +12,7 @@ services:
       pip install --upgrade pip &&
       pip install -r backend/requirements.txt &&
       python -c "from backend.retrieval.semantic_search import _get_fastembed_model; _get_fastembed_model(); print('FastEmbed model ready')"
-    startCommand: gunicorn wsgi:app --workers 1 --threads 4 --timeout 180 --bind 0.0.0.0:$PORT
+    startCommand: gunicorn wsgi:app --workers 1 --threads 2 --timeout 300 --bind 0.0.0.0:$PORT
 
     healthCheckPath: /
 
@@ -50,22 +50,30 @@ services:
       - key: MAX_CHUNK_CHARS
         value: "4500"
 
-      # Query embeddings must come from the SAME model family that built the
-      # stored vectors (Ollama nomic-embed-text = nomic-embed-text v1.5).
+      # Small embedding model (~67 MB) that fits the 512 MB instance.
+      # Its chunk vectors are created once with
+      #   python -m backend.scripts.reembed_chunks
       - key: FASTEMBED_MODEL
-        value: nomic-ai/nomic-embed-text-v1.5-Q
+        value: BAAI/bge-small-en-v1.5
 
       - key: FASTEMBED_CACHE_DIR
         value: /opt/render/project/src/backend/model_cache
 
       - key: DB_EMBEDDING_MODEL
-        value: nomic-embed-text
+        value: bge-small-en-v1.5
 
       - key: EMBEDDING_CACHE_SECONDS
         value: "900"
 
       - key: WARM_UP_ON_START
         value: "true"
+
+      # Keep memory low on the 512 MB instance.
+      - key: MALLOC_ARENA_MAX
+        value: "2"
+
+      - key: OMP_NUM_THREADS
+        value: "1"
 
       - key: JOURNEY_RETRIEVAL_TOP_K
         value: "24"

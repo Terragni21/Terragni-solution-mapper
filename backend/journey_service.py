@@ -1558,7 +1558,7 @@ def run_journey(
 
 
 
-    minimum_similarity: float = 0.50,
+    minimum_similarity: float | None = None,
 
 
 
@@ -1613,6 +1613,9 @@ def run_journey(
 
 
 
+
+    if minimum_similarity is None:
+        minimum_similarity = float(os.getenv("JOURNEY_MIN_SIMILARITY", "0.50"))
 
     package = retrieve_journey_evidence(
 
@@ -1734,7 +1737,7 @@ def continue_journey(
 
 
 
-    minimum_similarity: float = 0.50,
+    minimum_similarity: float | None = None,
 
 
 

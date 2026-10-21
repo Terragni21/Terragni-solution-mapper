@@ -32,18 +32,19 @@ load_dotenv(BACKEND_DIR / ".env")
 
 # FastEmbed model used to embed the visitor's question at query time.
 #
-# The stored chunk embeddings were created with Ollama "nomic-embed-text",
-# which is nomic-embed-text **v1.5**. The query must be embedded with the
-# same model, otherwise similarities are meaningless and every answer falls
-# below the match threshold.
+# The query MUST be embedded with the same model that produced the stored
+# chunk vectors (document_chunk_embedding.model_name = DB_EMBEDDING_MODEL).
 #
-#   nomic-ai/nomic-embed-text-v1.5-Q  (default) quantised, ~130 MB, fits the
-#                                     512 MB Render Starter plan
-#   nomic-ai/nomic-embed-text-v1.5    full precision, ~520 MB, needs a
-#                                     Render plan with >= 2 GB RAM
+# Default: BAAI/bge-small-en-v1.5 (~67 MB, 384 dims). It fits comfortably in
+# the free/512 MB Render instance. The chunk vectors for it are created once
+# with:   python -m backend.scripts.reembed_chunks
+#
+# (The older nomic-embed-text v1.5 vectors are still in the table under
+# model_name 'nomic-embed-text'; set FASTEMBED_MODEL=nomic-ai/nomic-embed-text-v1.5-Q
+# and DB_EMBEDDING_MODEL=nomic-embed-text to go back to them on a bigger plan.)
 FASTEMBED_MODEL = os.getenv(
     "FASTEMBED_MODEL",
-    "nomic-ai/nomic-embed-text-v1.5-Q"
+    "BAAI/bge-small-en-v1.5"
 ).strip()
 
 # Where the ONNX model is cached. It must live INSIDE the project so the
@@ -57,8 +58,25 @@ FASTEMBED_CACHE_DIR = os.getenv(
 # The model_name stored in document_chunk_embedding during ingestion.
 DB_EMBEDDING_MODEL = os.getenv(
     "DB_EMBEDDING_MODEL",
-    "nomic-embed-text"
+    "bge-small-en-v1.5"
 ).strip()
+
+
+def memory_mb() -> int | None:
+    """Resident memory of this process in MB (Linux only)."""
+    try:
+        with open("/proc/self/status", encoding="utf-8") as handle:
+            for line in handle:
+                if line.startswith("VmRSS:"):
+                    return round(int(line.split()[1]) / 1024)
+    except OSError:
+        return None
+    return None
+
+
+def log_memory(stage: str) -> None:
+    """Print memory use so it shows in the Render Logs tab."""
+    print(f"[memory] {stage}: {memory_mb()} MB", flush=True)
 
 
 # ============================================================
@@ -80,14 +98,19 @@ def _get_fastembed_model():
                     model_name=FASTEMBED_MODEL,
                     cache_dir=FASTEMBED_CACHE_DIR,
                     threads=int(os.getenv("FASTEMBED_THREADS", "1")),
+                    # ONNX's memory arena keeps large buffers after each
+                    # call; on a 512 MB instance that is what pushed the
+                    # process over the limit (Render then returns 502).
+                    enable_cpu_mem_arena=False,
                 )
+                log_memory(f"after loading embedding model {FASTEMBED_MODEL}")
     return _FASTEMBED_INSTANCE
 
 
 @lru_cache(maxsize=512)
 def _cached_embedding(text: str) -> tuple[float, ...]:
     model = _get_fastembed_model()
-    embeddings = list(model.embed([text]))
+    embeddings = list(model.embed([text], batch_size=1))
 
     if not embeddings:
         raise RuntimeError(
@@ -360,6 +383,10 @@ def get_cached_embeddings() -> list[dict[str, Any]]:
         _EMBEDDING_CACHE["rows"] = rows
         _EMBEDDING_CACHE["matrix"] = matrix
         _EMBEDDING_CACHE["loaded_at"] = time.time()
+
+        import gc
+        gc.collect()
+        log_memory(f"after loading {len(rows)} chunk embeddings")
 
         return rows
 

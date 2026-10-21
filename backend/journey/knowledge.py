@@ -15,6 +15,7 @@ returns is checked against what it was given, so nothing can be invented.
 from __future__ import annotations
 
 import json
+import os
 import re
 import threading
 import time
@@ -159,12 +160,16 @@ def _build_package(question: str) -> dict[str, Any]:
     journey = retrieve_journey_evidence(
         question,
         top_k=12,
-        minimum_similarity=0.45,
+        minimum_similarity=float(os.getenv("KNOWLEDGE_MIN_SIMILARITY", "0.45")),
     )
 
     brochure_hits = [
         hit
-        for hit in semantic_search(question, top_k=40, minimum_similarity=0.40)
+        for hit in semantic_search(
+            question,
+            top_k=40,
+            minimum_similarity=float(os.getenv("BROCHURE_MIN_SIMILARITY", "0.40")),
+        )
         if _is_brochure((hit.get("document") or {}).get("title"))
     ][:4]
 
