@@ -2,29 +2,21 @@ services:
   - type: web
     name: terragni-solution-mapper
     runtime: python
-    region: singapore   # closest to ap-northeast-2 (Seoul) Supabase instance
+    region: singapore
     plan: starter
 
-    # Where Render finds requirements and the app code
     rootDir: .
-    buildCommand: >-
-      pip install -r backend/requirements.txt &&
-      python -c "from fastembed import TextEmbedding; TextEmbedding('nomic-ai/nomic-embed-text-v1'); print('FastEmbed model cached OK')"
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: gunicorn wsgi:app --workers 1 --threads 4 --timeout 180 --bind 0.0.0.0:$PORT
 
-    # Gunicorn binds to $PORT (Render injects this automatically)
-    startCommand: gunicorn wsgi:app --workers 2 --threads 2 --timeout 120 --bind 0.0.0.0:$PORT
-
-    # Health-check endpoint (Flask serves / by default)
     healthCheckPath: /
 
     envVars:
-      # ── Supabase PostgreSQL ──────────────────────────────────────────────────
       - key: DATABASE_URL
-        sync: false          # set this manually in the Render dashboard (secret)
+        sync: false
 
-      # ── Groq LLM ────────────────────────────────────────────────────────────
       - key: GROQ_API_KEY
-        sync: false          # set manually in the Render dashboard (secret)
+        sync: false
 
       - key: GROQ_MODEL
         value: openai/gpt-oss-120b
@@ -35,7 +27,6 @@ services:
       - key: JOURNEY_GROQ_REASONING_EFFORT
         value: low
 
-      # ── Flask ────────────────────────────────────────────────────────────────
       - key: FLASK_DEBUG
         value: "false"
 
@@ -45,14 +36,12 @@ services:
       - key: MAX_CHUNK_CHARS
         value: "4500"
 
-      # ── FastEmbed ────────────────────────────────────────────────────────────
       - key: FASTEMBED_MODEL
         value: nomic-ai/nomic-embed-text-v1
 
       - key: DB_EMBEDDING_MODEL
         value: nomic-embed-text
 
-      # ── Embedding / retrieval tuning ─────────────────────────────────────────
       - key: EMBEDDING_CACHE_SECONDS
         value: "900"
 

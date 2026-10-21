@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 import threading
 from pathlib import Path
 import markdown as md_lib
@@ -102,7 +102,7 @@ def _warm_up() -> None:
         app.logger.exception("Terragni warm-up failed; first query will be slower")
 
 
-threading.Thread(target=_warm_up, daemon=True).start()
+# threading.Thread(target=_warm_up, daemon=True).start()
 # ============================================================
 # PUBLIC PAGES
 # ============================================================
