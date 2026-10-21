@@ -2985,20 +2985,36 @@ ${extra}`;
                 );
 
             let data;
+            const rawText = await response.text();
 
             try {
-                data = await response.json();
+                data = JSON.parse(rawText);
             } catch (error) {
+                console.error(
+                    "Terragni /api/ask non-JSON response",
+                    response.status,
+                    rawText.slice(0, 2000)
+                );
+                const hint =
+                    response.status === 502 || response.status === 503
+                        ? " The server restarted while answering (often out of memory or a timeout)."
+                        : "";
                 throw new Error(
-                    "The server returned an invalid response."
+                    `The server returned an invalid response (status ${response.status}).` +
+                    hint +
+                    (rawText ? ` Details: ${rawText.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 200)}` : "")
                 );
             }
 
             if (!response.ok || data?.ok === false) {
+                if (data?.details) {
+                    console.error("Terragni /api/ask error details:", data.details);
+                }
                 throw new Error(
-                    data?.error ||
+                    (data?.error ||
                     data?.message ||
-                    `Request failed with status ${response.status}.`
+                    `Request failed with status ${response.status}.`) +
+                    (data?.details ? ` (${data.details})` : "")
                 );
             }
 
