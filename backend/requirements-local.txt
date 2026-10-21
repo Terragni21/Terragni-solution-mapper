@@ -1,0 +1,4 @@
+# Extra tools for your own computer only (ingestion / re-embedding with Ollama).
+# Render does NOT need these.
+-r requirements.txt
+ollama>=0.3.0

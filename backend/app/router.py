@@ -1,4 +1,4 @@
-﻿"""Terragni document retrieval + strictly grounded LLM synthesis."""
+"""Terragni document retrieval + strictly grounded LLM synthesis."""
 
 from __future__ import annotations
 
@@ -29,7 +29,18 @@ KB = json.loads(
 # DOCUMENT RETRIEVER
 # -------------------------------------------------------------------
 
-RETRIEVER = Retriever()
+# Built lazily. The production journey does not use this legacy keyword
+# retriever, and building it means parsing every PDF/PPTX in raw_sources
+# (one is 100 MB) - doing that at import time made every Render boot slow
+# and could run the 512 MB instance out of memory.
+_RETRIEVER: Retriever | None = None
+
+
+def get_retriever() -> Retriever:
+    global _RETRIEVER
+    if _RETRIEVER is None:
+        _RETRIEVER = Retriever()
+    return _RETRIEVER
 
 
 def retrieve_evidence(
@@ -48,7 +59,7 @@ def retrieve_evidence(
     if not query:
         return []
 
-    return RETRIEVER.search(
+    return get_retriever().search(
         query,
         top_k=top_k,
     )

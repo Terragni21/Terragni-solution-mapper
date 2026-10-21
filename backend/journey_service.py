@@ -26,7 +26,7 @@ Orchestrates:
 
 
 
-        -> semantic retrieval (Oracle + Ollama)
+        -> semantic retrieval (Supabase PostgreSQL + FastEmbed)
 
 
 
@@ -50,11 +50,11 @@ Important design rules:
 
 
 
-- Oracle remains the source of truth for Terragni knowledge.
+- Supabase PostgreSQL is the source of truth for Terragni knowledge.
 
 
 
-- Ollama performs semantic retrieval.
+- FastEmbed (nomic-embed-text v1.5) embeds the question for semantic retrieval.
 
 
 

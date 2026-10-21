@@ -2,12 +2,15 @@ import os
 from collections import defaultdict
 from typing import Any
 
+import psycopg2
 from dotenv import load_dotenv
 
 from backend.database.connection import get_connection
-from backend.retrieval.semantic_search import semantic_search, create_query_embedding
-
-# Removed unused Ollama import – embeddings now use FastEmbed via semantic_search.
+from backend.retrieval.semantic_search import (
+    cosine_similarity,
+    create_query_embedding,
+    semantic_search,
+)
 
 BACKEND_DIR = os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))
@@ -26,9 +29,7 @@ DEFAULT_MAX_CASE_STUDIES = int(
 )
 
 def _clean_text(value: Any) -> str | None:
-    """Safely convert Oracle CLOB/scalar values into plain text.
-    The function now works for both Oracle and PostgreSQL (text fields).
-    """
+    """Convert a database value (PostgreSQL TEXT, or a legacy LOB) to text."""
     if value is None:
         return None
 
@@ -128,7 +129,7 @@ def _load_case_study_master_data(
     connection,
     case_study_ids: list[int],
 ) -> dict[int, dict[str, Any]]:
-    """Load CLOB fields for case studies (PostgreSQL stores TEXT)."""
+    """Load the long text fields of the given case studies."""
     if not case_study_ids:
         return {}
     placeholders = ", ".join(["%s"] * len(case_study_ids))
@@ -243,8 +244,16 @@ def _load_case_study_relationships(
     }
     with connection.cursor() as cursor:
         for entity_type, sql in relationship_queries.items():
-            cursor.execute(sql, params)
-            for row in cursor:
+            try:
+                cursor.execute(sql, params)
+                rows = cursor.fetchall()
+            except psycopg2.Error as exc:
+                # A missing/empty link table (e.g. case_study_offering was
+                # never exported from Oracle) must not break the whole answer.
+                connection.rollback()
+                print(f"Warning: could not load case-study {entity_type}: {exc}")
+                continue
+            for row in rows:
                 case_id = int(row[0])
                 if entity_type == "industries":
                     item = {
@@ -291,20 +300,6 @@ def _load_case_study_relationships(
                     {"industries": [], "offerings": [], "frameworks": [], "challenges": [], "outcomes": []},
                 )[entity_type].append(item)
     return result
-
-def cosine_similarity(vector_a: list[float], vector_b: list[float]) -> float:
-    """Calculate cosine similarity between two embedding vectors."""
-    if len(vector_a) != len(vector_b):
-        raise ValueError(
-            "Vector dimensions do not match: "
-            f"{len(vector_a)} != {len(vector_b)}"
-        )
-    dot_product = sum(a * b for a, b in zip(vector_a, vector_b))
-    mag_a = sum(a * a for a in vector_a) ** 0.5
-    mag_b = sum(b * b for b in vector_b) ** 0.5
-    if mag_a == 0.0 or mag_b == 0.0:
-        return 0.0
-    return dot_product / (mag_a * mag_b)
 
 def _embed_text(text: str) -> list[float]:
     """Create a FastEmbed embedding for a short master‑knowledge record.

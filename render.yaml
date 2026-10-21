@@ -3,19 +3,31 @@ services:
     name: terragni-solution-mapper
     runtime: python
     region: singapore
-    plan: starter
+    plan: starter            # 512 MB RAM - works with the quantised -Q embedding model
 
     rootDir: .
+    # The embedding model is downloaded during the BUILD into backend/model_cache
+    # (inside the project) so it is still there when the service starts.
     buildCommand: >-
+      pip install --upgrade pip &&
       pip install -r backend/requirements.txt &&
-      python -c "from fastembed import TextEmbedding; TextEmbedding('nomic-ai/nomic-embed-text-v1')"
+      python -c "from backend.retrieval.semantic_search import _get_fastembed_model; _get_fastembed_model(); print('FastEmbed model ready')"
     startCommand: gunicorn wsgi:app --workers 1 --threads 4 --timeout 180 --bind 0.0.0.0:$PORT
 
     healthCheckPath: /
 
     envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+
+      # Supabase -> Project Settings -> Database -> Connection string ->
+      # "Transaction pooler" (port 6543) or "Session pooler" (port 5432).
+      # Do NOT use the direct db.<project>.supabase.co host: it is IPv6 only.
       - key: DATABASE_URL
         sync: false
+
+      - key: DATABASE_SSLMODE
+        value: require
 
       - key: GROQ_API_KEY
         sync: false
@@ -24,7 +36,7 @@ services:
         value: openai/gpt-oss-120b
 
       - key: JOURNEY_GROQ_MAX_COMPLETION_TOKENS
-        value: "2500"
+        value: "3600"
 
       - key: JOURNEY_GROQ_REASONING_EFFORT
         value: low
@@ -38,14 +50,22 @@ services:
       - key: MAX_CHUNK_CHARS
         value: "4500"
 
+      # Query embeddings must come from the SAME model family that built the
+      # stored vectors (Ollama nomic-embed-text = nomic-embed-text v1.5).
       - key: FASTEMBED_MODEL
-        value: nomic-ai/nomic-embed-text-v1
+        value: nomic-ai/nomic-embed-text-v1.5-Q
+
+      - key: FASTEMBED_CACHE_DIR
+        value: /opt/render/project/src/backend/model_cache
 
       - key: DB_EMBEDDING_MODEL
         value: nomic-embed-text
 
       - key: EMBEDDING_CACHE_SECONDS
         value: "900"
+
+      - key: WARM_UP_ON_START
+        value: "true"
 
       - key: JOURNEY_RETRIEVAL_TOP_K
         value: "24"

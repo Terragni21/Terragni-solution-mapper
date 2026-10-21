@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 import threading
 from pathlib import Path
 import markdown as md_lib
@@ -22,16 +23,10 @@ from .config import (
     GROQ_MODEL,
     PORT,
     DEBUG,
-    TOP_K_CHUNKS,
 )
 from ..database.connection import get_connection
 from .router import (
     KB,
-    RETRIEVER,
-    retrieve_evidence,
-    map_with_llm,
-    get_case_studies,
-    get_offering,
     load_case_study_content,
 )
 from .confidentiality import (
@@ -72,8 +67,12 @@ app = Flask(
 def _warm_up() -> None:
     """
     Load the slow, rarely-changing data once, in the background:
-    Oracle embeddings, offering/framework embeddings, the knowledge
-    catalogue and client names for the public-page blocklist.
+    the FastEmbed model, chunk embeddings from Supabase, offering/framework
+    embeddings, the knowledge catalogue and client names for the
+    public-page blocklist.
+
+    Without this the FIRST visitor question has to do all of it inside the
+    request and can hit the gunicorn / browser timeout.
     """
     try:
         connection = get_connection()
@@ -102,7 +101,8 @@ def _warm_up() -> None:
         app.logger.exception("Terragni warm-up failed; first query will be slower")
 
 
-# threading.Thread(target=_warm_up, daemon=True).start()
+if os.getenv("WARM_UP_ON_START", "true").strip().lower() == "true":
+    threading.Thread(target=_warm_up, daemon=True).start()
 # ============================================================
 # PUBLIC PAGES
 # ============================================================
@@ -128,8 +128,10 @@ def about():
 def health():
     """
     Production health check.
-    Oracle is the source of truth for the production journey.
+    Supabase PostgreSQL is the source of truth for the production journey.
+    Open https://<your-app>.onrender.com/api/health to diagnose a deploy.
     """
+    from ..retrieval.semantic_search import DB_EMBEDDING_MODEL, FASTEMBED_MODEL
     connection = None
     cursor = None
     try:
@@ -153,13 +155,16 @@ def health():
             FROM document_chunk_embedding
             WHERE model_name = %s
             """,
-            ("nomic-embed-text",),
+            (DB_EMBEDDING_MODEL,),
         )
         nomic_embeddings = int(
             cursor.fetchone()[0]
         )
         return jsonify({
-            "ok": True,
+            "ok": bool(document_chunks and nomic_embeddings and GROQ_API_KEY),
+            "database": "connected",
+            "query_embedding_model": FASTEMBED_MODEL,
+            "stored_embedding_model": DB_EMBEDDING_MODEL,
             "llm_configured": bool(
                 GROQ_API_KEY
             ),
@@ -175,6 +180,7 @@ def health():
         )
         return jsonify({
             "ok": False,
+            "database": "error",
             "llm_configured": bool(
                 GROQ_API_KEY
             ),
@@ -358,7 +364,7 @@ def _public_entities(result: dict, key: str, name_key: str) -> list[dict]:
             ).strip()
         else:
             continue
-        # Case-study titles in Oracle can carry client names.
+        # Case-study titles in the database can carry client names.
         public_name = (
             public_case_title(public_name)
             if key == "case_studies"

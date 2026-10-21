@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import math
 import os
 import sys
 import threading
@@ -10,6 +9,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 from dotenv import load_dotenv
 
 
@@ -30,13 +30,31 @@ if str(PROJECT_ROOT) not in sys.path:
 
 load_dotenv(BACKEND_DIR / ".env")
 
-# FastEmbed model that produces 768-dim vectors compatible with stored embeddings.
+# FastEmbed model used to embed the visitor's question at query time.
+#
+# The stored chunk embeddings were created with Ollama "nomic-embed-text",
+# which is nomic-embed-text **v1.5**. The query must be embedded with the
+# same model, otherwise similarities are meaningless and every answer falls
+# below the match threshold.
+#
+#   nomic-ai/nomic-embed-text-v1.5-Q  (default) quantised, ~130 MB, fits the
+#                                     512 MB Render Starter plan
+#   nomic-ai/nomic-embed-text-v1.5    full precision, ~520 MB, needs a
+#                                     Render plan with >= 2 GB RAM
 FASTEMBED_MODEL = os.getenv(
     "FASTEMBED_MODEL",
-    "nomic-ai/nomic-embed-text-v1"
+    "nomic-ai/nomic-embed-text-v1.5-Q"
 ).strip()
 
-# The model_name stored in the DB during ingestion (used to filter rows).
+# Where the ONNX model is cached. It must live INSIDE the project so the
+# copy downloaded during the Render build is still there at run time
+# (/tmp is wiped between the build and the running service).
+FASTEMBED_CACHE_DIR = os.getenv(
+    "FASTEMBED_CACHE_DIR",
+    str(BACKEND_DIR / "model_cache"),
+).strip()
+
+# The model_name stored in document_chunk_embedding during ingestion.
 DB_EMBEDDING_MODEL = os.getenv(
     "DB_EMBEDDING_MODEL",
     "nomic-embed-text"
@@ -50,14 +68,19 @@ DB_EMBEDDING_MODEL = os.getenv(
 _FASTEMBED_LOCK = threading.Lock()
 _FASTEMBED_INSTANCE = None
 
+
 def _get_fastembed_model():
-    """Thread-safe singleton loader for FastEmbed model."""
+    """Thread-safe singleton loader for the FastEmbed model."""
     global _FASTEMBED_INSTANCE
     if _FASTEMBED_INSTANCE is None:
         with _FASTEMBED_LOCK:
             if _FASTEMBED_INSTANCE is None:
                 from fastembed import TextEmbedding
-                _FASTEMBED_INSTANCE = TextEmbedding(model_name=FASTEMBED_MODEL)
+                _FASTEMBED_INSTANCE = TextEmbedding(
+                    model_name=FASTEMBED_MODEL,
+                    cache_dir=FASTEMBED_CACHE_DIR,
+                    threads=int(os.getenv("FASTEMBED_THREADS", "1")),
+                )
     return _FASTEMBED_INSTANCE
 
 
@@ -78,7 +101,7 @@ def create_query_embedding(
     query: str
 ) -> list[float]:
 
-    query = query.strip()
+    query = (query or "").strip()
 
     if not query:
         raise ValueError(
@@ -93,80 +116,99 @@ def create_query_embedding(
 # ============================================================
 
 def cosine_similarity(
-    vector_a: list[float],
-    vector_b: list[float]
+    vector_a,
+    vector_b,
 ) -> float:
 
-    if len(vector_a) != len(vector_b):
+    a = np.asarray(vector_a, dtype=np.float32)
+    b = np.asarray(vector_b, dtype=np.float32)
+
+    if a.shape != b.shape:
         raise ValueError(
             "Vector dimensions do not match: "
-            f"{len(vector_a)} != {len(vector_b)}"
+            f"{a.shape[0]} != {b.shape[0]}"
         )
 
-    dot_product = 0.0
-    magnitude_a = 0.0
-    magnitude_b = 0.0
-
-    for a, b in zip(vector_a, vector_b):
-
-        dot_product += a * b
-        magnitude_a += a * a
-        magnitude_b += b * b
-
-    magnitude_a = math.sqrt(
-        magnitude_a
-    )
-
-    magnitude_b = math.sqrt(
-        magnitude_b
-    )
-
-    if magnitude_a == 0.0 or magnitude_b == 0.0:
+    norm = float(np.linalg.norm(a) * np.linalg.norm(b))
+    if norm == 0.0:
         return 0.0
-
-    return dot_product / (
-        magnitude_a * magnitude_b
-    )
+    return float(np.dot(a, b) / norm)
 
 
 # ============================================================
 # DATABASE EMBEDDINGS + SOURCE METADATA
 # ============================================================
 
+def _parse_vector(value: Any) -> list[float] | None:
+    if value is None:
+        return None
+    if hasattr(value, "read"):
+        value = value.read()
+    if isinstance(value, (list, tuple)):
+        return [float(v) for v in value]
+    try:
+        parsed = json.loads(str(value))
+    except (TypeError, ValueError):
+        return None
+    return [float(v) for v in parsed] if isinstance(parsed, list) else None
+
+
+def _load_db_embeddings(cursor) -> dict[int, list[float]]:
+    """Chunk embeddings stored in Supabase (document_chunk_embedding)."""
+    cursor.execute(
+        """
+        SELECT chunk_id, embedding_json
+        FROM document_chunk_embedding
+        WHERE model_name = %s
+        """,
+        (DB_EMBEDDING_MODEL,),
+    )
+    vectors: dict[int, list[float]] = {}
+    for chunk_id, embedding_json in cursor.fetchall():
+        vector = _parse_vector(embedding_json)
+        if vector:
+            vectors[int(chunk_id)] = vector
+    return vectors
+
+
 def _load_precomputed_embeddings() -> dict[int, list[float]]:
-    """Fast local lookup of 768-dim embeddings from the repository export."""
+    """
+    Optional local fallback: backend/data/oracle_embeddings_export.json.
+
+    This file is git-ignored, so it does NOT exist on Render. It is only
+    used on a developer machine when the database table is empty.
+    """
     data_file = BACKEND_DIR / "data" / "oracle_embeddings_export.json"
-    if data_file.exists():
-        try:
-            raw = json.loads(data_file.read_text(encoding="utf-8"))
-            return {
-                int(item["chunk_id"]): (
-                    json.loads(item["embedding_json"])
-                    if isinstance(item["embedding_json"], str)
-                    else item["embedding_json"]
-                )
-                for item in raw
-                if item.get("chunk_id") is not None and item.get("embedding_json") is not None
-            }
-        except Exception as e:
-            print(f"Warning: Failed to load precomputed embeddings: {e}")
-    return {}
+    if not data_file.exists():
+        return {}
+    try:
+        raw = json.loads(data_file.read_text(encoding="utf-8"))
+        vectors = {}
+        for item in raw:
+            if item.get("chunk_id") is None:
+                continue
+            vector = _parse_vector(item.get("embedding_json"))
+            if vector:
+                vectors[int(item["chunk_id"])] = vector
+        return vectors
+    except Exception as exc:
+        print(f"Warning: failed to load {data_file.name}: {exc}")
+        return {}
 
 
 def load_embeddings(
     connection
 ) -> list[dict[str, Any]]:
     """
-    Load semantic embeddings and all available Terragni
-    metadata associated with each chunk.
+    Load chunk embeddings and the Terragni metadata for each chunk.
 
-    Uses fast precomputed embeddings joined with database metadata,
-    falling back to querying document_chunk_embedding directly if needed.
+    Embeddings come from the document_chunk_embedding table in Supabase.
+    (The previous version read them ONLY from a git-ignored JSON file, so on
+    Render every chunk was skipped and every search returned nothing.)
     """
-    local_vectors = _load_precomputed_embeddings()
-
     with connection.cursor() as cursor:
-        # Load reference data into in-memory dictionaries for speed
+        vectors = _load_db_embeddings(cursor)
+
         cursor.execute("SELECT document_id, title, file_name, document_type FROM document")
         docs = {
             r[0]: {"title": r[1], "file_name": r[2], "document_type": r[3]}
@@ -202,7 +244,10 @@ def load_embeddings(
             for r in cursor.fetchall()
         }
 
-        cursor.execute("SELECT chunk_id, case_study_id, evidence_type, relevance_note FROM case_study_evidence")
+        cursor.execute(
+            "SELECT chunk_id, case_study_id, evidence_type, relevance_note "
+            "FROM case_study_evidence ORDER BY case_study_id"
+        )
         evs = {r[0]: (r[1], r[2], r[3]) for r in cursor.fetchall()}
 
         cursor.execute("""
@@ -212,9 +257,20 @@ def load_embeddings(
         """)
         chunks = cursor.fetchall()
 
+    if not vectors:
+        vectors = _load_precomputed_embeddings()
+
+    if not vectors:
+        raise RuntimeError(
+            "No chunk embeddings found. document_chunk_embedding is empty for "
+            f"model_name='{DB_EMBEDDING_MODEL}'. Run "
+            "'python -m backend.database.migrate_to_supabase' once from your "
+            "computer to load them into Supabase."
+        )
+
     results: list[dict[str, Any]] = []
     for c_id, d_id, s_id, order, text in chunks:
-        vec = local_vectors.get(c_id)
+        vec = vectors.get(int(c_id))
         if not vec:
             continue
 
@@ -254,6 +310,7 @@ EMBEDDING_CACHE_SECONDS = int(
 
 _EMBEDDING_CACHE: dict[str, Any] = {
     "rows": None,
+    "matrix": None,
     "loaded_at": 0.0,
 }
 
@@ -281,12 +338,36 @@ def get_cached_embeddings() -> list[dict[str, Any]]:
         finally:
             connection.close()
 
+        if not rows:
+            raise RuntimeError(
+                "Embeddings were found but none matched a document_chunk row. "
+                "Re-run the migration so chunk IDs and embeddings line up."
+            )
+
         link_chunks_to_document_case_study(rows)
 
+        # Pre-normalised matrix so one query is a single matrix product.
+        matrix = np.asarray([row["embedding"] for row in rows], dtype=np.float32)
+        norms = np.linalg.norm(matrix, axis=1, keepdims=True)
+        norms[norms == 0] = 1.0
+        matrix = matrix / norms
+
+        # The matrix now holds the vectors; free the Python lists (memory
+        # matters on a 512 MB Render instance).
+        for row in rows:
+            row.pop("embedding", None)
+
         _EMBEDDING_CACHE["rows"] = rows
+        _EMBEDDING_CACHE["matrix"] = matrix
         _EMBEDDING_CACHE["loaded_at"] = time.time()
 
         return rows
+
+
+def _get_cached_matrix() -> tuple[list[dict[str, Any]], Any]:
+    get_cached_embeddings()
+    with _EMBEDDING_CACHE_LOCK:
+        return _EMBEDDING_CACHE["rows"], _EMBEDDING_CACHE["matrix"]
 
 
 def link_chunks_to_document_case_study(
@@ -336,6 +417,7 @@ def clear_embedding_cache() -> None:
 
     with _EMBEDDING_CACHE_LOCK:
         _EMBEDDING_CACHE["rows"] = None
+        _EMBEDDING_CACHE["matrix"] = None
         _EMBEDDING_CACHE["loaded_at"] = 0.0
 
 
@@ -350,45 +432,39 @@ def semantic_search(
             "top_k must be greater than zero."
         )
 
-    query_embedding = (
-        create_query_embedding(query)
-    )
+    query_vector = np.asarray(create_query_embedding(query), dtype=np.float32)
+    query_norm = float(np.linalg.norm(query_vector)) or 1.0
+    query_vector = query_vector / query_norm
 
-    stored_embeddings = (
-        get_cached_embeddings()
-    )
+    stored_embeddings, matrix = _get_cached_matrix()
+
+    if matrix is None or not len(stored_embeddings):
+        return []
+
+    if matrix.shape[1] != query_vector.shape[0]:
+        raise ValueError(
+            "Query embedding has "
+            f"{query_vector.shape[0]} dimensions but stored embeddings have "
+            f"{matrix.shape[1]}. Check FASTEMBED_MODEL."
+        )
+
+    similarities = matrix @ query_vector
 
     scored_results = []
 
-    for record in stored_embeddings:
-
-        similarity = cosine_similarity(
-            query_embedding,
-            record["embedding"]
-        )
+    for index in np.argsort(-similarities):
+        similarity = float(similarities[index])
 
         if similarity < minimum_similarity:
-            continue
+            break
 
-        result = dict(record)
-
-        # Do not expose the large vector to the rest
-        # of the application.
-        result.pop(
-            "embedding",
-            None
-        )
-
+        result = dict(stored_embeddings[index])
         result["similarity"] = similarity
 
-        scored_results.append(
-            result
-        )
+        scored_results.append(result)
 
-    scored_results.sort(
-        key=lambda item: item["similarity"],
-        reverse=True
-    )
+        if len(scored_results) >= top_k:
+            break
 
     return scored_results[:top_k]
 
