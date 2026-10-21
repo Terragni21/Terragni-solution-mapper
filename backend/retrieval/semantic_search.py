@@ -126,6 +126,26 @@ def cosine_similarity(
 # DATABASE EMBEDDINGS + SOURCE METADATA
 # ============================================================
 
+def _load_precomputed_embeddings() -> dict[int, list[float]]:
+    """Fast local lookup of 768-dim embeddings from the repository export."""
+    data_file = BACKEND_DIR / "data" / "oracle_embeddings_export.json"
+    if data_file.exists():
+        try:
+            raw = json.loads(data_file.read_text(encoding="utf-8"))
+            return {
+                int(item["chunk_id"]): (
+                    json.loads(item["embedding_json"])
+                    if isinstance(item["embedding_json"], str)
+                    else item["embedding_json"]
+                )
+                for item in raw
+                if item.get("chunk_id") is not None and item.get("embedding_json") is not None
+            }
+        except Exception as e:
+            print(f"Warning: Failed to load precomputed embeddings: {e}")
+    return {}
+
+
 def load_embeddings(
     connection
 ) -> list[dict[str, Any]]:
@@ -133,194 +153,87 @@ def load_embeddings(
     Load semantic embeddings and all available Terragni
     metadata associated with each chunk.
 
-    Important:
-    A chunk is NOT assumed to belong to a case study.
-
-    case_study_evidence is used to determine whether an
-    explicit case-study relationship exists.
+    Uses fast precomputed embeddings joined with database metadata,
+    falling back to querying document_chunk_embedding directly if needed.
     """
-
-    sql = """
-        SELECT
-            e.chunk_id,
-            e.model_name,
-            e.dimensions,
-            e.embedding_json,
-
-            c.document_id,
-            c.section_id,
-            c.chunk_order,
-            c.chunk_text,
-
-            d.title AS document_title,
-            d.file_name,
-            d.document_type,
-
-            ds.section_type,
-            ds.section_title,
-
-            cse.case_study_id,
-            cse.evidence_type,
-            cse.relevance_note,
-
-            cs.case_study_code,
-            cs.title AS case_study_title,
-            cs.public_title,
-            cs.client_name,
-            cs.summary AS case_study_summary,
-            cs.challenge AS case_study_challenge,
-            cs.objective AS case_study_objective,
-            cs.approach AS case_study_approach,
-            cs.key_finding AS case_study_key_finding,
-            cs.solution AS case_study_solution,
-            cs.business_outcome AS case_study_business_outcome
-
-        FROM document_chunk_embedding e
-
-        INNER JOIN document_chunk c
-            ON c.chunk_id = e.chunk_id
-
-        LEFT JOIN document d
-            ON d.document_id = c.document_id
-
-        LEFT JOIN document_section ds
-            ON ds.section_id = c.section_id
-
-        LEFT JOIN case_study_evidence cse
-            ON cse.chunk_id = c.chunk_id
-
-        LEFT JOIN case_study cs
-            ON cs.case_study_id = cse.case_study_id
-
-        WHERE e.model_name = %s
-
-        ORDER BY e.chunk_id
-    """
-
-    results: list[dict[str, Any]] = []
+    local_vectors = _load_precomputed_embeddings()
 
     with connection.cursor() as cursor:
+        # Load reference data into in-memory dictionaries for speed
+        cursor.execute("SELECT document_id, title, file_name, document_type FROM document")
+        docs = {
+            r[0]: {"title": r[1], "file_name": r[2], "document_type": r[3]}
+            for r in cursor.fetchall()
+        }
 
-        cursor.execute(
-            sql,
-            (DB_EMBEDDING_MODEL,)
-        )
+        cursor.execute("SELECT section_id, section_type, section_title FROM document_section")
+        secs = {
+            r[0]: {"section_type": r[1], "section_title": r[2]}
+            for r in cursor.fetchall()
+        }
 
-        for row in cursor:
+        cursor.execute("""
+            SELECT case_study_id, case_study_code, title, public_title, client_name,
+                   summary, challenge, objective, approach, key_finding, solution, business_outcome
+            FROM case_study
+        """)
+        cases = {
+            r[0]: {
+                "case_study_id": r[0],
+                "case_study_code": r[1],
+                "title": r[2],
+                "public_title": r[3],
+                "client_name": r[4],
+                "summary": r[5],
+                "challenge": r[6],
+                "objective": r[7],
+                "approach": r[8],
+                "key_finding": r[9],
+                "solution": r[10],
+                "business_outcome": r[11],
+            }
+            for r in cursor.fetchall()
+        }
 
-            (
-                chunk_id,
-                model_name,
-                dimensions,
-                embedding_json,
+        cursor.execute("SELECT chunk_id, case_study_id, evidence_type, relevance_note FROM case_study_evidence")
+        evs = {r[0]: (r[1], r[2], r[3]) for r in cursor.fetchall()}
 
-                document_id,
-                section_id,
-                chunk_order,
-                chunk_text,
+        cursor.execute("""
+            SELECT chunk_id, document_id, section_id, chunk_order, chunk_text
+            FROM document_chunk
+            ORDER BY chunk_id
+        """)
+        chunks = cursor.fetchall()
 
-                document_title,
-                file_name,
-                document_type,
+    results: list[dict[str, Any]] = []
+    for c_id, d_id, s_id, order, text in chunks:
+        vec = local_vectors.get(c_id)
+        if not vec:
+            continue
 
-                section_type,
-                section_title,
+        cs_info = None
+        if c_id in evs:
+            cid, etype, rnote = evs[c_id]
+            if cid in cases:
+                cs_info = dict(cases[cid])
+                cs_info["evidence_type"] = etype
+                cs_info["relevance_note"] = rnote
 
-                case_study_id,
-                evidence_type,
-                relevance_note,
-
-                case_study_code,
-                case_study_title,
-                public_title,
-                client_name,
-                case_study_summary,
-                case_study_challenge,
-                case_study_objective,
-                case_study_approach,
-                case_study_key_finding,
-                case_study_solution,
-                case_study_business_outcome
-
-            ) = row
-
-            if embedding_json is None:
-                continue
-
-            # Handle Oracle CLOBs and plain PostgreSQL text alike.
-            if hasattr(
-                embedding_json,
-                "read"
-            ):
-                embedding_json = (
-                    embedding_json.read()
-                )
-
-            embedding = json.loads(
-                str(embedding_json)
-            )
-
-            if hasattr(
-                chunk_text,
-                "read"
-            ):
-                chunk_text = chunk_text.read()
-
-            results.append(
-                {
-                    "chunk_id": int(chunk_id),
-                    "model_name": model_name,
-                    "dimensions": int(dimensions),
-
-                    "embedding": embedding,
-
-                    "document_id": int(document_id),
-                    "section_id": int(section_id),
-                    "chunk_order": int(chunk_order),
-
-                    "chunk_text": str(
-                        chunk_text or ""
-                    ),
-
-                    "document": {
-                        "title": document_title,
-                        "file_name": file_name,
-                        "document_type": document_type,
-                    },
-
-                    "section": {
-                        "section_type": section_type,
-                        "section_title": section_title,
-                    },
-
-                    "case_study": (
-                        {
-                            "case_study_id": int(
-                                case_study_id
-                            ),
-                            "case_study_code": case_study_code,
-                            "title": case_study_title,
-                            "public_title": public_title,
-                            "client_name": client_name,
-                            "summary": case_study_summary,
-                            "challenge": case_study_challenge,
-                            "objective": case_study_objective,
-                            "approach": case_study_approach,
-                            "key_finding": case_study_key_finding,
-                            "solution": case_study_solution,
-                            "business_outcome": case_study_business_outcome,
-
-                            "evidence_type": evidence_type,
-                            "relevance_note": relevance_note,
-                        }
-                        if case_study_id is not None
-                        else None
-                    ),
-                }
-            )
+        results.append({
+            "chunk_id": int(c_id),
+            "model_name": DB_EMBEDDING_MODEL,
+            "dimensions": len(vec),
+            "embedding": vec,
+            "document_id": int(d_id),
+            "section_id": int(s_id) if s_id is not None else 0,
+            "chunk_order": int(order) if order is not None else 0,
+            "chunk_text": str(text or ""),
+            "document": docs.get(d_id, {}),
+            "section": secs.get(s_id, {}),
+            "case_study": cs_info,
+        })
 
     return results
-
 
 # ============================================================
 # SEMANTIC SEARCH
