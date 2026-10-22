@@ -313,11 +313,15 @@ document.addEventListener("DOMContentLoaded", () => {
             placeholder:
                 "e.g. Customers still come to our branches even though we launched an app.",
             submit: "Explore the challenge →",
+            // Every example below was tested on the live site and matched a
+            // past Terragni banking case study (match_status = "matched").
             examples: [
                 "Customers still come to our branches even though we launched an app.",
                 "Our affluent customers are happy but rarely refer anyone.",
                 "Our relationship managers do not resolve complaints well.",
-                "Customers lose interest after trying to redeem their reward points."
+                "Customers hardly use the benefits of our premium banking programme.",
+                "Many accounts are going dormant and customers only use basic banking products.",
+                "Our NRI customers are not engaged with the bank."
             ]
         },
         knowledge: {
