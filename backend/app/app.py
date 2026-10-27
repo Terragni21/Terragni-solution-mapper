@@ -67,7 +67,7 @@ app = Flask(
 def _warm_up() -> None:
     """
     Load the slow, rarely-changing data once, in the background:
-    the FastEmbed model, chunk embeddings from Supabase, offering/framework
+    the FastEmbed model, chunk embeddings from Oracle, offering/framework
     embeddings, the knowledge catalogue and client names for the
     public-page blocklist.
 
@@ -185,48 +185,12 @@ def _step(label: str) -> None:
     print(f"[step] {label} | memory {_memory_mb().get('current')} MB", flush=True)
 
 
-@app.route("/api/debug/<step>")
-def api_debug(step: str):
-    """
-    Temporary diagnostics: run ONE part of the answer pipeline.
-      /api/debug/embed     - embed a test sentence
-      /api/debug/retrieve  - full Supabase retrieval
-      /api/debug/groq      - one tiny Groq call
-    """
-    import time as _time
-    started = _time.time()
-    _step(f"debug {step}: start")
-    question = "Our affluent banking customers are happy but not engaged."
-    if step == "embed":
-        from ..retrieval.semantic_search import create_query_embedding
-        detail = f"{len(create_query_embedding(question + ' ' + str(started)))} dims"
-    elif step == "retrieve":
-        from ..retrieval.journey_retrieval import retrieve_journey_evidence
-        detail = retrieve_journey_evidence(question)["retrieval"]
-    elif step == "groq":
-        from ..journey_service import _call_groq
-        detail = _call_groq(
-            system_prompt='Reply with JSON {"ok": true}.',
-            user_prompt="Say ok.",
-        )
-    else:
-        return jsonify({"ok": False, "error": "unknown step"}), 404
-    _step(f"debug {step}: done")
-    return jsonify({
-        "ok": True,
-        "step": step,
-        "detail": detail,
-        "seconds": round(_time.time() - started, 2),
-        "memory_mb": _memory_mb(),
-    })
-
-
 @app.route("/api/health")
 def health():
     """
     Production health check.
-    Supabase PostgreSQL is the source of truth for the production journey.
-    Open https://<your-app>.onrender.com/api/health to diagnose a deploy.
+    The local Oracle database is the source of truth for the journey.
+    Open http://127.0.0.1:5000/api/health to check the setup.
     """
     from ..retrieval.semantic_search import DB_EMBEDDING_MODEL, FASTEMBED_MODEL
     connection = None
@@ -267,7 +231,7 @@ def health():
                 GROQ_API_KEY
             ),
             "model": GROQ_MODEL,
-            "retrieval_backend": "supabase_fastembed",
+            "retrieval_backend": "oracle_fastembed",
             "document_chunks": document_chunks,
             "embeddings": embeddings,
             "nomic_embeddings": nomic_embeddings,
@@ -283,7 +247,7 @@ def health():
                 GROQ_API_KEY
             ),
             "model": GROQ_MODEL,
-            "retrieval_backend": "supabase_fastembed",
+            "retrieval_backend": "oracle_fastembed",
             "error": (
                 f"{type(exc).__name__}: {exc}"
             ),

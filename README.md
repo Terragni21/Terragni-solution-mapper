@@ -21,7 +21,7 @@ Browser (frontend/)            Flask server (backend/app/app.py)
                                    │       └─ knowledge ─► journey/knowledge.py
                                    │                 │
                                    │                 ▼
-                                   │      meaning search over Supabase chunks (retrieval/)
+                                   │      meaning search over Oracle chunks (retrieval/)
                                    │      using FastEmbed embeddings, then Groq writes the
                                    │      answer from that evidence only
                                    ▼
@@ -48,45 +48,26 @@ Browser (frontend/)            Flask server (backend/app/app.py)
 | `POST /api/ask` | Main entry point. Body: `industry`, `role`, `text`, `mode` (`challenge` or `knowledge`), optional `force`. Returns `path`: `challenge`, `knowledge` or `out_of_scope`. |
 | `POST /api/lead` | Contact form. Body: `name`, `email`, `consent`, optional `organisation`, `phone`, `message`, `context`. |
 | `POST /api/query`, `POST /api/query/continue` | Challenge path only (kept for compatibility). |
-| `GET /api/health` | Checks Supabase, the stored embeddings and the AI configuration. |
+| `GET /api/health` | Checks Oracle, the stored embeddings and the AI configuration. |
 
-## Database: Supabase PostgreSQL
+## Database: local Oracle (no cloud database)
 
 All knowledge (documents, chunks, embeddings, case studies, offerings,
-frameworks) and the website leads live in Supabase PostgreSQL. Oracle is no
-longer used.
+frameworks) lives in the local Oracle database on this computer. Leads and
+the visitor question log are saved locally in `backend/data/leads/`
+(JSONL files + `leads.db`). No data is stored in any cloud database.
+Only the Groq AI call goes online (it receives the visitor's question and
+the relevant snippets to write the answer).
 
-**One-time load** (from your computer, project folder):
+Check the database:
 
 ```
-python -m pip install -r backend/requirements.txt
-python -m backend.database.test_connection          # can we reach Supabase?
-python -m backend.database.migrate_to_supabase      # create tables + load the Oracle export
-python -m backend.database.migrate_to_supabase --check
+python -m backend.database.test_connection
 ```
-
-The migration reads `backend/data/oracle_export.json` and
-`backend/data/oracle_embeddings_export.json` and is safe to re-run
-(`--reset` drops and reloads the knowledge tables; leads are kept).
-The schema is in `backend/database/schema.sql`.
-
-Use the Supabase **pooler** connection string
-(`aws-0-<region>.pooler.supabase.com`, port 6543) in `DATABASE_URL` - the
-direct `db.<project>.supabase.co` host is IPv6-only and Render cannot reach it.
-
-## Deploy on Render
-
-1. Run the one-time load above.
-2. In Render -> Environment set `DATABASE_URL` and `GROQ_API_KEY`; the other
-   variables come from `render.yaml` (if the service was created by hand,
-   copy them from `render.yaml`, especially
-   `FASTEMBED_MODEL=nomic-ai/nomic-embed-text-v1.5-Q`).
-3. Deploy, then open `https://<app>.onrender.com/api/health` - it must show
-   `"ok": true` and 803 `nomic_embeddings`.
 
 ## Run it locally (Windows)
 
-You need: Python 3.11+, the Supabase `DATABASE_URL`, and a Groq API key.
+You need: Python 3.11+, the local Oracle database (ORACLE_* settings in `backend/.env`), and a Groq API key.
 Ollama is only needed to embed NEW documents (`pip install -r backend/requirements-local.txt`).
 
 1. Install packages (from the project folder):
@@ -105,7 +86,7 @@ Ollama is only needed to embed NEW documents (`pip install -r backend/requiremen
 
 4. Open http://127.0.0.1:5000 (or the `PORT` in your `.env`).
 
-The server loads the embedding model and the Supabase data into memory in the background when it starts. The very first question can take longer; after that answers take about 3–5 seconds.
+The server loads the embedding model and the Oracle data into memory in the background when it starts. The very first question can take longer; after that answers take about 3–5 seconds.
 
 ## Test it
 
@@ -125,11 +106,11 @@ To check the page design without spending AI calls, open the browser console on 
 - `backend/data/leads/leads.jsonl` — one line per contact-form submission, with the visitor's journey context.
 - `backend/data/leads/visits.jsonl` — one line per question (role, industry, path, outcome, text with private details hidden). Lines with `"outcome": "no_match"` are the list of problems Terragni has no example for yet.
 
-These files contain personal data. They are git-ignored; do not share them. Every lead and question is also saved in Supabase (tables `user_leads` and `user_queries`), because Render's disk is wiped on each deploy.
+These files contain personal data. They are git-ignored; do not share them. Every lead and question is also saved in the local file `backend/data/leads/leads.db`.
 
 ## Adding documents
 
-New PDFs and PowerPoints go through the knowledge pipeline (`backend/run_knowledge_pipeline.py`), which extracts text, splits it into chunks, creates embeddings and saves everything to Supabase. Restart the server afterwards (or wait 15 minutes) so the in-memory cache reloads.
+New PDFs and PowerPoints go through the knowledge pipeline (`backend/run_knowledge_pipeline.py`), which extracts text, splits it into chunks, creates embeddings and saves everything to Oracle. Restart the server afterwards (or wait 15 minutes) so the in-memory cache reloads.
 
 **Known gap:** the personal-lending case studies (customers switching banks, late interest-rate surprises) are not in the database yet, so lending challenges currently get an honest "no match". Loading that document will fix it.
 

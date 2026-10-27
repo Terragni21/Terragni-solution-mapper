@@ -1,7 +1,7 @@
 """
-Quick Supabase connection test.
+Quick test of the local Oracle database.
 
-    python -m backend.database.test_connection      (from the project root)
+    python -m backend.database.test_connection      (from the project folder)
 """
 from __future__ import annotations
 
@@ -14,29 +14,47 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from backend.database.connection import get_connection  # noqa: E402
 
+TABLES = (
+    "DOCUMENT",
+    "DOCUMENT_CHUNK",
+    "DOCUMENT_CHUNK_EMBEDDING",
+    "CASE_STUDY",
+    "CASE_STUDY_EVIDENCE",
+    "OFFERING",
+    "FRAMEWORK",
+)
+
 
 def main():
     connection = get_connection()
-
     try:
-        with connection.cursor() as cursor:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT USER, SYS_CONTEXT('USERENV', 'DB_NAME') FROM dual"
+        )
+        user, database = cursor.fetchone()
+        print("Oracle connection successful")
+        print(f"USER     : {user}")
+        print(f"DATABASE : {database}")
+        print("-" * 50)
+
+        for table in TABLES:
+            try:
+                cursor.execute(f"SELECT COUNT(*) FROM {table}")
+                print(f"{table:<26}: {cursor.fetchone()[0]} rows")
+            except Exception as exc:
+                print(f"{table:<26}: MISSING ({str(exc).splitlines()[0]})")
+
+        try:
             cursor.execute(
-                "SELECT current_user, current_database(), version()"
+                "SELECT MODEL_NAME, COUNT(*) FROM DOCUMENT_CHUNK_EMBEDDING "
+                "GROUP BY MODEL_NAME"
             )
-            user, database, version = cursor.fetchone()
-
-            print("PostgreSQL connection successful")
-            print(f"USER     : {user}")
-            print(f"DATABASE : {database}")
-            print(f"VERSION  : {version.split(',')[0]}")
-
-            for table in ("document_chunk", "document_chunk_embedding", "case_study"):
-                try:
-                    cursor.execute(f"SELECT COUNT(*) FROM {table}")
-                    print(f"{table:<26}: {cursor.fetchone()[0]} rows")
-                except Exception as exc:
-                    connection.rollback()
-                    print(f"{table:<26}: MISSING - run migrate_to_supabase ({exc.__class__.__name__})")
+            print("-" * 50)
+            for name, count in cursor.fetchall():
+                print(f"embeddings '{name}': {count}")
+        except Exception:
+            pass
     finally:
         connection.close()
 

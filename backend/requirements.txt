@@ -1,10 +1,9 @@
-# Runtime dependencies (installed by Render)
+# Runs on your own computer with the local Oracle database.
 flask==3.0.3
-gunicorn>=22.0
 groq>=0.11.0
 markdown==3.6
 python-dotenv>=1.0.1
-psycopg2-binary>=2.9.9
+oracledb>=2.0
 fastembed>=0.4.0
 numpy>=1.26
 pypdf>=5.0.0

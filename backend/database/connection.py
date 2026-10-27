@@ -1,28 +1,25 @@
 """
-Single PostgreSQL (Supabase) connection point for the whole project.
+Single connection point to the LOCAL Oracle database.
 
-Every module - the Flask website, retrieval, leads, the knowledge pipeline
-and the ingestion scripts - gets its database connection from here.
+Every module (website, retrieval, knowledge pipeline, ingestion) gets its
+connection from here. Nothing is sent to any cloud database.
 
-Configuration (backend/.env locally, Environment tab on Render):
+Settings (backend/.env):
 
-    DATABASE_URL      postgresql://USER:PASSWORD@HOST:PORT/postgres
-    DATABASE_SSLMODE  require (default)
+    ORACLE_USER=...
+    ORACLE_PASSWORD=...
+    ORACLE_HOST=localhost          (or the PC/server name)
+    ORACLE_HOST_IP=                (optional fallback IP if the name fails)
+    ORACLE_PORT=1521
+    ORACLE_SID=XE                  (use ORACLE_SERVICE_NAME instead if your
+                                    database uses a service name, e.g. XEPDB1)
+    ORACLE_CLIENT_LIB_DIR=         (optional: only for Oracle 11g or older -
+                                    path to Oracle Instant Client, enables
+                                    "thick" mode)
 
-On Render use the Supabase *pooler* connection string
-(host  aws-0-<region>.pooler.supabase.com, port 6543 or 5432).
-The "direct" host db.<project>.supabase.co is IPv6-only and Render cannot
-reach it.
-
-ORACLE COMPATIBILITY
---------------------
-The older ingestion / knowledge-pipeline scripts were written for Oracle
-(named binds like :document_id, SYSTIMESTAMP, NVL, ROWNUM = 1,
-cursor.var(int) + RETURNING ... INTO :out_id, execute(sql, name=value)).
-Instead of rewriting thousands of lines, the cursor returned by this module
-translates those few Oracle idioms to PostgreSQL on the fly. SQL already
-written for psycopg2 (%s / %(name)s placeholders) is passed through
-untouched.
+The newer code uses psycopg2-style placeholders (%s and %(name)s); the
+cursor returned here converts them to Oracle binds (:1, :name) so the same
+SQL works. Oracle-style SQL (:name binds) passes through unchanged.
 """
 from __future__ import annotations
 
@@ -31,162 +28,164 @@ import re
 from pathlib import Path
 from typing import Any
 
-import psycopg2
-import psycopg2.extensions
+import oracledb
 from dotenv import load_dotenv
 
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 load_dotenv(BACKEND_DIR / ".env")
 
+# Return CLOB/NCLOB columns as normal Python strings.
+oracledb.defaults.fetch_lobs = False
+
+_CLIENT_DIR = os.getenv("ORACLE_CLIENT_LIB_DIR", "").strip()
+if _CLIENT_DIR:
+    # Thick mode: needed only for Oracle Database 11.2 or older.
+    oracledb.init_oracle_client(lib_dir=_CLIENT_DIR)
+
 
 # ============================================================
-# ORACLE -> POSTGRESQL SQL TRANSLATION
+# %s / %(name)s  ->  :1 / :name
 # ============================================================
 
-# :name  (but not ::type casts, not inside 'string literals', not 10:30)
-_BIND_RE = re.compile(r"(?<![:\w]):([A-Za-z_][A-Za-z0-9_]*)")
 _STRING_RE = re.compile(r"'(?:[^']|'')*'")
-_RETURNING_INTO_RE = re.compile(
-    r"RETURNING\s+([A-Za-z_][\w]*)\s+INTO\s+:([A-Za-z_]\w*)",
-    re.IGNORECASE,
-)
-_ROWNUM_RE = re.compile(
-    r"\s+(AND|WHERE)\s+ROWNUM\s*(?:=\s*1|<=\s*1|<\s*2)\b",
-    re.IGNORECASE,
-)
-
-
-def _uses_pg_placeholders(sql: str) -> bool:
-    return "%s" in sql or "%(" in sql
+_NAMED_RE = re.compile(r"%\(([A-Za-z_]\w*)\)s")
 
 
 def translate_sql(sql: str) -> str:
-    """Translate the Oracle idioms used in this project into PostgreSQL."""
-    if _uses_pg_placeholders(sql):
+    """Convert psycopg2 placeholders to Oracle binds (outside string literals)."""
+    if "%s" not in sql and "%(" not in sql:
         return sql
 
-    sql = re.sub(r"\bSYSTIMESTAMP\b", "CURRENT_TIMESTAMP", sql, flags=re.IGNORECASE)
-    sql = re.sub(r"\bSYSDATE\b", "CURRENT_TIMESTAMP", sql, flags=re.IGNORECASE)
-    sql = re.sub(r"\bNVL\s*\(", "COALESCE(", sql, flags=re.IGNORECASE)
-    sql = re.sub(r"\s+FROM\s+DUAL\b", "", sql, flags=re.IGNORECASE)
+    counter = 0
 
-    # "... WHERE X = 1 AND ROWNUM = 1"  ->  "... WHERE X = 1 LIMIT 1"
-    if _ROWNUM_RE.search(sql):
-        def _drop_rownum(match: re.Match) -> str:
-            # "WHERE ROWNUM = 1" with no other condition -> drop WHERE too
-            return "" if match.group(1).upper() == "AND" else " WHERE TRUE"
-        sql = _ROWNUM_RE.sub(_drop_rownum, sql).rstrip().rstrip(";") + "\nLIMIT 1"
+    def convert(code: str) -> str:
+        nonlocal counter
+        code = _NAMED_RE.sub(r":\1", code)
 
-    # Escape literal % (e.g. LIKE 'abc%') before adding %(name)s placeholders.
+        def positional(_match: re.Match) -> str:
+            nonlocal counter
+            counter += 1
+            return f":{counter}"
+
+        code = re.sub(r"%s", positional, code)
+        return code.replace("%%", "%")
+
     pieces = []
     last = 0
     for literal in _STRING_RE.finditer(sql):
-        code = sql[last:literal.start()]
-        pieces.append(_BIND_RE.sub(r"%(\1)s", code.replace("%", "%%")))
-        pieces.append(literal.group(0).replace("%", "%%"))
+        pieces.append(convert(sql[last:literal.start()]))
+        pieces.append(literal.group(0).replace("%%", "%"))
         last = literal.end()
-    code = sql[last:]
-    pieces.append(_BIND_RE.sub(r"%(\1)s", code.replace("%", "%%")))
-    return "".join(pieces)
+    pieces.append(convert(sql[last:]))
+    return "".join(pieces).rstrip().rstrip(";")
 
 
-class OutVar:
-    """Stand-in for oracledb's cursor.var(int) used with RETURNING ... INTO."""
+class CompatCursor:
+    """Thin wrapper around an oracledb cursor that accepts %s placeholders."""
 
-    def __init__(self, kind: Any = int):
-        self.kind = kind
-        self.value: Any = None
+    def __init__(self, cursor):
+        self._cursor = cursor
 
-    def getvalue(self, pos: int = 0) -> Any:
-        return self.value
-
-    def setvalue(self, pos: int, value: Any) -> None:
-        self.value = value
-
-
-class CompatCursor(psycopg2.extensions.cursor):
-    """psycopg2 cursor that also accepts the Oracle style used by old scripts."""
-
-    def var(self, kind: Any = int, *args, **kwargs) -> OutVar:  # noqa: D401
-        return OutVar(kind)
-
-    def execute(self, query, vars=None, **kwargs):  # type: ignore[override]
+    def execute(self, sql, params=None, **kwargs):
+        if isinstance(sql, str):
+            sql = translate_sql(sql)
         if kwargs:
-            merged = dict(vars or {})
+            merged = dict(params or {})
             merged.update(kwargs)
-            vars = merged
+            params = merged
+        if isinstance(params, tuple):
+            params = list(params)
+        if params is None or params == {} or params == []:
+            return self._cursor.execute(sql)
+        return self._cursor.execute(sql, params)
 
-        if not isinstance(query, str):
-            return super().execute(query, vars)
+    def executemany(self, sql, rows):
+        if isinstance(sql, str):
+            sql = translate_sql(sql)
+        rows = [list(r) if isinstance(r, tuple) else r for r in rows]
+        return self._cursor.executemany(sql, rows)
 
-        out_vars: dict[str, OutVar] = {}
-        if isinstance(vars, dict):
-            out_vars = {k: v for k, v in vars.items() if isinstance(v, OutVar)}
-            if out_vars:
-                vars = {k: v for k, v in vars.items() if k not in out_vars}
+    def __iter__(self):
+        return iter(self._cursor)
 
-        if out_vars:
-            # RETURNING ID INTO :out_id  ->  RETURNING ID  (then fetch it)
-            query = _RETURNING_INTO_RE.sub(r"RETURNING \1", query)
+    def __enter__(self):
+        return self
 
-        if isinstance(vars, dict) and not vars:
-            vars = None
+    def __exit__(self, *exc):
+        self.close()
+        return False
 
-        sql = translate_sql(query)
-        if vars is None and not _uses_pg_placeholders(query):
-            # No parameters: psycopg2 must not interpret %% escapes.
-            sql = sql.replace("%%", "%")
+    def close(self):
+        try:
+            self._cursor.close()
+        except Exception:
+            pass
 
-        result = super().execute(sql, vars)
+    def __getattr__(self, name: str) -> Any:
+        # fetchone, fetchall, description, rowcount, var, arraysize, ...
+        return getattr(self._cursor, name)
 
-        if out_vars:
-            row = super().fetchone()
-            value = row[0] if row else None
-            for out in out_vars.values():
-                out.value = value
-        return result
 
-    def executemany(self, query, vars_list):  # type: ignore[override]
-        if isinstance(query, str):
-            query = translate_sql(query)
-        return super().executemany(query, vars_list)
+class CompatConnection:
+    """oracledb connection whose cursors accept %s placeholders."""
+
+    def __init__(self, connection):
+        self._connection = connection
+
+    def cursor(self, *args, **kwargs):
+        return CompatCursor(self._connection.cursor(*args, **kwargs))
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.close()
+        return False
+
+    def close(self):
+        try:
+            self._connection.close()
+        except Exception:
+            pass
+
+    def __getattr__(self, name: str) -> Any:
+        # commit, rollback, autocommit, ...
+        return getattr(self._connection, name)
 
 
 # ============================================================
 # CONNECTION
 # ============================================================
 
-def get_database_url() -> str:
-    database_url = os.getenv("DATABASE_URL", "").strip()
-    if not database_url:
-        raise RuntimeError(
-            "DATABASE_URL is missing. Add your Supabase pooler connection "
-            "string to backend/.env (local) or the Render Environment tab."
-        )
-    # Some dashboards hand out postgres:// - psycopg2 accepts both, but
-    # normalise for clarity.
-    if database_url.startswith("postgres://"):
-        database_url = "postgresql://" + database_url[len("postgres://"):]
-    return database_url
+def _dsn(host: str) -> str:
+    port = int(os.getenv("ORACLE_PORT", "1521"))
+    service = os.getenv("ORACLE_SERVICE_NAME", "").strip()
+    sid = os.getenv("ORACLE_SID", "").strip()
+    if service:
+        return oracledb.makedsn(host, port, service_name=service)
+    if sid:
+        return oracledb.makedsn(host, port, sid=sid)
+    raise RuntimeError(
+        "Set ORACLE_SID or ORACLE_SERVICE_NAME in backend/.env."
+    )
 
 
 def get_connection():
-    """
-    Open a new PostgreSQL connection.
+    user = os.getenv("ORACLE_USER", "").strip()
+    password = os.getenv("ORACLE_PASSWORD", "")
+    host = os.getenv("ORACLE_HOST", "localhost").strip() or "localhost"
+    host_ip = os.getenv("ORACLE_HOST_IP", "").strip()
 
-    The caller is responsible for closing it (use try/finally or `with
-    closing(get_connection())`).
-    """
-    sslmode = (os.getenv("DATABASE_SSLMODE", "require").strip() or "require")
+    if not user or not password:
+        raise RuntimeError(
+            "ORACLE_USER / ORACLE_PASSWORD are missing in backend/.env."
+        )
 
-    return psycopg2.connect(
-        get_database_url(),
-        sslmode=sslmode,
-        connect_timeout=int(os.getenv("DATABASE_CONNECT_TIMEOUT", "15")),
-        cursor_factory=CompatCursor,
-        application_name="terragni-solution-mapper",
-        keepalives=1,
-        keepalives_idle=30,
-        keepalives_interval=10,
-        keepalives_count=5,
-    )
+    try:
+        connection = oracledb.connect(user=user, password=password, dsn=_dsn(host))
+    except oracledb.Error:
+        if not host_ip:
+            raise
+        connection = oracledb.connect(user=user, password=password, dsn=_dsn(host_ip))
+
+    return CompatConnection(connection)

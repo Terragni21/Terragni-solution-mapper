@@ -2,7 +2,6 @@ import os
 from collections import defaultdict
 from typing import Any
 
-import psycopg2
 from dotenv import load_dotenv
 
 from backend.database.connection import get_connection
@@ -247,9 +246,9 @@ def _load_case_study_relationships(
             try:
                 cursor.execute(sql, params)
                 rows = cursor.fetchall()
-            except psycopg2.Error as exc:
+            except Exception as exc:
                 # A missing/empty link table (e.g. case_study_offering was
-                # never exported from Oracle) must not break the whole answer.
+                # empty in the database) must not break the whole answer.
                 connection.rollback()
                 print(f"Warning: could not load case-study {entity_type}: {exc}")
                 continue

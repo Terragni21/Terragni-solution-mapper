@@ -32,19 +32,13 @@ load_dotenv(BACKEND_DIR / ".env")
 
 # FastEmbed model used to embed the visitor's question at query time.
 #
-# The query MUST be embedded with the same model that produced the stored
-# chunk vectors (document_chunk_embedding.model_name = DB_EMBEDDING_MODEL).
-#
-# Default: BAAI/bge-small-en-v1.5 (~67 MB, 384 dims). It fits comfortably in
-# the free/512 MB Render instance. The chunk vectors for it are created once
-# with:   python -m backend.scripts.reembed_chunks
-#
-# (The older nomic-embed-text v1.5 vectors are still in the table under
-# model_name 'nomic-embed-text'; set FASTEMBED_MODEL=nomic-ai/nomic-embed-text-v1.5-Q
-# and DB_EMBEDDING_MODEL=nomic-embed-text to go back to them on a bigger plan.)
+# It must match the model that produced the chunk vectors stored in the local
+# Oracle table DOCUMENT_CHUNK_EMBEDDING. Those were made with Ollama
+# "nomic-embed-text" (= nomic-embed-text v1.5), so the query is embedded with
+# the same model. Everything runs on this computer.
 FASTEMBED_MODEL = os.getenv(
     "FASTEMBED_MODEL",
-    "BAAI/bge-small-en-v1.5"
+    "nomic-ai/nomic-embed-text-v1.5-Q"
 ).strip()
 
 # Where the ONNX model is cached. It must live INSIDE the project so the
@@ -58,7 +52,7 @@ FASTEMBED_CACHE_DIR = os.getenv(
 # The model_name stored in document_chunk_embedding during ingestion.
 DB_EMBEDDING_MODEL = os.getenv(
     "DB_EMBEDDING_MODEL",
-    "bge-small-en-v1.5"
+    "nomic-embed-text"
 ).strip()
 
 
@@ -177,7 +171,7 @@ def _parse_vector(value: Any) -> list[float] | None:
 
 
 def _load_db_embeddings(cursor) -> dict[int, list[float]]:
-    """Chunk embeddings stored in Supabase (document_chunk_embedding)."""
+    """Chunk embeddings stored in Oracle (DOCUMENT_CHUNK_EMBEDDING)."""
     cursor.execute(
         """
         SELECT chunk_id, embedding_json
@@ -225,9 +219,8 @@ def load_embeddings(
     """
     Load chunk embeddings and the Terragni metadata for each chunk.
 
-    Embeddings come from the document_chunk_embedding table in Supabase.
-    (The previous version read them ONLY from a git-ignored JSON file, so on
-    Render every chunk was skipped and every search returned nothing.)
+    Embeddings come from the DOCUMENT_CHUNK_EMBEDDING table in the local Oracle database.
+    
     """
     with connection.cursor() as cursor:
         vectors = _load_db_embeddings(cursor)
@@ -287,8 +280,8 @@ def load_embeddings(
         raise RuntimeError(
             "No chunk embeddings found. document_chunk_embedding is empty for "
             f"model_name='{DB_EMBEDDING_MODEL}'. Run "
-            "'python -m backend.database.migrate_to_supabase' once from your "
-            "computer to load them into Supabase."
+            "'python -m backend.embeddings.ollama_embeddings' to create them "
+            "in Oracle."
         )
 
     results: list[dict[str, Any]] = []
