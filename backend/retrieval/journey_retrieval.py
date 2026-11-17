@@ -4,6 +4,7 @@ from typing import Any
 
 from dotenv import load_dotenv
 
+from backend.app.confidentiality import remove_client_names
 from backend.database.connection import get_connection
 from backend.retrieval.semantic_search import (
     cosine_similarity,
@@ -35,7 +36,8 @@ def _clean_text(value: Any) -> str | None:
     if hasattr(value, "read"):
         value = value.read()
 
-    text = str(value).strip()
+    # Safety net: replace any client name before it reaches the AI.
+    text = remove_client_names(str(value)).strip()
     return text if text else None
 
 def _case_study_key(case_study: dict[str, Any]) -> Any:

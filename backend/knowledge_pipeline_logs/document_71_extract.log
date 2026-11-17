@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 71
+Title       : Behaviours For Business Powering Growth through Wallet Share and Word of Mouth
+Chunks loaded: 26
+Source characters sent to Groq: 11510
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 71
+Title       : Behaviours For Business Powering Growth through Wallet Share and Word of Mouth
+Chunks      : 26
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 71
+document_title                     : Behaviours For Business Powering Growth through Wallet Share and Word of Mouth
+chunks_sent                        : 26
+previous_pending_deleted           : 0
+staging_rows_inserted              : 8
+case_studies                       : 1
+industries                         : 1
+offerings                          : 0
+frameworks                         : 0
+challenges                         : 1
+outcomes                           : 3
+
+====================================================================================================
+2026-11-17T11:12:37 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 71
+====================================================================================================

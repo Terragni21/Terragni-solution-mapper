@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 92
+Title       : Terragni Customer Engagement Insights for the banks premium banking programme
+Chunks loaded: 84
+Source characters sent to Groq: 11946
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 92
+Title       : Terragni Customer Engagement Insights for the banks premium banking programme
+Chunks      : 84
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 92
+document_title                     : Terragni Customer Engagement Insights for the banks premium banking programme
+chunks_sent                        : 84
+previous_pending_deleted           : 0
+staging_rows_inserted              : 9
+case_studies                       : 1
+industries                         : 1
+offerings                          : 2
+frameworks                         : 1
+challenges                         : 2
+outcomes                           : 0
+
+====================================================================================================
+2026-11-17T11:25:33 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 92
+====================================================================================================

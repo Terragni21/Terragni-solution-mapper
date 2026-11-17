@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const PATH_COPY = {
         challenge: {
-            label: "What is not working?",
+            label: "What challenge are you facing?",
             placeholder:
                 "e.g. Customers still come to our branches even though we launched an app.",
             submit: "Explore the challenge →",

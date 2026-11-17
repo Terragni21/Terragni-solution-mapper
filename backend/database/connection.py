@@ -183,8 +183,10 @@ def get_connection():
 
     try:
         connection = oracledb.connect(user=user, password=password, dsn=_dsn(host))
-    except oracledb.Error:
-        if not host_ip:
+    except Exception:
+        # Includes name-lookup failures (socket.gaierror) when the computer
+        # name (e.g. Terragni-10) can't be resolved: retry with the IP.
+        if not host_ip or host_ip == host:
             raise
         connection = oracledb.connect(user=user, password=password, dsn=_dsn(host_ip))
 

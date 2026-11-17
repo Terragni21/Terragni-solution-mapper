@@ -18,3 +18,8 @@ venv/
 
 
 backend/model_cache/
+
+# Confidential: client names list, original and clean report folders
+backend/data/client_names.csv
+backend/data1/
+backend/data/raw_sources/

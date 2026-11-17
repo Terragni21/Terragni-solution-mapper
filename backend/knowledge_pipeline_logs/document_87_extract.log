@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 87
+Title       : LENS Brochure Terragni Consulting 2022
+Chunks loaded: 19
+Source characters sent to Groq: 6114
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 87
+Title       : LENS Brochure Terragni Consulting 2022
+Chunks      : 19
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 87
+document_title                     : LENS Brochure Terragni Consulting 2022
+chunks_sent                        : 19
+previous_pending_deleted           : 0
+staging_rows_inserted              : 9
+case_studies                       : 0
+industries                         : 0
+offerings                          : 4
+frameworks                         : 0
+challenges                         : 2
+outcomes                           : 3
+
+====================================================================================================
+2026-11-17T11:22:32 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 87
+====================================================================================================

@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 73
+Title       : Customer Centric Culture Brochure Terragni Consulting 2023
+Chunks loaded: 14
+Source characters sent to Groq: 5309
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 73
+Title       : Customer Centric Culture Brochure Terragni Consulting 2023
+Chunks      : 14
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 73
+document_title                     : Customer Centric Culture Brochure Terragni Consulting 2023
+chunks_sent                        : 14
+previous_pending_deleted           : 0
+staging_rows_inserted              : 8
+case_studies                       : 0
+industries                         : 0
+offerings                          : 1
+frameworks                         : 1
+challenges                         : 0
+outcomes                           : 6
+
+====================================================================================================
+2026-11-17T11:13:59 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 73
+====================================================================================================

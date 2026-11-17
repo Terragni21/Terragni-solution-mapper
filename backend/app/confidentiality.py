@@ -313,6 +313,40 @@ def _rebuild_client_name_pattern() -> None:
     )
 
 
+_CLIENT_REPLACEMENTS: dict[str, str] = {}
+
+
+def _load_client_names_file() -> None:
+    """
+    Load backend/data/client_names.csv (name_in_reports, replace_with).
+
+    This local, git-ignored file is the same list used to create the clean
+    reports. Loading it here is a safety net: if a client name ever slips
+    into the knowledge base, it is replaced before text reaches the AI or
+    a visitor.
+    """
+    import csv
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "data" / "client_names.csv"
+    if not path.exists():
+        return
+    try:
+        with path.open(newline="", encoding="utf-8-sig") as handle:
+            for row in csv.reader(handle):
+                if len(row) < 1 or not row[0].strip():
+                    continue
+                name = row[0].strip()
+                if name.lower() == "name_in_reports" or name.lower().startswith("example "):
+                    continue
+                _KNOWN_CLIENT_NAMES.add(name)
+                if len(row) > 1 and row[1].strip():
+                    _CLIENT_REPLACEMENTS[name.lower()] = row[1].strip()
+    except OSError:
+        pass
+
+
+_load_client_names_file()
 _rebuild_client_name_pattern()
 
 
@@ -337,7 +371,10 @@ def remove_client_names(text: str) -> str:
     if not _CLIENT_NAME_RE:
         return value
 
-    return _CLIENT_NAME_RE.sub("a client", value)
+    return _CLIENT_NAME_RE.sub(
+        lambda match: _CLIENT_REPLACEMENTS.get(match.group(0).lower(), "a client"),
+        value,
+    )
 
 
 _BRAND_PREFIX_RE = re.compile(

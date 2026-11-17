@@ -1,0 +1,41 @@
+C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper_v2\backend\knowledge\extractor.py:185: SyntaxWarning: invalid escape sequence '\-'
+  \- case studies
+C:\Users\Admin\Downloads\Terragni_solution_mapper_AI_dynamic\Terragni_solution_mapper_v2\backend\knowledge\extractor.py:497: SyntaxWarning: invalid escape sequence '\.'
+  1\. Return valid JSON only.
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 61
+Title       : A leading health insurer Behaviours for Business Engaging the TribeVF
+Chunks loaded: 77
+Source characters sent to Groq: 11746
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 61
+Title       : A leading health insurer Behaviours for Business Engaging the TribeVF
+Chunks      : 77
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 61
+document_title                     : A leading health insurer Behaviours for Business Engaging the TribeVF
+chunks_sent                        : 77
+previous_pending_deleted           : 0
+staging_rows_inserted              : 6
+case_studies                       : 0
+industries                         : 1
+offerings                          : 0
+frameworks                         : 0
+challenges                         : 3
+outcomes                           : 2
+
+====================================================================================================
+2026-11-17T11:06:29 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 61
+====================================================================================================

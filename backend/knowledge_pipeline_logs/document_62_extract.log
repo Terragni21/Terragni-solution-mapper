@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 62
+Title       : A leading life insurer - Barriers to Premium Renewals - Pilot - 27thDec 2017
+Chunks loaded: 40
+Source characters sent to Groq: 11978
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 62
+Title       : A leading life insurer - Barriers to Premium Renewals - Pilot - 27thDec 2017
+Chunks      : 40
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 62
+document_title                     : A leading life insurer - Barriers to Premium Renewals - Pilot - 27thDec 2017
+chunks_sent                        : 40
+previous_pending_deleted           : 0
+staging_rows_inserted              : 9
+case_studies                       : 1
+industries                         : 1
+offerings                          : 0
+frameworks                         : 1
+challenges                         : 3
+outcomes                           : 0
+
+====================================================================================================
+2026-11-17T11:06:39 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 62
+====================================================================================================

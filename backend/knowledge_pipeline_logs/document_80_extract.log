@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 80
+Title       : EAS Brochure Terragni Consulting 2023
+Chunks loaded: 17
+Source characters sent to Groq: 8425
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 80
+Title       : EAS Brochure Terragni Consulting 2023
+Chunks      : 17
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 80
+document_title                     : EAS Brochure Terragni Consulting 2023
+chunks_sent                        : 17
+previous_pending_deleted           : 0
+staging_rows_inserted              : 13
+case_studies                       : 3
+industries                         : 5
+offerings                          : 1
+frameworks                         : 0
+challenges                         : 2
+outcomes                           : 2
+
+====================================================================================================
+2026-11-17T11:18:08 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 80
+====================================================================================================

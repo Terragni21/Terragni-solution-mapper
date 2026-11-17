@@ -10,6 +10,8 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+from backend.app.confidentiality import remove_client_names
 from dotenv import load_dotenv
 
 
@@ -227,7 +229,7 @@ def load_embeddings(
 
         cursor.execute("SELECT document_id, title, file_name, document_type FROM document")
         docs = {
-            r[0]: {"title": r[1], "file_name": r[2], "document_type": r[3]}
+            r[0]: {"title": remove_client_names(r[1]), "file_name": remove_client_names(r[2]), "document_type": r[3]}
             for r in cursor.fetchall()
         }
 
@@ -242,20 +244,23 @@ def load_embeddings(
                    summary, challenge, objective, approach, key_finding, solution, business_outcome
             FROM case_study
         """)
+        def _safe(value):
+            return remove_client_names(value) if value else value
+
         cases = {
             r[0]: {
                 "case_study_id": r[0],
                 "case_study_code": r[1],
-                "title": r[2],
-                "public_title": r[3],
-                "client_name": r[4],
-                "summary": r[5],
-                "challenge": r[6],
-                "objective": r[7],
-                "approach": r[8],
-                "key_finding": r[9],
-                "solution": r[10],
-                "business_outcome": r[11],
+                "title": _safe(r[2]),
+                "public_title": _safe(r[3]),
+                "client_name": None,
+                "summary": _safe(r[5]),
+                "challenge": _safe(r[6]),
+                "objective": _safe(r[7]),
+                "approach": _safe(r[8]),
+                "key_finding": _safe(r[9]),
+                "solution": _safe(r[10]),
+                "business_outcome": _safe(r[11]),
             }
             for r in cursor.fetchall()
         }
@@ -273,14 +278,14 @@ def load_embeddings(
         """)
         chunks = cursor.fetchall()
 
-    if not vectors:
-        vectors = _load_precomputed_embeddings()
+    # No fallback to old exported files: they came from the original
+    # (confidential) reports. Only embeddings stored in Oracle are used.
 
     if not vectors:
         raise RuntimeError(
             "No chunk embeddings found. document_chunk_embedding is empty for "
             f"model_name='{DB_EMBEDDING_MODEL}'. Run "
-            "'python -m backend.embeddings.ollama_embeddings' to create them "
+            "'python -m backend.scripts.embed_chunks' to create them "
             "in Oracle."
         )
 
@@ -306,7 +311,8 @@ def load_embeddings(
             "document_id": int(d_id),
             "section_id": int(s_id) if s_id is not None else 0,
             "chunk_order": int(order) if order is not None else 0,
-            "chunk_text": str(text or ""),
+            # Safety net: no client name may reach the AI or a visitor.
+            "chunk_text": remove_client_names(str(text or "")),
             "document": docs.get(d_id, {}),
             "section": secs.get(s_id, {}),
             "case_study": cs_info,
@@ -356,8 +362,8 @@ def get_cached_embeddings() -> list[dict[str, Any]]:
 
         if not rows:
             raise RuntimeError(
-                "Embeddings were found but none matched a document_chunk row. "
-                "Re-run the migration so chunk IDs and embeddings line up."
+                "No text chunk has AI search data yet. Run "
+                "'python -m backend.scripts.embed_chunks' to create it."
             )
 
         link_chunks_to_document_case_study(rows)

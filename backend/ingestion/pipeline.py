@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -527,70 +528,38 @@ def process_document(
 # DISCOVER SOURCE DOCUMENTS
 # ============================================================
 
+# Only the CLEAN reports are ever read. The original client reports must
+# not be ingested (they contain client names and confidential data).
+# Override with INGEST_SOURCE_DIR in backend/.env if the clean files are
+# kept somewhere else.
+CLEAN_SOURCE_DIR = Path(
+    os.getenv(
+        "INGEST_SOURCE_DIR",
+        str(BACKEND_DIR / "data1" / "clean_reports_draft"),
+    )
+)
+
+
 def discover_source_documents() -> list[Path]:
     """
-    Discover all supported Terragni source documents.
-
-    Supported:
-
-        PDF
-        PPTX
-        DOCX
+    Discover the CLEAN Terragni documents (PDF, PPTX, DOCX) to ingest.
     """
-
-    paths: list[Path] = []
-
-    # --------------------------------------------------------
-    # PDF
-    # --------------------------------------------------------
-
-    if RAW_PDF_DIR.exists():
-
-        paths.extend(
-            RAW_PDF_DIR.glob(
-                "*.pdf"
-            )
+    if not CLEAN_SOURCE_DIR.exists():
+        raise FileNotFoundError(
+            f"Clean reports folder not found: {CLEAN_SOURCE_DIR}. "
+            "Run 'python -m backend.scripts.make_clean_reports' first."
         )
 
-    # --------------------------------------------------------
-    # PPTX
-    # --------------------------------------------------------
+    paths = [
+        path
+        for path in CLEAN_SOURCE_DIR.iterdir()
+        if path.is_file()
+        and path.suffix.lower() in {".pdf", ".pptx", ".docx"}
+        and not path.name.startswith("~$")
+    ]
 
-    if RAW_PPTX_DIR.exists():
-
-        paths.extend(
-            RAW_PPTX_DIR.glob(
-                "*.pptx"
-            )
-        )
-
-    # --------------------------------------------------------
-    # DOCX
-    # --------------------------------------------------------
-
-    if RAW_DOCX_DIR.exists():
-
-        paths.extend(
-            RAW_DOCX_DIR.glob(
-                "*.docx"
-            )
-        )
-
-    # --------------------------------------------------------
-    # Remove duplicate paths
-    # --------------------------------------------------------
-
-    unique_paths = {
-        path.resolve()
-        for path in paths
-    }
-
-    return sorted(
-        unique_paths,
-        key=lambda path: str(
-            path
-        ).lower(),
-    )
+    unique_paths = {path.resolve() for path in paths}
+    return sorted(unique_paths, key=lambda path: str(path).lower())
 
 
 # ============================================================
@@ -724,9 +693,17 @@ def run_ingestion(
         exist_ok=True,
     )
 
+    # Remove JSON files from earlier runs so that only the clean reports
+    # are loaded into Oracle afterwards.
+    if limit is None:
+        for old_json in output_directory.glob("*.json"):
+            old_json.unlink()
+
     documents = (
         discover_source_documents()
     )
+
+    print(f"Reading CLEAN reports from: {CLEAN_SOURCE_DIR}")
 
     # --------------------------------------------------------
     # Optional limit

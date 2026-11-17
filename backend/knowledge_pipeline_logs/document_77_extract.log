@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 77
+Title       : Driving Customer Engagement for NRI Banking A Terragni Case Study
+Chunks loaded: 13
+Source characters sent to Groq: 4450
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 77
+Title       : Driving Customer Engagement for NRI Banking A Terragni Case Study
+Chunks      : 13
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 77
+document_title                     : Driving Customer Engagement for NRI Banking A Terragni Case Study
+chunks_sent                        : 13
+previous_pending_deleted           : 0
+staging_rows_inserted              : 6
+case_studies                       : 1
+industries                         : 1
+offerings                          : 0
+frameworks                         : 0
+challenges                         : 1
+outcomes                           : 1
+
+====================================================================================================
+2026-11-17T11:16:18 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 77
+====================================================================================================

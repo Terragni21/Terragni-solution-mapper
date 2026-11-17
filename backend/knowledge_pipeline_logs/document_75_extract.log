@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 75
+Title       : Driving App Adoption in Life Insurance A Terragni Case Study
+Chunks loaded: 14
+Source characters sent to Groq: 6358
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 75
+Title       : Driving App Adoption in Life Insurance A Terragni Case Study
+Chunks      : 14
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 75
+document_title                     : Driving App Adoption in Life Insurance A Terragni Case Study
+chunks_sent                        : 14
+previous_pending_deleted           : 0
+staging_rows_inserted              : 10
+case_studies                       : 1
+industries                         : 1
+offerings                          : 1
+frameworks                         : 2
+challenges                         : 1
+outcomes                           : 1
+
+====================================================================================================
+2026-11-17T11:15:00 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 75
+====================================================================================================

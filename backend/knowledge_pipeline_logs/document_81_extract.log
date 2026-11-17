@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 81
+Title       : JUMP Behaviours for Business - Behavioral Design for Adoption & Engagement
+Chunks loaded: 14
+Source characters sent to Groq: 5687
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 81
+Title       : JUMP Behaviours for Business - Behavioral Design for Adoption & Engagement
+Chunks      : 14
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 81
+document_title                     : JUMP Behaviours for Business - Behavioral Design for Adoption & Engagement
+chunks_sent                        : 14
+previous_pending_deleted           : 0
+staging_rows_inserted              : 13
+case_studies                       : 1
+industries                         : 1
+offerings                          : 1
+frameworks                         : 1
+challenges                         : 3
+outcomes                           : 3
+
+====================================================================================================
+2026-11-17T11:18:50 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 81
+====================================================================================================

@@ -1,0 +1,37 @@
+
+================================================================================
+Loading document from Oracle
+================================================================================
+Document ID : 94
+Title       : trunorth Terragni Consulting 2023
+Chunks loaded: 16
+Source characters sent to Groq: 4746
+
+================================================================================
+Sending document to Groq
+================================================================================
+Document ID : 94
+Title       : trunorth Terragni Consulting 2023
+Chunks      : 16
+Model       : openai/gpt-oss-120b
+Max source chars : 12000
+Max completion   : 3000
+
+================================================================================
+EXTRACTION COMPLETE
+================================================================================
+document_id                        : 94
+document_title                     : trunorth Terragni Consulting 2023
+chunks_sent                        : 16
+previous_pending_deleted           : 0
+staging_rows_inserted              : 12
+case_studies                       : 0
+industries                         : 0
+offerings                          : 2
+frameworks                         : 1
+challenges                         : 3
+outcomes                           : 4
+
+====================================================================================================
+2026-11-17T11:26:41 | C:\Users\Admin\AppData\Local\Programs\Python\Python312\python.exe -m knowledge.extractor 94
+====================================================================================================
