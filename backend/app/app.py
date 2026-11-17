@@ -911,6 +911,8 @@ def api_case_study_detail(
 # START SERVER
 # ============================================================
 if __name__ == "__main__":
+    # Developer mode: only this computer can open the site.
+    # To share it on the office network use:  python run_office_server.py
     start_warm_up()
     app.run(
         host="127.0.0.1",
