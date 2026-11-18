@@ -1,20 +1,27 @@
 """
-Lead capture, query logging and database tracking for Terragni Solution Mapper.
+Contact-form leads and visitor questions for Terragni Solution Mapper.
 
-Stores every visitor interaction in:
-    1. A local SQLite file, backend/data/leads/leads.db (tables user_leads, user_queries)
-    2. Append-only JSON Lines backup files:
-       - backend/data/leads/leads.jsonl   (contact-form submissions + role/industry/query context)
-       - backend/data/leads/visits.jsonl  (every question asked + role/industry/outcome)
+Everything is saved in ONE Oracle table, WEBSITE_LEAD (local Oracle on
+Terragni-10, nothing goes to any cloud):
 
-Allows full tracking of user inquiries, queries, roles, and industries for
-the Terragni consulting and sales teams.
+    ENTRY_TYPE = 'CONTACT'   a contact-form submission (name, email, ...
+                             plus the question they asked in the mapper)
+    ENTRY_TYPE = 'QUESTION'  a question typed in the mapper (contact
+                             columns are empty)
+
+A backup copy is also written to two files, so nothing is lost if the
+Oracle computer is switched off:
+    backend/data/leads/leads.jsonl   (contact-form submissions)
+    backend/data/leads/visits.jsonl  (every question asked)
+
+Old backup entries can be copied into Oracle with:
+    python -m backend.scripts.import_old_leads
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
-import os
 import re
 import threading
 import uuid
@@ -31,9 +38,11 @@ LEADS_DIR = Path(__file__).resolve().parents[1] / "data" / "leads"
 LEADS_FILE = LEADS_DIR / "leads.jsonl"
 VISITS_FILE = LEADS_DIR / "visits.jsonl"
 
+TABLE = "WEBSITE_LEAD"
+
 _WRITE_LOCK = threading.Lock()
-_DB_LOCK = threading.Lock()
-_DB_INITIALIZED = False
+_TABLE_LOCK = threading.Lock()
+_TABLE_READY = False
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
@@ -55,116 +64,160 @@ def _text(value: Any, limit: int) -> str:
 
 
 # ============================================================
-# LOCAL DATABASE FOR LEADS & QUERIES (SQLite file on this computer)
+# THE ORACLE TABLE
 # ============================================================
-# backend/data/leads/leads.db - nothing is sent to any cloud database.
 
-SQLITE_DB_FILE = LEADS_DIR / "leads.db"
+CREATE_TABLE_SQL = f"""
+CREATE TABLE {TABLE} (
+    ENTRY_KEY           VARCHAR2(64)    PRIMARY KEY,
+    ENTRY_TYPE          VARCHAR2(10)    NOT NULL,
+    SUBMITTED_AT        TIMESTAMP,
+    REFERENCE_NO        VARCHAR2(20),
+    FULL_NAME           VARCHAR2(200 CHAR),
+    EMAIL               VARCHAR2(200 CHAR),
+    ORGANISATION        VARCHAR2(300 CHAR),
+    PHONE               VARCHAR2(60),
+    MESSAGE             CLOB,
+    INDUSTRY            VARCHAR2(200 CHAR),
+    VISITOR_ROLE        VARCHAR2(300 CHAR),
+    SEARCH_PATH         VARCHAR2(40),
+    OUTCOME             VARCHAR2(60),
+    QUESTION            CLOB,
+    SUMMARY             VARCHAR2(2000 CHAR),
+    SUGGESTED_SERVICES  VARCHAR2(1000 CHAR),
+    CREATED_AT          TIMESTAMP DEFAULT SYSTIMESTAMP
+)
+"""
 
-_LEAD_TABLES_SQL = """
-    CREATE TABLE IF NOT EXISTS user_leads (
-        reference           TEXT PRIMARY KEY,
-        submitted_at        TEXT,
-        name                TEXT,
-        email               TEXT,
-        organisation        TEXT,
-        phone               TEXT,
-        message             TEXT,
-        industry            TEXT,
-        role                TEXT,
-        question            TEXT,
-        summary             TEXT,
-        suggested_services  TEXT,
-        created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-    CREATE TABLE IF NOT EXISTS user_queries (
-        id          INTEGER PRIMARY KEY AUTOINCREMENT,
-        logged_at   TEXT,
-        industry    TEXT,
-        role        TEXT,
-        path        TEXT,
-        outcome     TEXT,
-        query_text  TEXT,
-        created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+INSERT_SQL = f"""
+INSERT INTO {TABLE} (
+    ENTRY_KEY, ENTRY_TYPE, SUBMITTED_AT, REFERENCE_NO, FULL_NAME, EMAIL,
+    ORGANISATION, PHONE, MESSAGE, INDUSTRY, VISITOR_ROLE, SEARCH_PATH,
+    OUTCOME, QUESTION, SUMMARY, SUGGESTED_SERVICES
+) VALUES (
+    :entry_key, :entry_type, :submitted_at, :reference_no, :full_name, :email,
+    :organisation, :phone, :message, :industry, :visitor_role, :search_path,
+    :outcome, :question, :summary, :suggested_services
+)
 """
 
 
-def _db_execute(sql: str, params: tuple) -> None:
-    """Run one write against the local SQLite file, creating tables first."""
-    import sqlite3
-
-    global _DB_INITIALIZED
-    LEADS_DIR.mkdir(parents=True, exist_ok=True)
-    with _DB_LOCK:
-        connection = sqlite3.connect(str(SQLITE_DB_FILE))
-        try:
-            if not _DB_INITIALIZED:
-                connection.executescript(_LEAD_TABLES_SQL)
-                _DB_INITIALIZED = True
-            connection.execute(sql.replace("%s", "?"), params)
-            connection.commit()
-        finally:
-            connection.close()
+def ensure_table(cursor) -> None:
+    """Create WEBSITE_LEAD the first time it is needed."""
+    global _TABLE_READY
+    if _TABLE_READY:
+        return
+    with _TABLE_LOCK:
+        if _TABLE_READY:
+            return
+        cursor.execute(
+            "SELECT COUNT(*) FROM user_tables WHERE table_name = :t", {"t": TABLE}
+        )
+        if cursor.fetchone()[0] == 0:
+            cursor.execute(CREATE_TABLE_SQL)
+        _TABLE_READY = True
 
 
-def _save_lead_to_db(record: dict[str, Any]) -> None:
-    """Save the lead record locally (errors are logged, never raised)."""
+def _local_time(iso_text: str):
+    """'2026-11-18T06:30:00+00:00' -> this computer's local time (IST), no zone."""
+    try:
+        moment = datetime.fromisoformat(str(iso_text))
+        if moment.tzinfo is None:
+            moment = moment.replace(tzinfo=timezone.utc)
+        return moment.astimezone().replace(tzinfo=None)
+    except (TypeError, ValueError):
+        return None
+
+
+def question_key(at: str, text: str) -> str:
+    """Stable id for a question row, so the same question is never stored twice."""
+    return "Q-" + hashlib.sha1(f"{at}|{text}".encode("utf-8")).hexdigest()[:40]
+
+
+def contact_row(record: dict[str, Any]) -> dict[str, Any]:
     context = record.get("context") or {}
-    services_str = ", ".join(context.get("suggested_services") or [])
-    try:
-        _db_execute(
-            """
-            INSERT OR IGNORE INTO user_leads (
-                reference, submitted_at, name, email, organisation,
-                phone, message, industry, role, question, summary, suggested_services
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            
-            """,
-            (
-                record["reference"],
-                record["submitted_at"],
-                record["name"],
-                record["email"],
-                record["organisation"],
-                record["phone"],
-                record["message"],
-                context.get("industry", ""),
-                context.get("role", ""),
-                context.get("question", ""),
-                context.get("summary", ""),
-                services_str,
-            ),
-        )
-    except Exception as exc:
-        print(f"Warning: lead {record.get('reference')} not saved to database: {exc}")
+    return {
+        "entry_key": record["reference"],
+        "entry_type": "CONTACT",
+        "submitted_at": _local_time(record.get("submitted_at")),
+        "reference_no": record["reference"],
+        "full_name": record.get("name", ""),
+        "email": record.get("email", ""),
+        "organisation": record.get("organisation", ""),
+        "phone": record.get("phone", ""),
+        "message": record.get("message", ""),
+        "industry": context.get("industry", ""),
+        "visitor_role": context.get("role", ""),
+        "search_path": context.get("path", ""),
+        "outcome": "",
+        "question": context.get("question", ""),
+        "summary": context.get("summary", ""),
+        "suggested_services": ", ".join(context.get("suggested_services") or [])[:1000],
+    }
 
 
-def _log_visit_to_db(
-    *,
-    logged_at: str,
-    industry: str,
-    role: str,
-    path: str,
-    outcome: str,
-    text: str,
-) -> None:
-    """Save one visitor question locally (never raises)."""
+def question_row(visit: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "entry_key": question_key(visit.get("at", ""), visit.get("text", "")),
+        "entry_type": "QUESTION",
+        "submitted_at": _local_time(visit.get("at")),
+        "reference_no": None,
+        "full_name": None,
+        "email": None,
+        "organisation": None,
+        "phone": None,
+        "message": None,
+        "industry": visit.get("industry", ""),
+        "visitor_role": visit.get("role", ""),
+        "search_path": visit.get("path", ""),
+        "outcome": visit.get("outcome", ""),
+        "question": visit.get("text", ""),
+        "summary": None,
+        "suggested_services": None,
+    }
+
+
+def insert_rows(rows: list[dict[str, Any]]) -> int:
+    """Insert rows into WEBSITE_LEAD, skipping ones already there. Returns the number added."""
+    import oracledb
+    from ..database.connection import get_connection
+
+    if not rows:
+        return 0
+    added = 0
+    connection = get_connection()
     try:
-        _db_execute(
-            """
-            INSERT INTO user_queries (
-                logged_at, industry, role, path, outcome, query_text
-            ) VALUES (%s, %s, %s, %s, %s, %s)
-            """,
-            (logged_at, industry, role, path, outcome, text),
-        )
-    except Exception as exc:
-        print(f"Warning: visit not saved to database: {exc}")
+        cursor = connection.cursor()
+        ensure_table(cursor)
+        for row in rows:
+            cursor.setinputsizes(message=oracledb.DB_TYPE_CLOB, question=oracledb.DB_TYPE_CLOB)
+            try:
+                cursor.execute(INSERT_SQL, row)
+                added += 1
+            except oracledb.IntegrityError:
+                pass  # already saved earlier
+        connection.commit()
+    finally:
+        connection.close()
+    return added
+
+
+def _save_in_background(row: dict[str, Any]) -> None:
+    """Save one row to Oracle without slowing the page. Never raises."""
+    def work():
+        try:
+            insert_rows([row])
+        except Exception as exc:
+            print(
+                f"Warning: {row['entry_type']} entry not saved to Oracle "
+                f"(it is still in the backup file): {exc}"
+            )
+
+    threading.Thread(target=work, daemon=True).start()
 
 
 # ============================================================
-# PUBLIC INTERFACE
+# PUBLIC INTERFACE (used by app.py)
 # ============================================================
 
 def validate_lead(payload: dict[str, Any]) -> list[str]:
@@ -185,7 +238,7 @@ def validate_lead(payload: dict[str, Any]) -> list[str]:
 
 
 def save_lead(payload: dict[str, Any]) -> dict[str, Any]:
-    """Store a contact-form submission in DB and JSONL, returning the saved record."""
+    """Store a contact-form submission (backup file + Oracle) and return it."""
     context = payload.get("context") if isinstance(payload.get("context"), dict) else {}
     reference = "TSM-" + uuid.uuid4().hex[:8].upper()
 
@@ -209,11 +262,11 @@ def save_lead(payload: dict[str, Any]) -> dict[str, Any]:
         },
     }
 
-    # 1. Append to JSON Lines backup file
+    # 1. Backup file first - always works, even if Oracle is off.
     _append(LEADS_FILE, record)
 
-    # 2. Save directly to Database
-    _save_lead_to_db(record)
+    # 2. Oracle table WEBSITE_LEAD.
+    _save_in_background(contact_row(record))
 
     return record
 
@@ -226,39 +279,17 @@ def log_visit(
     outcome: str,
     text: str,
 ) -> None:
-    """Record one question in DB and JSONL. Never raises: logging must not break the page."""
+    """Record one question (backup file + Oracle). Never raises."""
     try:
-        now_ts = _now()
-        safe_text = _text(redact_confidential_text(text), 600)
-        safe_industry = _text(industry, 120)
-        safe_role = _text(role, 160)
-
-        # 1. Append to JSON Lines backup file
-        _append(
-            VISITS_FILE,
-            {
-                "at": now_ts,
-                "industry": safe_industry,
-                "role": safe_role,
-                "path": path,
-                "outcome": outcome,
-                "text": safe_text,
-            },
-        )
-
-        # 2. Save to the local database in the background so the answer is
-        #    not delayed by an extra database round-trip.
-        threading.Thread(
-            target=_log_visit_to_db,
-            kwargs={
-                "logged_at": now_ts,
-                "industry": safe_industry,
-                "role": safe_role,
-                "path": path,
-                "outcome": outcome,
-                "text": safe_text,
-            },
-            daemon=True,
-        ).start()
+        visit = {
+            "at": _now(),
+            "industry": _text(industry, 120),
+            "role": _text(role, 160),
+            "path": path,
+            "outcome": outcome,
+            "text": _text(redact_confidential_text(text), 600),
+        }
+        _append(VISITS_FILE, visit)
+        _save_in_background(question_row(visit))
     except Exception:
         pass
